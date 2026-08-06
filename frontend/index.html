@@ -103,9 +103,122 @@
          el poster hace que el primer fotograma pintado sea la imagen, que pesa
          40 KB, en vez de esperar a que el mp4 tenga datos suficientes. -->
     <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
+    <!--
+      Estilo de la pantalla de entrada, incrustado a propósito: si viniera en
+      la hoja externa habría un instante con el velo sin estilar —una imagen
+      suelta sobre fondo blanco— justo antes de que llegara el CSS.
+    -->
+    <style>
+      .splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(150deg, #252f3d, #181e28);
+        /* Nunca intercepta clics, ni siquiera mientras se desvanece: por
+           debajo la página ya es utilizable. */
+        pointer-events: none;
+        /* `forwards` deja fijado el estado final. Esta es la regla que
+           garantiza que el velo se vaya sin intervención de JavaScript. */
+        animation: splash-salir 1000ms ease forwards;
+      }
+
+      /* Remate azul de marca, el mismo de la cabecera. */
+      .splash::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: #0078a9;
+      }
+
+      .splash__logo {
+        height: 68px;
+        width: auto;
+        opacity: 0;
+        animation: splash-logo 620ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+
+      @keyframes splash-logo {
+        from {
+          opacity: 0;
+          transform: translateY(10px) scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes splash-salir {
+        0%,
+        62% {
+          opacity: 1;
+          visibility: visible;
+        }
+        100% {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      /* Ya vista en esta sesión: no se vuelve a mostrar al navegar. */
+      .splash--omitir {
+        display: none;
+      }
+
+      /* Quien pide menos movimiento no ve ni el velo ni el logotipo entrando:
+         una cortina a pantalla completa es exactamente lo que molesta. */
+      @media (prefers-reduced-motion: reduce) {
+        .splash {
+          display: none;
+        }
+      }
+    </style>
   </head>
   <body>
+    <!--
+      Pantalla de entrada.
+
+      Va aquí y no en un componente de React por dos razones. Se ve desde el
+      primer fotograma, sin esperar a los 344 KB del bundle —que es justo el
+      hueco que tapa—. Y, más importante, **se quita sola con CSS**: la
+      animación termina en `visibility: hidden` con `forwards`, así que si el
+      JavaScript falla, tarda o está desactivado, el velo se va igual. Un velo
+      a pantalla completa que dependa de JS para desaparecer es la forma más
+      fácil de servir una página en blanco.
+
+      El script de abajo sólo puede quitarlo ANTES; nunca mantenerlo.
+    -->
+    <div id="splash" class="splash" aria-hidden="true">
+      <img
+        class="splash__logo"
+        src="/assets/marcas/ppg-blanco.png"
+        alt=""
+        width="291"
+        height="226"
+      />
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      // Una sola vez por sesión: quien ya la vio no la vuelve a esperar al
+      // navegar. Sólo acorta —marca el velo como terminado—; la regla de CSS
+      // sigue siendo la que garantiza que se vaya en cualquier caso.
+      try {
+        if (sessionStorage.getItem('ppg-splash') === 'visto') {
+          document.getElementById('splash').classList.add('splash--omitir')
+        } else {
+          sessionStorage.setItem('ppg-splash', 'visto')
+        }
+      } catch (e) {
+        /* Sin sessionStorage (modo privado, cookies bloqueadas) se ve siempre. */
+      }
+    </script>
   </body>
 </html>
