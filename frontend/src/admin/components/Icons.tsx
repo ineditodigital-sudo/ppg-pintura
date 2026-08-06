@@ -130,6 +130,16 @@ export const IconEye = (p: IconProps) => (
   </Svg>
 )
 
+/** Ojo tachado: el estado «la contraseña se está viendo». */
+export const IconEyeOff = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M10.6 6.1A9.7 9.7 0 0 1 12 6c6 0 9.5 6 9.5 6a17 17 0 0 1-2.7 3.4" />
+    <path d="M6.6 8.2A17 17 0 0 0 2.5 12S6 18 12 18a9.5 9.5 0 0 0 4.2-1" />
+    <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+    <path d="M3 3l18 18" />
+  </Svg>
+)
+
 export const IconTrash = (p: IconProps) => (
   <Svg {...p}>
     <path d="M4 7h16" />

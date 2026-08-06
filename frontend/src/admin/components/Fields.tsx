@@ -1,8 +1,68 @@
 import { useEffect, useId, useState, type ReactNode } from 'react'
 import type { FieldDef } from '../schema'
 import { listMedia, uploadMedia, type MediaItem } from '../api'
+import { IconEye, IconEyeOff } from './Icons'
 
 /* --- Envoltorio común ------------------------------------------------------ */
+
+/**
+ * Campo de contraseña con botón para revelarla.
+ *
+ * Escribir una contraseña a ciegas es la primera causa de «no me deja entrar»
+ * cuando en realidad hay una errata. El botón alterna entre `password` y
+ * `text`; arranca siempre oculto y no recuerda el estado entre campos.
+ *
+ * Va como componente y no suelto en cada pantalla porque hay cuatro campos de
+ * contraseña —el acceso y los tres del cambio de clave— y tenían que
+ * comportarse igual.
+ */
+export function PasswordInput({
+  value,
+  onChange,
+  autoComplete,
+  autoFocus,
+  required,
+  minLength,
+  id,
+}: {
+  value: string
+  onChange: (valor: string) => void
+  autoComplete?: string
+  autoFocus?: boolean
+  required?: boolean
+  minLength?: number
+  id?: string
+}) {
+  const [visible, setVisible] = useState(false)
+
+  return (
+    <div className="adm-clave">
+      <input
+        id={id}
+        type={visible ? 'text' : 'password'}
+        value={value}
+        autoComplete={autoComplete}
+        autoFocus={autoFocus}
+        required={required}
+        minLength={minLength}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      <button
+        type="button"
+        className="adm-clave__ojo"
+        onClick={() => setVisible((v) => !v)}
+        // `aria-pressed` comunica el estado; la etiqueta dice qué hace al
+        // pulsar. Sin ella el lector de pantalla anunciaría un botón sin
+        // nombre, porque el icono va oculto a propósito.
+        aria-pressed={visible}
+        aria-label={visible ? 'Ocultar la contraseña' : 'Mostrar la contraseña'}
+        title={visible ? 'Ocultar la contraseña' : 'Mostrar la contraseña'}
+      >
+        {visible ? <IconEyeOff size={18} /> : <IconEye size={18} />}
+      </button>
+    </div>
+  )
+}
 
 export function Field({
   label,

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import * as api from '../api'
 import { Alert, Empty, Loading, PageHead } from '../components/Common'
-import { Field } from '../components/Fields'
+import { Field, PasswordInput } from '../components/Fields'
 
 /* --- Bandeja de mensajes ------------------------------------------------------ */
 
@@ -235,32 +235,29 @@ export function PasswordScreen() {
 
       <form className="admin-card" style={{ maxWidth: 460 }} onSubmit={(e) => void submit(e)}>
         <Field label="Contraseña actual" required>
-          <input
-            type="password"
+          <PasswordInput
             value={current}
             autoComplete="current-password"
             required
-            onChange={(e) => setCurrent(e.target.value)}
+            onChange={setCurrent}
           />
         </Field>
         <Field label="Nueva contraseña" required>
-          <input
-            type="password"
+          <PasswordInput
             value={next}
             autoComplete="new-password"
             minLength={10}
             required
-            onChange={(e) => setNext(e.target.value)}
+            onChange={setNext}
           />
         </Field>
         <Field label="Repite la nueva contraseña" required>
-          <input
-            type="password"
+          <PasswordInput
             value={repeat}
             autoComplete="new-password"
             minLength={10}
             required
-            onChange={(e) => setRepeat(e.target.value)}
+            onChange={setRepeat}
           />
         </Field>
         <button type="submit" className="adm-btn adm-btn--primary" disabled={busy}>

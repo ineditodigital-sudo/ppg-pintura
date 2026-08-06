@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import * as api from './api'
 import { Alert, Loading } from './components/Common'
-import { Field } from './components/Fields'
+import { Field, PasswordInput } from './components/Fields'
 import { PageEditorScreen, PagesScreen } from './screens/Pages'
 import { BusinessLinesScreen, NavigationScreen, SiteScreen } from './screens/Settings'
 import { MediaScreen, MessagesScreen, PasswordScreen } from './screens/Misc'
@@ -87,12 +87,11 @@ function LoginScreen({ onSuccess }: { onSuccess: (user: string) => void }) {
           />
         </Field>
         <Field label="Contraseña" required>
-          <input
-            type="password"
+          <PasswordInput
             value={password}
             autoComplete="current-password"
             required
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={setPassword}
           />
         </Field>
 

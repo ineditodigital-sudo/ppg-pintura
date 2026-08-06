@@ -482,6 +482,54 @@
     box-shadow var(--dur-fast) var(--ease-out);
 }
 
+/* --- Campo de contraseña con botón de ojo --- */
+
+.adm-clave {
+  position: relative;
+  display: block;
+}
+
+/* Hueco a la derecha para que el texto no pase por debajo del botón: la
+   contraseña revelada llegaba hasta el borde y se leía encima del icono.
+   Los selectores van con `[type=…]` porque la regla general de los campos
+   también los lleva y, a igualdad de peso, ganaría la que va antes. Y hacen
+   falta los dos tipos: el input alterna entre `password` y `text`. */
+.adm-field .adm-clave input[type='password'],
+.adm-field .adm-clave input[type='text'] {
+  padding-right: 44px;
+}
+
+.adm-clave__ojo {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--fg-tertiary);
+  background: none;
+  border: 0;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.adm-clave__ojo:hover {
+  color: var(--fg-primary);
+  background: var(--bg-secondary);
+}
+
+/* Pulsado = la contraseña está a la vista. Se marca en azul de marca para que
+   el estado se note sin depender sólo de que el icono cambie. */
+.adm-clave__ojo[aria-pressed='true'] {
+  color: var(--fg-brand-secondary);
+}
+
 .adm-field textarea {
   min-height: 92px;
   resize: vertical;
