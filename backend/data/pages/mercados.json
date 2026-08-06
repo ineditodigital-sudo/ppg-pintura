@@ -1,0 +1,138 @@
+{
+  "slug": "mercados",
+  "seo": {
+    "title": "Mercados PPG | Recubrimientos por sector industrial",
+    "description": "Arquitectura, automotriz, industria general, ACE, mueblero e iluminacion: los sectores donde el recubrimiento PPG en polvo resuelve."
+  },
+  "breadcrumbs": [
+    {
+      "label": "Inicio",
+      "href": "/"
+    },
+    {
+      "label": "Mercados"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "variant": "compact",
+      "eyebrow": "Mercados PPG",
+      "title": "Usted tiene la superficie, nosotros la solución",
+      "subtitle": "Ofrecemos soluciones de alto desempeño que añaden durabilidad, belleza y color duradero a productos de una gran variedad de sectores.",
+      "image": {
+        "src": "/assets/csmx/mercados/arquitectura.webp",
+        "alt": "Fachada de aluminio recubierta con pintura en polvo"
+      }
+    },
+    {
+      "type": "cardGrid",
+      "eyebrow": "Seis sectores",
+      "title": "Cada industria pide otra cosa",
+      "columns": 2,
+      "variant": "thumb",
+      "items": [
+        {
+          "title": "Arquitectura",
+          "description": "Fachadas, cancelería, perfilería de aluminio, barandales y mobiliario urbano. Acabados que resisten radiación solar, lluvia y cambios de temperatura sin perder color.",
+          "image": {
+            "src": "/assets/csmx/mercados/arquitectura.webp",
+            "alt": "Edificios con fachada de aluminio y vidrio"
+          }
+        },
+        {
+          "title": "Automotriz",
+          "description": "Rines, chasis, componentes de suspensión, soportes y piezas de acabado. Recubrimientos que cumplen especificaciones de fabricante original.",
+          "image": {
+            "src": "/assets/csmx/mercados/automotriz.webp",
+            "alt": "Detalle frontal de un automóvil"
+          }
+        },
+        {
+          "title": "Industria General",
+          "description": "Maquinaria, gabinetes eléctricos, estructura metálica, estantería y equipo de proceso. Protección anticorrosiva con acabado uniforme.",
+          "image": {
+            "src": "/assets/csmx/mercados/industria-general.webp",
+            "alt": "Maquinaria industrial"
+          }
+        },
+        {
+          "title": "ACE",
+          "description": "Agrícola, construcción y movimiento de tierra. Equipos expuestos a abrasión, químicos y a la intemperie de forma continua.",
+          "image": {
+            "src": "/assets/csmx/mercados/ace.webp",
+            "alt": "Cosechadora agrícola en el campo"
+          }
+        },
+        {
+          "title": "Mueblero",
+          "description": "Mobiliario metálico para oficina, espacios públicos, aeropuertos y áreas de espera. Acabados de contacto frecuente y limpieza intensiva.",
+          "image": {
+            "src": "/assets/csmx/mercados/mueblero.webp",
+            "alt": "Butacas metálicas en una sala de espera"
+          }
+        },
+        {
+          "title": "Iluminación",
+          "description": "Luminarias, reflectores y carcasas. Acabados que soportan el calor del equipo y mantienen la reflectancia.",
+          "image": {
+            "src": "/assets/csmx/mercados/iluminacion.webp",
+            "alt": "Luminaria de diseño"
+          }
+        }
+      ],
+      "description": "Mismo producto, criterios de seleccion distintos segun a que se expone la pieza."
+    },
+    {
+      "type": "statGrid",
+      "theme": "dark",
+      "eyebrow": "Como se elige",
+      "title": "Lo que decide el sistema",
+      "description": "Tres variables ordenan la recomendacion antes que el color.",
+      "items": [
+        {
+          "value": "Exterior",
+          "label": "Exposicion",
+          "detail": "Poliester para intemperie; hibrido solo bajo techo."
+        },
+        {
+          "value": "Sustrato",
+          "label": "Material base",
+          "detail": "Acero, aluminio o galvanizado definen el pre tratamiento.",
+          "highlight": true
+        },
+        {
+          "value": "Servicio",
+          "label": "Condiciones",
+          "detail": "Abrasion, quimicos, calor o contacto frecuente."
+        }
+      ]
+    },
+    {
+      "type": "richText",
+      "align": "center",
+      "eyebrow": "Fuera de lista",
+      "title": "Si tu sector no aparece, sigue habiendo sistema",
+      "paragraphs": [
+        "Si tu pieza es de acero, aluminio o galvanizado y necesita un acabado duradero, podemos proponerte un sistema. Cuéntanos las condiciones a las que estará expuesta y el volumen que manejas."
+      ]
+    },
+    {
+      "type": "ctaBanner",
+      "title": "¿Tienes un proyecto en mente?",
+      "description": "Te asesoramos en la elección del recubrimiento y el pre tratamiento adecuados para tu sustrato y tus condiciones de servicio.",
+      "image": {
+        "src": "/assets/csmx/industria.webp",
+        "alt": "Aplicación industrial de recubrimientos"
+      },
+      "cta": {
+        "label": "Solicitar cotización",
+        "href": "/contacto"
+      },
+      "secondaryCta": {
+        "label": "WhatsApp",
+        "href": "https://api.whatsapp.com/send?phone=523333892775"
+      }
+    }
+  ]
+}

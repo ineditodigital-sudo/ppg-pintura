@@ -1,0 +1,2096 @@
+/* ============================================================================
+   Bloques de contenido
+   ========================================================================== */
+
+/* --- Hero ----------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Variante `full`: panel insertado con esquinas redondeadas.
+   No va a sangre: se respira margen alrededor, como en las referencias. */
+.hero--full {
+  padding-top: var(--space-l);
+  padding-bottom: var(--space-2xl);
+}
+
+.hero--full .hero__panel {
+  position: relative;
+  isolation: isolate;
+  /* Grande, pero sin comerse la pantalla: hay que insinuar que sigue
+     contenido debajo. */
+  min-height: clamp(420px, 68vh, 620px);
+  display: flex;
+  align-items: flex-end;
+  /* El tramo más alto de la escala: es la pieza de mayor superficie del sitio
+     y aguanta algo más de radio que una tarjeta. Antes eran 32px fijos, que a
+     este tamaño se leían como pastilla y no como panel. */
+  border-radius: var(--radius-4xl);
+  overflow: hidden;
+  background: var(--bg-menu-secondary);
+  color: var(--fg-white);
+}
+
+.hero--full .hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.hero--full .hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Degradado de abajo arriba: el texto se apoya en la base y la foto
+   se ve limpia en la parte superior. */
+.hero--full .hero__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 22, 32, 0.15) 0%,
+    rgba(6, 22, 32, 0.55) 45%,
+    rgba(6, 22, 32, 0.88) 100%
+  );
+}
+
+.hero--full .hero__inner {
+  width: 100%;
+  padding: var(--space-4xl);
+}
+
+.hero--full .hero__text {
+  gap: var(--space-s);
+  max-width: 62rem;
+}
+
+/* El momento tipográfico de la página.
+   Versales con tracking apretado: es la excepción deliberada al resto del
+   sitio, que sigue el tono en caja baja de PPG.
+   El ancho se limita aquí, no en el contenedor, para no estrangular también
+   el subtítulo y los botones. */
+.hero--full h1 {
+  color: var(--fg-white);
+  font-size: var(--fs-hero);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  max-width: 13ch;
+}
+
+.hero--full .hero__subtitle {
+  color: rgba(255, 255, 255, 0.88);
+  max-width: 48ch;
+}
+
+.hero--full .eyebrow {
+  color: #8fd3f0;
+}
+
+/* Botones tipo píldora sobre la imagen. */
+.hero--full .hero__actions .btn {
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-xl);
+}
+
+@media (max-width: 48rem) {
+  .hero--full .hero__inner {
+    padding: var(--space-4xl) var(--space-l) var(--space-xl);
+  }
+
+  .hero--full .hero__panel {
+    border-radius: var(--radius-3xl);
+  }
+
+  .hero--full .hero__text {
+    max-width: none;
+  }
+}
+
+/* --- Variante `feature`: el panel de las landings de sector ---------------
+   Foto a sangre en el fondo y el texto encima. Nada más.
+   Las fotos de sector son de 266×154, así que la ampliación es grande; el
+   desenfoque suave y el velo azul de marca son lo que la sostienen. */
+
+.hero--feature {
+  padding-top: var(--space-l);
+  padding-bottom: var(--space-2xl);
+}
+
+.hero--feature .hero__panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: clamp(380px, 56vh, 500px);
+  padding: var(--space-4xl);
+  border-radius: var(--radius-4xl);
+  overflow: hidden;
+  background: var(--bg-menu-secondary);
+  color: var(--fg-white);
+}
+
+.hero--feature .hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.hero--feature .hero__wash img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Desenfoque mínimo: sólo el justo para limar el escalonado de la
+     ampliación. La escala evita que el difuminado descubra los bordes. */
+  transform: scale(1.06);
+  filter: blur(7px) saturate(1.25);
+}
+
+/* Velo azul de marca: da legibilidad al texto y es lo que mantiene el aire
+   de PPG aunque la foto de fondo sea de otro color. */
+.hero--feature .hero__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* El velo pesa donde está el texto y se abre hacia la derecha, que es donde
+     la foto tiene que verse. */
+  background:
+    linear-gradient(
+      100deg,
+      rgba(4, 26, 40, 0.9) 0%,
+      rgba(4, 26, 40, 0.66) 46%,
+      rgba(4, 26, 40, 0.34) 100%
+    ),
+    linear-gradient(0deg, rgba(0, 120, 169, 0.32), rgba(0, 120, 169, 0.32));
+}
+
+/* El texto se limita a poco más de media anchura: por encima de eso las
+   líneas se alargan y el lado derecho del panel deja de verse. */
+.hero--feature .hero__inner {
+  width: min(100%, 58ch);
+}
+
+.hero--feature .hero__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: var(--space-l);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(6px);
+  color: #fff;
+}
+
+.hero--feature h1 {
+  color: var(--fg-white);
+  font-size: var(--fs-h1);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  max-width: 17ch;
+}
+
+.hero--feature .hero__subtitle {
+  color: rgba(255, 255, 255, 0.86);
+  max-width: 46ch;
+}
+
+.hero--feature .eyebrow {
+  color: #8fd3f0;
+}
+
+.hero--feature .hero__actions .btn {
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-xl);
+}
+
+@media (max-width: 48rem) {
+  .hero--feature .hero__panel {
+    padding: var(--space-xl) var(--space-l);
+    border-radius: var(--radius-3xl);
+    min-height: clamp(340px, 62vh, 460px);
+  }
+
+  /* En pantalla estrecha el velo tiene que cubrir todo el ancho: el texto
+     ocupa el panel entero y ya no queda un lado libre por el que abrirlo. */
+  .hero--feature .hero__panel::after {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(4, 26, 40, 0.72) 0%,
+        rgba(4, 26, 40, 0.86) 100%
+      ),
+      linear-gradient(0deg, rgba(0, 120, 169, 0.32), rgba(0, 120, 169, 0.32));
+  }
+}
+
+/* Variante `split`: texto y media en dos columnas. */
+.hero--split .hero__inner {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  align-items: center;
+  gap: var(--space-5xl);
+  padding-block: var(--space-5xl);
+}
+
+.hero--split .hero__media {
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-l);
+}
+
+/* Variante `compact`: apertura de las páginas internas.
+   Era una banda azul claro con texto oscuro —el lenguaje anterior—, así que
+   al entrar en Mercados o Contacto el sitio parecía otro. Ahora abre con el
+   mismo azul profundo y la misma malla que la portada, y la cabecera monta
+   encima igual. Es lo que unifica el sitio entero. */
+.hero--compact {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--ppg-navy);
+  color: var(--fg-white);
+  margin-top: calc((var(--header-height) + 4px) * -1);
+  border-bottom: 0;
+}
+
+.hero--compact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Luz difusa arriba a la derecha en vez del grafismo de malla, que se
+     retiro del sitio. Da profundidad sin dibujar nada. */
+  background: radial-gradient(
+    90% 120% at 78% 0%,
+    rgba(0, 120, 169, 0.42) 0%,
+    rgba(10, 42, 63, 0) 62%
+  );
+  pointer-events: none;
+}
+
+.hero--compact .hero__inner {
+  padding-block: calc(var(--header-height) + var(--space-4xl)) var(--space-5xl);
+  max-width: 68ch;
+}
+
+.hero--compact h1 {
+  color: var(--fg-white);
+  font-size: clamp(2.2rem, 1.2rem + 3.4vw, 3.75rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.hero--compact .hero__subtitle {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.hero--compact .eyebrow {
+  color: var(--ppg-sky);
+  background: rgba(143, 211, 240, 0.12);
+}
+
+.hero__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  align-items: flex-start;
+}
+
+.hero__subtitle {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-secondary);
+  max-width: 60ch;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-s);
+}
+
+@media (max-width: 62rem) {
+  .hero--split .hero__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .hero--split .hero__media {
+    order: -1;
+  }
+}
+
+/* --- Hero con diapositivas --------------------------------------------------
+   Banda a sangre, no panel insertado.
+
+   La version anterior metia el hero en una tarjeta redondeada con la foto a
+   un lado: se leia como un modulo mas de la pagina. Aqui ocupa el ancho
+   completo, la foto va detras y muy oscurecida, y encima se superpone la
+   malla esferica. El texto manda porque es lo unico nitido.
+   -------------------------------------------------------------------------- */
+
+/* El hero sube por detrás de la cabecera y compensa con relleno propio.
+   Así la cabecera flota encima —transparente arriba, blanca al bajar— sin
+   que el texto llegue a quedar debajo. El tirón lo da el hero y no la
+   cabecera: de ese modo no depende del estado del scroll. */
+.hero-slider {
+  position: relative;
+  isolation: isolate;
+  background: var(--ppg-navy);
+  margin-top: calc((var(--header-height) + 4px) * -1);
+}
+
+/* Trama de puntos de 3 px sobre el video: rompe el bandeado y el bloque de
+   compresion del mp4 sin llegar a leerse como patron. */
+.hero-slider__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.16) 0.5px,
+    transparent 0.6px
+  );
+  background-size: 3px 3px;
+}
+
+.hero-slider__panel {
+  position: relative;
+  display: grid;
+  grid-template-areas: 'slide';
+  /* La columna se dimensionaba al contenido y en móvil crecía por encima del
+     panel: los slides medían 396 px dentro de 375 y el `overflow: hidden`
+     recortaba el final del subtítulo y de los botones. Con `minmax(0, 1fr)`
+     la columna manda y el texto se reajusta. */
+  grid-template-columns: minmax(0, 1fr);
+  /* El cliente lo quiere en 90vh a cualquier resolucion, sin topes.
+     `svh` usa la altura estable del viewport movil: con `vh` la barra de
+     direcciones de iOS y Android descuadra el alto al aparecer y esconderse. */
+  min-height: 90svh;
+  height: 90svh;
+  padding-top: calc(var(--header-height) + 4px);
+  overflow: hidden;
+}
+
+/* Video de fondo.
+   Va detras de todo y con un velo encima: el material es de 640x360, asi que
+   a pantalla completa se amplia mucho. Oscurecido y con el degradado delante
+   funciona como textura en movimiento, no como video que haya que mirar. */
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.hero-slider__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* Denso a la izquierda, donde va el texto; se abre a la derecha para que el
+     video se vea. Y un refuerzo inferior que sostiene los controles. */
+  background:
+    linear-gradient(
+      100deg,
+      rgba(6, 28, 43, 0.94) 0%,
+      rgba(6, 28, 43, 0.72) 48%,
+      rgba(6, 28, 43, 0.45) 100%
+    ),
+    linear-gradient(180deg, rgba(6, 28, 43, 0.35) 0%, rgba(6, 28, 43, 0) 34%);
+  pointer-events: none;
+}
+
+/* Relevo, no fundido cruzado.
+   Con ambas diapositivas apiladas en la misma celda y fundiéndose a la vez
+   durante 700ms, los dos titulares quedaban legibles superpuestos y se leía
+   como un error de renderizado. La saliente ahora se apaga rápido (220ms) y
+   la entrante arranca con retardo: nunca hay dos textos a la vez. */
+.hero-slide {
+  grid-area: slide;
+  display: grid;
+  /* Igual que en el panel: sin esto la columna crece hasta el contenido más
+     largo y en móvil el titular y el subtítulo se salen del recorte. */
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 220ms var(--ease-out),
+    visibility 0s linear 220ms;
+}
+
+.hero-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity 520ms var(--ease-out) 200ms,
+    visibility 0s;
+}
+
+.hero-slide__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-slide__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.28;
+  filter: saturate(0.65);
+  transform: scale(1.04);
+  transition: transform 9s var(--ease-out);
+}
+
+.hero-slide.is-active .hero-slide__bg img {
+  transform: scale(1.12);
+}
+
+.hero-slide__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      92deg,
+      var(--ppg-navy) 6%,
+      rgba(10, 42, 63, 0.82) 46%,
+      rgba(10, 42, 63, 0.62) 100%
+    );
+}
+
+.hero-slide__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-6xl) var(--page-padding-x);
+}
+
+/* El ancho se limita en cada elemento, no en el bloque.
+   Ceñir el contenedor a 20ch partía el titular en cuatro líneas y de paso
+   estrangulaba el subtítulo, que necesita medida larga para leerse. */
+.hero-slide__text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+  max-width: 62ch;
+}
+
+/* El logotipo abre la composicion, por encima del antetitulo. */
+.hero-slide__logo {
+  height: 72px;
+  width: auto;
+  margin-bottom: var(--space-2xs);
+}
+
+/* Antetitulo como pastilla: el detalle que aparece en todas las referencias
+   y que separa de un vistazo el rotulo del titular. */
+.hero-slide .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 16px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ppg-sky);
+  background: rgba(143, 211, 240, 0.12);
+  border: 1px solid rgba(143, 211, 240, 0.24);
+  border-radius: var(--radius-full);
+}
+
+/* Display grande y de peso ligero: es el cambio que mas se nota respecto a
+   la version anterior, que iba en versales apretadas. */
+.hero-slide h1,
+.hero-slide__titulo-inactivo {
+  color: var(--fg-white);
+  font-size: clamp(1.9rem, 0.4rem + 5.4vw, 5rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-transform: none;
+  /* Una sola linea: el `max-width: 15ch` con `balance` los partia en dos.
+     El tamaño se recorta con el ancho para que quepa sin desbordar. */
+  white-space: nowrap;
+  text-wrap: nowrap;
+  max-width: none;
+}
+
+.hero-slide__subtitle {
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.hero-slide__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-s);
+}
+
+.hero-slide__actions .btn {
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-2xl);
+}
+
+/* --- Controles ------------------------------------------------------------- */
+
+.hero-slider__arrow {
+  position: absolute;
+  bottom: var(--space-4xl);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.hero-slider__arrow:hover {
+  background: var(--ppg-blue);
+  border-color: var(--ppg-blue);
+}
+
+/* Flechas y barras juntas abajo a la izquierda, alineadas con el texto:
+   dejan de flotar sobre el titular, que era el problema en movil. */
+.hero-slider__arrow--prev {
+  left: var(--page-padding-x);
+}
+
+.hero-slider__arrow--next {
+  left: calc(var(--page-padding-x) + 56px);
+}
+
+.hero-slider__dots {
+  position: absolute;
+  align-items: center;
+  right: var(--page-padding-x);
+  bottom: calc(var(--space-4xl) + 20px);
+  z-index: 4;
+  display: flex;
+  gap: var(--space-xs);
+}
+
+/* La barra visible mide 3 px de alto: como area tactil es inservible.
+   El relleno vertical le da los 44 px que pide la WCAG 2.5.8 sin mover un
+   pixel de lo que se ve, y el margen negativo evita que empuje al vecino. */
+.hero-slider__dot {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 20px 0;
+  margin: -20px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.hero-slider__dot-track {
+  display: block;
+  width: 60px;
+  height: 3px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.26);
+  overflow: hidden;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+
+.hero-slider__dot:hover .hero-slider__dot-track {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.hero-slider__dot-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--ppg-sky);
+  border-radius: inherit;
+}
+
+/* `width` obliga al navegador a rehacer el layout en cada fotograma y
+   Lighthouse lo marca como animacion no compuesta. `transform` va en la GPU. */
+.hero-slider__dot.is-active .hero-slider__dot-fill {
+  width: 100%;
+  transform-origin: left center;
+  animation: hero-progress linear forwards;
+}
+
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide,
+  .hero-slide__bg img {
+    transition: none;
+  }
+
+  .hero-slide.is-active .hero-slide__bg img {
+    transform: scale(1.04);
+  }
+
+  .hero-slider__dot.is-active .hero-slider__dot-fill {
+    animation: none;
+    width: 100%;
+  }
+}
+
+@media (max-width: 62rem) {
+  /* Trama de puntos de 3 px sobre el video: rompe el bandeado y el bloque de
+   compresion del mp4 sin llegar a leerse como patron. */
+.hero-slider__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.16) 0.5px,
+    transparent 0.6px
+  );
+  background-size: 3px 3px;
+}
+
+.hero-slider__panel {
+    min-height: clamp(480px, 76vh, 640px);
+  }
+
+  .hero-slide__inner {
+    padding: var(--space-5xl) var(--page-padding-x) var(--space-8xl);
+  }
+
+  .hero-slide__text {
+    max-width: none;
+  }
+
+  .hero-slider__dots {
+    right: auto;
+    left: var(--page-padding-x);
+    bottom: var(--space-4xl);
+  }
+
+  .hero-slider__dot-track {
+    width: 40px;
+  }
+
+  /* En tactil se pasa deslizando; las flechas solo estorban. */
+  .hero-slider__arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 48rem) {
+  .hero-slide h1,
+  .hero-slide__titulo-inactivo {
+    font-size: clamp(2rem, 1rem + 6vw, 2.75rem);
+  }
+
+  .hero-slider__panel::before {
+    background-position: center top;
+    opacity: 0.55;
+  }
+}
+
+/* --- Rich text ------------------------------------------------------------ */
+
+.rich-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  max-width: 68ch;
+}
+
+.rich-text--center {
+  margin-inline: auto;
+  text-align: center;
+  align-items: center;
+}
+
+.rich-text p {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-secondary);
+}
+
+/* --- Card grid ------------------------------------------------------------ */
+
+/* El número de columnas se respeta tal cual se declara.
+   Antes se usaba `auto-fit` con `minmax`, que mete tantas columnas como
+   quepan: un grupo de 6 tarjetas pedido a 3 columnas se dibujaba a 4, y
+   dejaba la segunda fila coja. */
+.card-grid {
+  display: grid;
+  gap: var(--space-2xl);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.card-grid[data-columns='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.card-grid[data-columns='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.card-grid[data-columns='4'] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 68rem) {
+  .card-grid[data-columns='4'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 56rem) {
+  .card-grid,
+  .card-grid[data-columns='3'],
+  .card-grid[data-columns='4'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .card-grid,
+  .card-grid[data-columns='2'],
+  .card-grid[data-columns='3'],
+  .card-grid[data-columns='4'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --- Media grid (videos) -------------------------------------------------- */
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(288px, 1fr));
+  gap: var(--space-2xl);
+}
+
+.media-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-l);
+  overflow: hidden;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  color: inherit;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.media-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--shadow-m);
+  color: inherit;
+}
+
+.media-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.media-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.media-card:hover .media-card__media img {
+  transform: scale(1.05);
+}
+
+.media-card__play {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 21, 32, 0.08),
+    rgba(8, 21, 32, 0.55)
+  );
+}
+
+.media-card__play span {
+  display: grid;
+  place-items: center;
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--bg-brand-solid);
+  box-shadow: var(--shadow-m);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+
+.media-card:hover .media-card__play span {
+  transform: scale(1.1);
+  background: var(--bg-brand-solid);
+  color: var(--fg-white);
+}
+
+.media-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-l) var(--space-xl) var(--space-xl);
+  flex: 1;
+}
+
+.media-card__title {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-body);
+  color: var(--fg-primary);
+}
+
+/* --- Content banner ------------------------------------------------------- */
+
+.content-banner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--space-5xl);
+}
+
+.content-banner--image-left .content-banner__media {
+  order: -1;
+}
+
+.content-banner__media {
+  aspect-ratio: 16 / 11;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-m);
+}
+
+/* Sin marco fijo: la imagen impone su propia proporción y se ve entera.
+   Es lo que necesitan las que llevan texto incrustado o vienen verticales:
+   dentro del marco apaisado, el recorte se comía justo lo que había que leer. */
+.content-banner--fit-natural .content-banner__media {
+  aspect-ratio: auto;
+  align-self: center;
+  /* Alto mínimo a propósito: si la imagen no trae `width`/`height`, la caja
+     mediría cero, nunca entraría en pantalla y la carga diferida no llegaría
+     a dispararse. Con esto siempre hay algo que observar. */
+  min-height: 120px;
+}
+
+.content-banner--fit-natural .content-banner__media .smart-image,
+.content-banner--fit-natural .content-banner__media .smart-image img {
+  height: auto;
+  object-fit: contain;
+}
+
+.content-banner__media .smart-image img {
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.content-banner:hover .content-banner__media .smart-image img {
+  transform: scale(1.03);
+}
+
+.content-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  align-items: flex-start;
+}
+
+.content-banner__subtitle {
+  font-family: ui-monospace, 'SFMono-Regular', 'Cascadia Code', monospace;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  color: var(--fg-tertiary);
+}
+
+.content-banner__body {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-secondary);
+  max-width: 56ch;
+}
+
+.section--dark .content-banner__body {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.content-banner__children {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-m);
+  width: 100%;
+  margin-top: var(--space-s);
+}
+
+@media (max-width: 62rem) {
+  .content-banner {
+    grid-template-columns: 1fr;
+    gap: var(--space-2xl);
+  }
+  .content-banner--image-left .content-banner__media,
+  .content-banner__media {
+    order: -1;
+  }
+}
+
+/* --- Stat grid ------------------------------------------------------------ */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-2xl);
+}
+
+/* Mosaicos rellenos, no simples cifras con borde. Uno del grupo se destaca
+   en azul de marca para dar un punto de atención. */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-xl);
+  background: var(--bg-brand-primary);
+  border-radius: var(--radius-2xl);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+
+.stat:hover {
+  transform: translateY(-3px);
+  background: var(--bg-brand-secondary);
+}
+
+.stat__value {
+  font-size: clamp(2.25rem, 1.5rem + 2.6vw, 3.25rem);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: normal;
+  color: var(--fg-brand-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat__label {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+/* Sobre el tinte azul claro, el gris terciario se queda en 4,03:1.
+   Se usa el secundario, que da 8:1 y sí cumple AA. */
+.stat__detail {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--fg-secondary);
+}
+
+/* --- Mosaico destacado --- */
+.stat--highlight,
+.stat--highlight:hover {
+  background: var(--bg-brand-solid);
+  box-shadow: var(--shadow-brand);
+}
+
+.stat--highlight .stat__value,
+.stat--highlight .stat__label {
+  color: #fff;
+}
+
+/* Blanco puro sobre #0078A9 da 4,93:1 y es lo maximo posible; cualquier
+   opacidad por debajo de 1 lo tira bajo el minimo AA. La jerarquia frente al
+   rotulo la marca el tamaño, no el contraste. */
+.stat--highlight .stat__detail {
+  color: #fff;
+}
+
+/* Sobre fondo de marca los mosaicos neutros pasan a blanco para separarse. */
+.section--brand .stat {
+  background: var(--bg-primary);
+}
+
+.section--brand .stat:hover {
+  background: var(--bg-primary);
+}
+
+.section--dark .stat {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.section--dark .stat:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.section--dark .stat__value {
+  color: #7cc8e8;
+}
+.section--dark .stat__label {
+  color: var(--fg-white);
+}
+.section--dark .stat__detail {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+/* Sin esto la regla de arriba pisa a `.stat--highlight` por orden de cascada
+   y el detalle vuelve a caer a 3,23:1 sobre el azul solido. */
+.section--dark .stat--highlight .stat__detail {
+  color: #fff;
+}
+.section--dark .stat--highlight {
+  background: var(--bg-brand-solid);
+}
+.section--dark .stat--highlight .stat__value {
+  color: #fff;
+}
+
+/* --- Timeline ------------------------------------------------------------- */
+
+.timeline {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  padding-left: var(--space-3xl);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--bg-brand-solid),
+    var(--border-brand-secondary)
+  );
+  border-radius: var(--radius-full);
+}
+
+.timeline__entry {
+  position: relative;
+}
+
+.timeline__entry::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--space-3xl) * -1);
+  top: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background: var(--bg-primary);
+  border: 3px solid var(--bg-brand-solid);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.timeline__entry:hover::before {
+  transform: scale(1.25);
+}
+
+.timeline__period {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-brand-tertiary);
+  margin-bottom: var(--space-2xs);
+}
+
+.timeline__title {
+  font-size: var(--fs-h4);
+  margin-bottom: var(--space-2xs);
+}
+
+.timeline__description {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-secondary);
+  max-width: 68ch;
+}
+
+/* --- CTA banner ----------------------------------------------------------- */
+
+/* Panel relleno con la imagen sangrando por la derecha. */
+/* Panel de cierre.
+   Sin `gap`: el hueco entre el texto y la foto dejaba una franja azul muerta
+   de más de 300px. Ahora la imagen llega hasta el texto y el panel mide lo
+   que mide su contenido. */
+.cta-banner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: stretch;
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--ppg-blue) 0%, var(--ppg-blue-deep) 70%);
+  border-radius: var(--radius-3xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-flotante);
+}
+
+.cta-banner--plain {
+  grid-template-columns: 1fr;
+}
+
+.cta-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: var(--space-4xl);
+  max-width: 56ch;
+}
+
+/* Más contenido que `--fs-display`: dentro de un panel a media anchura, 56px
+   partían el titular en tres líneas y estiraban el bloque a 488px, dejando
+   el resto en azul vacío. Es un cierre, no el titular de la página. */
+.cta-banner h2 {
+  color: #fff;
+  font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.cta-banner__description {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.cta-banner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  margin-top: var(--space-xs);
+}
+
+/* Sobre el azul, el botón principal se invierte a blanco. */
+.cta-banner__actions .btn--primary {
+  background: #fff;
+  color: var(--fg-brand-secondary);
+  border-radius: var(--radius-full);
+}
+
+.cta-banner__actions .btn--primary:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--fg-brand-secondary);
+}
+
+.cta-banner__actions .btn--on-dark {
+  border-radius: var(--radius-full);
+}
+
+/* Altura fija en la imagen, no `stretch`.
+   Estirada, la foto imponía su proporción natural —488px de columna— y el
+   bloque de texto se estiraba con ella dejando unos 300px de azul vacío. Con
+   una altura acotada manda el texto, que es quien tiene algo que decir. */
+.cta-banner__media {
+  height: clamp(240px, 26vw, 320px);
+  align-self: center;
+}
+
+.cta-banner__media .smart-image,
+.cta-banner__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 62rem) {
+  .cta-banner {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-2xl);
+  }
+
+  .cta-banner__text {
+    padding: var(--space-2xl);
+  }
+
+  .cta-banner__media {
+    order: -1;
+    min-height: 200px;
+  }
+}
+
+/* --- Link list ------------------------------------------------------------ */
+
+.link-list {
+  display: grid;
+  gap: var(--space-2xl);
+}
+
+.link-list[data-columns='2'] {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+.link-list[data-columns='3'] {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.link-list[data-columns='4'] {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.link-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  padding: var(--space-xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  transition: box-shadow var(--dur-base) var(--ease-out);
+}
+
+.link-group:hover {
+  box-shadow: var(--shadow-m);
+}
+
+.link-group h3 {
+  font-size: var(--fs-h4);
+  color: var(--fg-brand-secondary);
+}
+
+.link-group__description {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-body);
+  color: var(--fg-tertiary);
+}
+
+.link-group ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+.link-group li a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-size: var(--fs-body);
+  color: var(--fg-brand-tertiary);
+}
+
+/* --- Quote ---------------------------------------------------------------- */
+
+/* Dos columnas: la comilla ancla a la izquierda, el texto respira a la derecha. */
+.quote {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-xl) var(--space-2xl);
+  align-items: start;
+  max-width: 68rem;
+  margin-inline: auto;
+  padding: var(--space-3xl);
+  background: var(--bg-brand-primary);
+  border-radius: var(--radius-3xl);
+}
+
+.quote__mark {
+  color: var(--tint-brand-strong);
+  flex-shrink: 0;
+}
+
+.quote figcaption {
+  grid-column: 2;
+}
+
+@media (max-width: 48rem) {
+  .quote {
+    grid-template-columns: 1fr;
+    padding: var(--space-xl);
+  }
+
+  .quote figcaption {
+    grid-column: 1;
+  }
+}
+
+.quote__text {
+  font-size: clamp(1.25rem, 1rem + 1.4vw, 2rem);
+  font-weight: var(--fw-medium);
+  line-height: 1.35;
+  color: var(--fg-primary);
+  letter-spacing: normal;
+  text-wrap: balance;
+}
+
+.quote__author {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.quote__role {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+/* --- Tira de marcas --------------------------------------------------------- */
+
+/* Franja a lo ancho con el logotipo a la izquierda y el texto al lado.
+   El planteamiento anterior (dos cajas centradas) desperdiciaba el ancho y
+   dejaba los logotipos flotando en placas enormes. */
+.brand-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: var(--space-m);
+}
+
+.brand-strip__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  align-items: center;
+  gap: var(--space-xl);
+  padding: var(--space-xl) var(--space-2xl) var(--space-xl) var(--space-xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xs);
+  color: inherit;
+  overflow: hidden;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+/* Filo azul a la izquierda que crece al pasar el cursor. No es un borde de
+   tarjeta: es un acento interno que sólo aparece al interactuar. */
+.brand-strip__item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--bg-brand-solid);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+a.brand-strip__item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-m);
+  color: inherit;
+}
+
+a.brand-strip__item:hover::before {
+  transform: scaleY(1);
+}
+
+.brand-strip__plate {
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 96px;
+  background: #fff;
+  border-radius: var(--radius-l);
+}
+
+.brand-strip__plate img {
+  max-height: 72px;
+  max-width: 100%;
+  width: auto;
+  object-fit: contain;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+a.brand-strip__item:hover .brand-strip__plate img {
+  transform: scale(1.06);
+}
+
+.brand-strip__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  min-width: 0;
+}
+
+.brand-strip__name {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  color: var(--fg-brand-secondary);
+}
+
+.brand-strip__desc {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--fg-secondary);
+}
+
+.brand-strip__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-2xs);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-tertiary);
+}
+
+.brand-strip__more svg {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+a.brand-strip__item:hover .brand-strip__more svg {
+  transform: translate(3px, -3px);
+}
+
+@media (max-width: 34rem) {
+  .brand-strip__item {
+    grid-template-columns: 88px 1fr;
+    gap: var(--space-m);
+    padding: var(--space-m);
+  }
+
+  .brand-strip__plate {
+    width: 88px;
+    height: 72px;
+  }
+
+  .brand-strip__plate img {
+    max-height: 52px;
+  }
+}
+
+/* --- Muestrario de color ----------------------------------------------------- */
+
+/* Rejilla de conteo fijo, no `auto-fill`.
+   Con `auto-fill` la última fila se quedaba con una sola muestra suelta;
+   con 6 y 4 columnas, 12 muestras siempre reparten en filas completas. */
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--space-s);
+  margin-bottom: var(--space-3xl);
+}
+
+.swatch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 2px;
+  aspect-ratio: 4 / 3;
+  padding: var(--space-s);
+  border-radius: var(--radius-l);
+  box-shadow: inset 0 0 0 1px rgba(8, 21, 32, 0.08);
+  overflow: hidden;
+  cursor: default;
+  transition:
+    transform 320ms var(--ease-out),
+    box-shadow 320ms var(--ease-out),
+    z-index 0s;
+}
+
+/* Al pasar el cursor la muestra se levanta y crece; el resto se apaga
+   ligeramente para que destaque la que se está mirando. */
+.swatches:hover .swatch {
+  opacity: 0.55;
+  transition:
+    transform 320ms var(--ease-out),
+    opacity 320ms var(--ease-out),
+    box-shadow 320ms var(--ease-out);
+}
+
+.swatches .swatch:hover {
+  opacity: 1;
+  transform: translateY(-6px) scale(1.06);
+  box-shadow:
+    inset 0 0 0 1px rgba(8, 21, 32, 0.08),
+    0 12px 28px rgba(8, 21, 32, 0.22);
+  z-index: 1;
+}
+
+/* Brillo que barre la muestra al entrar el cursor. */
+.swatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  transition: transform 620ms var(--ease-out);
+  pointer-events: none;
+}
+
+.swatch:hover::after {
+  transform: translateX(100%);
+}
+
+/* La placa ocupa el recuadro entero por detrás del texto. */
+.swatch__placa {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Sobre la placa el fondo es blanco, así que la tinta es siempre oscura: ya no
+   hace falta decidir entre blanco y negro según la luminancia del color. */
+.swatch__code {
+  position: relative;
+  z-index: 1;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.04em;
+  color: var(--fg-primary);
+}
+
+.swatch__name {
+  position: relative;
+  z-index: 1;
+  font-size: var(--fs-xs);
+  line-height: 1.3;
+  color: var(--fg-secondary);
+}
+
+@media (max-width: 62rem) {
+  .swatches {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 34rem) {
+  .swatches {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swatches:hover .swatch {
+    opacity: 1;
+  }
+
+  .swatch::after {
+    display: none;
+  }
+}
+
+/* --- Acabados ---------------------------------------------------------------- */
+
+.finishes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-m);
+}
+
+.finish {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-l);
+  background: var(--bg-primary);
+  border-radius: var(--radius-l);
+}
+
+/* Cada acabado se insinúa con una textura, no con un cuadro de color plano. */
+.finish__chip {
+  height: 44px;
+  border-radius: var(--radius-s);
+  margin-bottom: var(--space-2xs);
+  background: var(--bg-brand-solid);
+}
+
+.finish__chip--brillante {
+  background: linear-gradient(115deg, #0a90c8 0%, #7fd3f2 38%, #0078a9 62%, #044d6b 100%);
+}
+
+.finish__chip--mate {
+  background: #3f6e83;
+}
+
+.finish__chip--metalico {
+  background:
+    repeating-linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.16) 0 2px,
+      rgba(0, 0, 0, 0.14) 2px 4px
+    ),
+    linear-gradient(115deg, #56798c 0%, #9fbccb 50%, #46697c 100%);
+}
+
+.finish__chip--martillado {
+  background:
+    radial-gradient(circle at 22% 32%, rgba(255, 255, 255, 0.34) 0 18%, transparent 19%),
+    radial-gradient(circle at 62% 68%, rgba(255, 255, 255, 0.28) 0 15%, transparent 16%),
+    radial-gradient(circle at 84% 22%, rgba(0, 0, 0, 0.22) 0 14%, transparent 15%),
+    linear-gradient(120deg, #0a6f97 0%, #0d87b6 100%);
+}
+
+.finish__name {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.finish__desc {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--fg-tertiary);
+}
+
+.showcase-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-tertiary);
+}
+
+.showcase-foot__note {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+  max-width: 62ch;
+}
+
+/* --- Formulario de contacto ----------------------------------------------- */
+
+/* Formulario a la izquierda, datos a la derecha. */
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: var(--space-3xl);
+  align-items: start;
+}
+
+.contact-layout--solo {
+  grid-template-columns: minmax(0, 720px);
+}
+
+/* El formulario va en su propio panel blanco, no suelto sobre el fondo.
+   Antes la columna de datos estaba rellena y el formulario no, así que las dos
+   mitades no se leían como pareja: una parecía terminada y la otra a medias. */
+.contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-l) var(--space-m);
+  align-content: start;
+  padding: var(--space-2xl);
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 1px 2px rgba(16, 34, 46, 0.06), 0 12px 32px rgba(16, 34, 46, 0.07);
+}
+
+/* --- Columna de datos ------------------------------------------------------- */
+
+.contact-aside {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-l));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  padding: var(--space-xl);
+  background: var(--bg-brand-primary);
+  border-radius: var(--radius-2xl);
+}
+
+.contact-aside h3 {
+  font-size: var(--fs-h4);
+  color: var(--fg-brand-secondary);
+}
+
+.contact-aside__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+/* Cada dato separado por una línea fina: la columna se lee como una ficha
+   ordenada y no como un bloque de texto continuo. */
+.contact-aside__list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--space-m);
+  border-bottom: 1px solid var(--border-brand-secondary);
+}
+
+.contact-aside__list li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.contact-aside__label {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+.contact-aside__value {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+  overflow-wrap: anywhere;
+}
+
+a.contact-aside__value {
+  color: var(--fg-brand-secondary);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+a.contact-aside__value:hover {
+  color: var(--fg-brand-tertiary);
+  text-decoration: underline;
+}
+
+.contact-aside__note {
+  font-size: var(--fs-sm);
+  color: var(--fg-secondary);
+}
+
+.contact-aside__addresses {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--border-brand-secondary);
+}
+
+.contact-aside__address {
+  display: block;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--fg-secondary);
+}
+
+@media (max-width: 62rem) {
+  .contact-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2xl);
+  }
+
+  .contact-aside {
+    position: static;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.field--wide {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+/* Campo relleno en reposo y blanco al enfocar: el que estás escribiendo se
+   separa solo del resto, sin necesidad de subrayarlo con color. */
+.field input,
+.field select,
+.field textarea {
+  padding: 13px var(--space-m);
+  font-size: var(--fs-body);
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-m);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+/* Valor propio, no un token: `--fg-tertiary` da 3,90:1 sobre el relleno del
+   campo y se queda corto. El indicio del área de mensaje lleva instrucciones
+   de verdad, así que tiene que leerse. Este tono es el primero del mismo
+   matiz que pasa el 4,5:1 tanto en reposo como enfocado, sin llegar a
+   confundirse con texto ya escrito. */
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #5f6c7c;
+  opacity: 1;
+}
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--border-secondary);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  background: var(--bg-primary);
+  border-color: var(--bg-brand-solid);
+  box-shadow: 0 0 0 3px var(--bg-brand-secondary);
+}
+
+.field label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 140px;
+  font-family: inherit;
+}
+
+.field__required {
+  color: var(--fg-error);
+}
+
+.form-status {
+  grid-column: 1 / -1;
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-s);
+  font-size: var(--fs-sm);
+  border: 1px solid transparent;
+}
+
+.form-status--ok {
+  background: var(--bg-success-primary);
+  border-color: var(--fg-success);
+  color: var(--fg-success);
+}
+
+.form-status--error {
+  background: var(--bg-error-primary);
+  border-color: var(--fg-error);
+  color: var(--fg-error);
+}
+
+/* El botón se separa con una línea fina: cierra el formulario y deja claro
+   que el envío es el final del recorrido, no un campo más. */
+.contact-form__actions {
+  grid-column: 1 / -1;
+  margin-top: var(--space-2xs);
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--border-tertiary);
+}
+
+.contact-form__actions .btn {
+  border-radius: var(--radius-full);
+  padding-inline: var(--space-2xl);
+}
+
+@media (max-width: 48rem) {
+  .contact-form {
+    grid-template-columns: 1fr;
+    padding: var(--space-l);
+  }
+
+  .contact-form__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ============================================================================
+   Ficha técnica (specList)
+   La alternativa a una rejilla de tarjetas con dos palabras dentro. La unidad
+   es la fila y el separador es una línea fina neutra: nada de cajas ni bordes
+   de color, que es justo lo que hacía que la sección se leyera como relleno.
+   ========================================================================== */
+
+.spec-list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--border-tertiary);
+}
+
+.spec-list[data-columns='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--space-3xl);
+}
+
+.spec-list__row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-m);
+  padding: var(--space-l) var(--space-s);
+  border-bottom: 1px solid var(--border-tertiary);
+  transition: background-color var(--dur-base) var(--ease-card);
+}
+
+.spec-list__row:hover {
+  background: var(--bg-brand-primary);
+}
+
+.spec-list__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border-radius: var(--radius-l);
+  background: var(--bg-brand-primary);
+  color: var(--fg-brand-tertiary);
+  transition:
+    background-color var(--dur-base) var(--ease-card),
+    color var(--dur-base) var(--ease-card);
+}
+
+/* Al pasar por encima el icono se rellena en azul de marca: es el único
+   momento de color de la sección, y sólo aparece en la fila señalada. */
+.spec-list__row:hover .spec-list__icon {
+  background: var(--bg-brand-solid);
+  color: #fff;
+}
+
+.spec-list__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.spec-list__term {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--fg-primary);
+}
+
+.spec-list__note {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--fg-secondary);
+  text-wrap: pretty;
+}
+
+@media (max-width: 48rem) {
+  .spec-list[data-columns='2'] {
+    grid-template-columns: 1fr;
+  }
+
+  .spec-list__row {
+    padding-inline: 0;
+  }
+}
+
+
+/* Por debajo de 1100px el texto necesita todo el ancho: el panel estorba. */
+@media (max-width: 69rem) {
+  .hero-muestras {
+    display: none;
+  }
+}
+
+
+/* La marca manda en el rotulo; el distribuidor va debajo, en secundario. */
+.contact-aside__subtitle {
+  margin-top: calc(var(--space-2xs) * -1);
+  margin-bottom: var(--space-m);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+  color: var(--fg-secondary);
+}
+
+
+/* --- Hero compacto con foto de fondo ------------------------------------- */
+
+/* Las fotos de sector son de 266x154: aqui se amplian mucho, asi que el velo
+   azul y un desenfoque leve son lo que sostiene el resultado. Sin ellos se ve
+   el pixelado. El cliente pidio fondo a sangre y poco desenfoque. */
+.hero--compact-img .hero__panel {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero--compact-img .hero__wash {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Sangra fuera del contenedor: el fondo llega a los bordes de la ventana
+     aunque el texto siga alineado con el resto de la pagina. */
+  margin-inline: calc(50% - 50vw);
+  overflow: hidden;
+}
+
+.hero--compact-img .hero__wash img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(2px) saturate(0.85);
+  transform: scale(1.06); /* tapa el borde blando que deja el desenfoque */
+}
+
+/* Velo de marca: sin el, el texto blanco no aguanta sobre las zonas claras. */
+.hero--compact-img .hero__wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    104deg,
+    rgba(6, 28, 43, 0.93) 0%,
+    rgba(6, 28, 43, 0.78) 52%,
+    rgba(0, 120, 169, 0.58) 100%
+  );
+}
+
+/* La luz radial ya la aporta la foto; encima del velo solo ensucia. */
+.hero--compact-img::before {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero--compact-img .hero__wash img {
+    transform: scale(1.06);
+  }
+}

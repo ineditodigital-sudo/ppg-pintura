@@ -1,0 +1,86 @@
+{
+  "locale": "ES-MX",
+  "cta": { "label": "Cotizar", "href": "/contacto" },
+  "main": [
+    {
+      "label": "Productos",
+      "description": "Recubrimientos industriales de alto desempeño, como distribuidor autorizado PPG.",
+      "children": [
+        {
+          "label": "Pintura en Polvo",
+          "href": "/productos/pintura-en-polvo",
+          "description": "Poliéster, híbridos, epóxicos y poliuretanos."
+        },
+        {
+          "label": "Pintura Líquida",
+          "href": "/productos/pintura-liquida",
+          "description": "Recubrimientos líquidos de alto desempeño."
+        },
+        {
+          "label": "Pre Tratamientos Metálicos",
+          "href": "/productos/pretratamientos-metalicos",
+          "description": "Desengrasantes, desoxidantes y fosfatizantes."
+        }
+      ]
+    },
+    {
+      "label": "Mercados",
+      "description": "Los sectores donde aplicamos nuestras soluciones.",
+      "children": [
+        { "label": "Todos los sectores", "href": "/mercados", "description": "Panorama de las seis industrias que atendemos." },
+        { "label": "Arquitectura", "href": "/mercados/arquitectura", "description": "Fachadas, cancelería y perfilería a la intemperie." },
+        { "label": "Automotriz", "href": "/mercados/automotriz", "description": "Rines, chasis y componentes con especificación OEM." },
+        { "label": "Industria General", "href": "/mercados/industria-general", "description": "Maquinaria, gabinetes y estructura metálica." },
+        { "label": "ACE", "href": "/mercados/ace", "description": "Agrícola, construcción y movimiento de tierra." },
+        { "label": "Mueblero", "href": "/mercados/mueblero", "description": "Mobiliario metálico de contacto frecuente." },
+        { "label": "Iluminación", "href": "/mercados/iluminacion", "description": "Luminarias y carcasas expuestas al calor." }
+      ]
+    },
+    {
+      "label": "Quiénes Somos",
+      "href": "/quienes-somos",
+      "description": "Empresa mexicana con un propósito firme."
+    },
+    {
+      "label": "Contacto",
+      "href": "/contacto",
+      "description": "Cotiza con nosotros."
+    }
+  ],
+  "footer": [
+    {
+      "title": "Productos",
+      "links": [
+        { "label": "Pintura en Polvo", "href": "/productos/pintura-en-polvo" },
+        { "label": "Pintura Líquida", "href": "/productos/pintura-liquida" },
+        { "label": "Pre Tratamientos Metálicos", "href": "/productos/pretratamientos-metalicos" },
+        { "label": "Servicio de maquila", "href": "/productos/pintura-en-polvo#maquila" }
+      ]
+    },
+    {
+      "title": "Mercados",
+      "links": [
+        { "label": "Arquitectura", "href": "/mercados/arquitectura" },
+        { "label": "Automotriz", "href": "/mercados/automotriz" },
+        { "label": "Industria General", "href": "/mercados/industria-general" },
+        { "label": "ACE", "href": "/mercados/ace" },
+        { "label": "Mueblero", "href": "/mercados/mueblero" },
+        { "label": "Iluminación", "href": "/mercados/iluminacion" }
+      ]
+    },
+    {
+      "title": "Empresa",
+      "links": [
+        { "label": "Quiénes Somos", "href": "/quienes-somos" },
+        { "label": "Carta de colores", "href": "/colores" },
+        { "label": "Contacto", "href": "/contacto" },
+        { "label": "WhatsApp", "href": "https://api.whatsapp.com/send?phone=523333892775", "external": true }
+      ]
+    }
+  ],
+  "legal": [
+    { "label": "ventas@coatingsystemsmx.com", "href": "mailto:ventas@coatingsystemsmx.com", "external": true },
+    { "label": "33 3389 2775", "href": "tel:+523333892775", "external": true },
+    { "label": "Aguascalientes, Ags., México", "href": "/contacto", "external": true }
+  ]
+}

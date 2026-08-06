@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 100" role="img" aria-label="Coating Systems MX">
+  <title>Coating Systems MX</title>
+  <!--
+    Logotipo horizontal: isotipo vectorizado del cliente + tipografía.
+    El texto usa Noto Sans, la misma familia del resto del sitio, para que el
+    encabezado quede tipográficamente coherente.
+  -->
+  <g>
+    <path fill="#EE272C"
+          d="M40.52 0 L42.48 0.65 L42.48 20.26 L16.34 33.99 L16.34 65.36
+             L42.48 79.74 L41.83 100 L0 75.16 L0 23.53Z"/>
+    <path fill="#3D72B8"
+          d="M46.41 0 L52.29 1.96 L88.89 23.53 L88.89 43.14 L81.7 40.52 L46.41 20.92Z
+             M46.41 24.84 L88.89 47.71 L88.89 73.2 L46.41 50.33Z
+             M67.97 67.32 L70.59 67.32 L80.39 72.55 L84.97 75.16 L86.27 77.78
+             L46.41 100 L46.41 79.08Z"/>
+  </g>
+
+  <g font-family="'Noto Sans', system-ui, sans-serif">
+    <text x="108" y="46" font-size="30" font-weight="700" letter-spacing="-0.5"
+          fill="#3D72B8">COATING</text>
+    <text x="108" y="76" font-size="30" font-weight="700" letter-spacing="-0.5"
+          fill="#20292E">SYSTEMS<tspan fill="#EE272C" dx="8">MX</tspan></text>
+  </g>
+</svg>

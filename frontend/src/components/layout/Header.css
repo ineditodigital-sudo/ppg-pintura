@@ -1,0 +1,500 @@
+/* ============================================================================
+   Header + Mega-menú
+   ========================================================================== */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-tertiary);
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    background-color 320ms var(--ease-out),
+    border-color 320ms var(--ease-out);
+}
+
+/* Franja azul superior: el remate de marca del propio sitio de PPG. */
+.header::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: var(--bg-brand-solid);
+  transition: opacity 320ms var(--ease-out);
+}
+
+.header--scrolled {
+  box-shadow: var(--shadow-s);
+}
+
+/* ---------------------------------------------------------------------------
+   Cabecera sobre el hero.
+
+   Mientras no se ha bajado y debajo hay una banda oscura, la cabecera se
+   vuelve transparente y monta sobre ella. Antes era una barra blanca encima
+   del hero: dos bloques separados por una línea, que es justo lo que hacía
+   que la página arrancara como un documento y no como una portada.
+
+   Al bajar recupera el fondo blanco, para que el menú siga siendo legible
+   sobre el contenido claro.
+
+   La clase la pone React (`useCabeceraSobreHero`), no un `:has()` en CSS: el
+   hero de una página interna se monta cuando responde la API, después del
+   primer pintado, y el navegador no reevaluaba el `:has()` sobre el body. La
+   cabecera se quedaba blanca con su texto y su logotipo en blanco encima.
+   -------------------------------------------------------------------------- */
+body.con-hero .header:not(.header--scrolled) {
+  background: transparent;
+  border-bottom-color: transparent;
+}
+
+body.con-hero .header:not(.header--scrolled)::before {
+  opacity: 0;
+}
+
+/* Sobre el azul, el texto del menú va en blanco. */
+body.con-hero .header:not(.header--scrolled) .header__link {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+body.con-hero .header:not(.header--scrolled) .header__link:hover,
+body.con-hero .header:not(.header--scrolled) .header__link[aria-expanded='true'],
+body.con-hero .header:not(.header--scrolled) .header__link.is-active {
+  color: #fff;
+  /* La pastilla de hover heredaba `--bg-brand-primary`, un azul casi blanco:
+     sobre el header transparente el texto pasaba a blanco y quedaba blanco
+     sobre blanco. Sobre foto la pastilla tiene que ser oscura, no clara. */
+  background: rgba(255, 255, 255, 0.16);
+}
+
+body.con-hero .header:not(.header--scrolled) .header__distribuidor {
+  border-left-color: rgba(255, 255, 255, 0.24);
+}
+
+body.con-hero .header:not(.header--scrolled) .header__distribuidor-etiqueta {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+body.con-hero .header:not(.header--scrolled) .header__distribuidor-nombre {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+body.con-hero .header:not(.header--scrolled) .header__burger {
+  color: #fff;
+}
+
+/* El logotipo pasa a su versión calada en blanco. */
+body.con-hero .header:not(.header--scrolled) .header__logo img {
+  content: url('/assets/marcas/ppg-blanco.png');
+}
+
+.header__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xl);
+  height: var(--header-height);
+}
+
+.header__logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* La marca es PPG: el logotipo va a mayor tamaño que la versión anterior,
+   porque ahora es el encabezado del sitio y no un sello secundario. */
+.header__logo img {
+  height: 42px;
+  width: auto;
+}
+
+/* El distribuidor, en texto y sin logotipo.
+   Un segundo logotipo al lado del de PPG genera duda sobre de quién es el
+   sitio; en texto pequeño la relación queda clara y la marca no compite. */
+.header__distribuidor {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex-shrink: 0;
+  padding-left: var(--space-m);
+  margin-left: var(--space-s);
+  border-left: 1px solid var(--border-secondary);
+}
+
+.header__distribuidor-etiqueta {
+  font-size: 10px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+.header__distribuidor-nombre {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.2;
+  color: var(--fg-secondary);
+}
+
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-left: var(--space-l);
+}
+
+@media (max-width: 78rem) {
+  .header__distribuidor {
+    display: none;
+  }
+}
+
+.header__item {
+  position: relative;
+}
+
+.header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-s);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--fg-secondary);
+  border-radius: var(--radius-xs);
+  background: none;
+  border: none;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.header__link:hover,
+.header__link[aria-expanded='true'] {
+  color: var(--fg-brand-tertiary);
+  background: var(--bg-brand-primary);
+}
+
+.header__link.is-active {
+  color: var(--fg-brand-secondary);
+  font-weight: var(--fw-semibold);
+}
+
+/* Subrayado animado — reemplaza el estado plano del original */
+.header__link::after {
+  content: '';
+  position: absolute;
+  left: var(--space-s);
+  right: var(--space-s);
+  bottom: 2px;
+  height: 2px;
+  background: var(--bg-brand-solid);
+  border-radius: var(--radius-full);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.header__link:hover::after,
+.header__link.is-active::after,
+.header__link[aria-expanded='true']::after {
+  transform: scaleX(1);
+}
+
+.header__chevron {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.header__link[aria-expanded='true'] .header__chevron {
+  transform: rotate(180deg);
+}
+
+/* El empuje a la derecha vive aquí, no en el nav.
+   Si estuviera en `.header__nav`, al ocultarlo en móvil el bloque de acciones
+   se quedaba pegado al logotipo, con el burger flotando a media barra. */
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* 44×44 es el mínimo táctil recomendado; el icono se dibuja centrado. */
+.header__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  color: var(--fg-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-2xs);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.header__burger:active {
+  background: var(--bg-secondary);
+}
+
+.header__burger[aria-expanded='true'] {
+  background: var(--bg-brand-solid);
+  border-color: var(--bg-brand-solid);
+  color: #fff;
+}
+
+/* --- Panel del mega-menú -------------------------------------------------- */
+
+/* Panel oscuro, no blanco.
+   Era la ultima superficie con el lenguaje anterior: una lamina blanca con
+   enlaces y barritas de acento a la izquierda. En azul profundo se lee como
+   una extension del hero y no como un desplegable pegado encima. */
+.megamenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background:
+    radial-gradient(120% 160% at 12% 0%, var(--ppg-navy-soft) 0%, var(--ppg-navy) 68%);
+  border-bottom: 0;
+  box-shadow: 0 30px 70px rgba(4, 20, 32, 0.42);
+  animation: megamenu-in var(--dur-base) var(--ease-out);
+}
+
+.megamenu__aside h2 {
+  color: #fff;
+  font-weight: var(--fw-regular);
+  letter-spacing: -0.02em;
+}
+
+@keyframes megamenu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.megamenu__inner {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) 1fr;
+  gap: var(--space-4xl);
+  padding-block: var(--space-3xl) var(--space-4xl);
+}
+
+.megamenu__aside h2 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-xs);
+}
+
+.megamenu__aside p {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.megamenu__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--space-xs) var(--space-xl);
+}
+
+/* Fila con linea fina arriba, como el resto del sitio: nada de barras de
+   acento a la izquierda ni cajas redondeadas. */
+.megamenu__link {
+  display: block;
+  padding: var(--space-m) 0;
+  border-radius: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transition:
+    border-top-color var(--dur-base) var(--ease-out),
+    padding-left var(--dur-base) var(--ease-card);
+}
+
+.megamenu__link:hover {
+  background: none;
+  border-top-color: var(--ppg-sky);
+  /* Desplaza en vez de rellenar: el gesto acompana al cursor sin encender
+     una caja de color en mitad del panel. */
+  padding-left: var(--space-s);
+  color: #fff;
+}
+
+.megamenu__link-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body);
+  color: var(--fg-brand-tertiary);
+}
+
+.megamenu__link-description {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-sm);
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.megamenu__overlay {
+  position: fixed;
+  /* +4px por la franja de marca: con sólo `--header-height` el velo subía
+     hasta dentro de la cabecera y le comía el borde inferior. */
+  inset: calc(var(--header-height) + 4px) 0 0;
+  z-index: calc(var(--z-header) - 1);
+  background: var(--alpha-black-30);
+  backdrop-filter: blur(3px);
+  animation: fade-in var(--dur-base) var(--ease-out);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- Navegación móvil ----------------------------------------------------- */
+
+/* Entra deslizando desde arriba en vez de aparecer de golpe. */
+@keyframes mobile-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes mobile-item-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mobile-nav {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: var(--z-modal);
+  background: var(--bg-primary);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-m) var(--page-padding-x) var(--space-4xl);
+  animation: mobile-nav-in var(--dur-base) var(--ease-out);
+}
+
+/* Los grupos entran escalonados: da sensación de despliegue, no de corte. */
+.mobile-nav__group {
+  border-bottom: 1px solid var(--border-tertiary);
+  animation: mobile-item-in var(--dur-base) var(--ease-out) backwards;
+}
+
+.mobile-nav__group:nth-child(1) { animation-delay: 40ms; }
+.mobile-nav__group:nth-child(2) { animation-delay: 80ms; }
+.mobile-nav__group:nth-child(3) { animation-delay: 120ms; }
+.mobile-nav__group:nth-child(4) { animation-delay: 160ms; }
+.mobile-nav__group:nth-child(5) { animation-delay: 200ms; }
+
+.mobile-nav__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  padding: var(--space-m) 0;
+  font-size: var(--fs-lead);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+  text-align: left;
+}
+
+.mobile-nav__toggle[aria-expanded='true'] {
+  color: var(--fg-brand-secondary);
+}
+
+/* La rejilla de una fila anima su altura sin necesidad de medir en JS. */
+.mobile-nav__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-base) var(--ease-out);
+}
+
+.mobile-nav__panel.is-open {
+  grid-template-rows: 1fr;
+}
+
+.mobile-nav__panel-inner {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.mobile-nav__panel a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: var(--space-xs) var(--space-m);
+  background: var(--bg-brand-primary);
+  color: var(--fg-brand-secondary);
+  font-size: var(--fs-body);
+  border-radius: var(--radius-s);
+}
+
+.mobile-nav__panel a:active {
+  background: var(--bg-brand-secondary);
+}
+
+.mobile-nav__panel-inner > :last-child {
+  margin-bottom: var(--space-m);
+}
+
+.mobile-nav__footer {
+  margin-top: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  animation: mobile-item-in var(--dur-base) var(--ease-out) 220ms backwards;
+}
+
+@media (max-width: 62rem) {
+  .header__nav {
+    display: none;
+  }
+
+  .header__burger {
+    display: inline-flex;
+  }
+
+  .header__actions .btn {
+    display: none;
+  }
+
+  /* En móvil sólo queda el burger, pegado al borde derecho. */
+  .header__bar {
+    gap: var(--space-m);
+  }
+}
+
+@media (min-width: 62.0625rem) {
+  .mobile-nav {
+    display: none;
+  }
+}

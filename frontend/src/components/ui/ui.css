@@ -1,0 +1,854 @@
+/* ============================================================================
+   Primitivas de UI
+   ========================================================================== */
+
+/* --- Container / Section -------------------------------------------------- */
+
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--page-padding-x);
+}
+
+.container--narrow {
+  max-width: calc(var(--content-max) + var(--page-padding-x) * 2);
+}
+
+.section {
+  padding-block: var(--space-6xl);
+}
+
+.section--tight {
+  padding-block: var(--space-4xl);
+}
+
+.section--flush {
+  padding-block: 0;
+}
+
+.section--light {
+  background: var(--bg-secondary);
+}
+
+.section--brand {
+  background: var(--bg-brand-primary);
+}
+
+/* Bloque oscuro del ritmo editorial.
+   No es un gris neutro: es el azul profundo de la escala PPG, con un degradado
+   muy sutil que evita que un tramo alto se vea como una plancha plana. */
+.section--dark {
+  background:
+    radial-gradient(
+      120% 90% at 15% 0%,
+      var(--ppg-navy-soft) 0%,
+      var(--ppg-navy) 62%
+    );
+  color: var(--fg-white);
+}
+
+.section--dark :is(h1, h2, h3, h4) {
+  color: var(--fg-white);
+}
+
+@media (max-width: 48rem) {
+  .section {
+    padding-block: var(--space-4xl);
+  }
+  .section--tight {
+    padding-block: var(--space-2xl);
+  }
+}
+
+/* --- Encabezado de sección ------------------------------------------------ */
+
+/* Titulares de sección más grandes y de peso ligero: el contraste entre un
+   display amplio y el cuerpo pequeño es lo que da el registro editorial. */
+/* Encabezado a dos columnas, separado del contenido por una línea.
+   El título ocupa la izquierda con medida corta —para que caiga en dos o tres
+   líneas y funcione como titular— y la descripción se apoya abajo a la
+   derecha. Es la composición que da el aire editorial: la sección abre con
+   una tensión entre los dos lados, no con un bloque centrado. */
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.85fr);
+  align-items: end;
+  gap: var(--space-3xl);
+  max-width: none;
+  margin-bottom: var(--space-3xl);
+  padding-bottom: var(--space-l);
+  border-bottom: 1px solid var(--border-tertiary);
+}
+
+.section--dark .section-head {
+  border-bottom-color: rgba(255, 255, 255, 0.16);
+}
+
+.section-head__principal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+}
+
+.section-head h2 {
+  font-size: clamp(2rem, 1.1rem + 2.8vw, 3.4rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  max-width: 18ch;
+}
+
+.section-head__description {
+  padding-bottom: 6px;
+}
+
+@media (max-width: 62rem) {
+  .section-head {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--space-m);
+  }
+
+  .section-head h2 {
+    max-width: none;
+  }
+}
+
+.section-head--center {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+}
+
+.section-head__description {
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-tertiary);
+}
+
+.section--dark .section-head__description {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.section--dark .eyebrow {
+  color: #7cc8e8;
+}
+
+/* --- Botón ---------------------------------------------------------------- */
+
+/* Botón de píldora en todo el sitio.
+   El rectángulo de 4px era el rasgo que más ataba la interfaz al aspecto
+   anterior: aparece en el hero, en cada tarjeta, en los CTA y en el
+   formulario, así que cambiarlo se nota en todas las pantallas a la vez. */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 13px var(--space-2xl);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  overflow: hidden;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn__icon {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.btn:hover .btn__icon {
+  transform: translateX(3px);
+}
+
+.btn--primary {
+  background: var(--bg-brand-solid);
+  color: var(--fg-brand-on-solid);
+  box-shadow: var(--shadow-xs);
+}
+
+.btn--primary:hover {
+  background: var(--bg-brand-solid-hover);
+  color: var(--fg-brand-on-solid);
+  box-shadow: var(--shadow-brand);
+}
+
+.btn--secondary {
+  background: transparent;
+  color: var(--fg-brand-secondary);
+  border-color: var(--border-brand-primary);
+}
+
+.btn--secondary:hover {
+  background: var(--bg-brand-primary);
+  border-color: var(--border-brand-solid);
+  color: var(--fg-brand-secondary);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--fg-secondary);
+  padding-inline: var(--space-s);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+}
+
+.btn--on-dark {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--fg-white);
+  border-color: rgba(255, 255, 255, 0.34);
+  backdrop-filter: blur(6px);
+}
+
+.btn--on-dark:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.6);
+  color: var(--fg-white);
+}
+
+.btn--small {
+  padding: var(--space-xs) var(--space-m);
+  font-size: var(--fs-sm);
+}
+
+.btn--block {
+  width: 100%;
+}
+
+/* --- Enlace con flecha (patrón de PPG) ------------------------------------ */
+
+.arrow-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-body);
+  color: var(--fg-brand-tertiary);
+}
+
+/* El azul de marca solo funciona sobre fondo claro. Sobre navy se queda en
+   3,01:1, asi que en contexto oscuro se sube al tinte claro: 9:1. */
+.section--dark .arrow-link,
+.section--brand .arrow-link {
+  color: #8fd3f0;
+}
+
+.arrow-link__icon {
+  flex-shrink: 0;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.arrow-link:hover .arrow-link__icon,
+a:hover .arrow-link__icon {
+  transform: translate(3px, -3px);
+}
+
+/* --- Tarjeta -------------------------------------------------------------- */
+
+/* Curva y duraciones compartidas por todo lo que responde al cursor.
+   `--ease-card` sale suave y frena despacio: es lo que hace que el
+   movimiento se sienta continuo en vez de a tirones. */
+/* Tarjeta.
+   Sin borde: el contorno de 1px sobre blanco es lo que hacía que la rejilla
+   se leyera como una tabla. Ahora se separa del fondo por elevación, y al
+   pasar el cursor una línea azul crece desde la izquierda —el gesto de las
+   referencias— además de levantarse. */
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-primary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-xs);
+  will-change: transform;
+  transition:
+    transform 460ms var(--ease-card),
+    box-shadow 460ms var(--ease-card),
+    background-color 320ms var(--ease-card);
+}
+
+/* Filo superior que se despliega al pasar por encima. */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ppg-blue), var(--ppg-sky));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 460ms var(--ease-card);
+  z-index: 2;
+}
+
+a.card:hover,
+.card--interactive:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-flotante);
+}
+
+a.card:hover::before,
+.card--interactive:hover::before {
+  transform: scaleX(1);
+}
+
+/* Al soltar, vuelve un poco más rápido de lo que sube. */
+a.card:active {
+  transform: translateY(-2px);
+  transition-duration: 120ms;
+}
+
+.card__media {
+  position: relative;
+  aspect-ratio: 13 / 9;
+  overflow: hidden;
+  background: var(--bg-secondary);
+}
+
+.card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms var(--ease-card);
+}
+
+a.card:hover .card__media img {
+  transform: scale(1.06);
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: var(--space-xl);
+  flex: 1;
+}
+
+.card__title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-s);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  color: var(--fg-brand-tertiary);
+}
+
+.card__description {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-secondary);
+}
+
+.card__label {
+  align-self: flex-start;
+  margin-bottom: var(--space-2xs);
+}
+
+/* Icono vectorial sobre el título. Va en una placa para que tenga presencia
+   sin depender de una imagen. */
+.card__icon {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  margin-bottom: var(--space-xs);
+  border-radius: var(--radius-l);
+  background: var(--bg-primary);
+  color: var(--fg-brand-tertiary);
+  transition:
+    background-color var(--dur-base) var(--ease-card),
+    color var(--dur-base) var(--ease-card),
+    transform var(--dur-base) var(--ease-card);
+}
+
+/* Sobre tarjeta tintada, la placa va en blanco para separarse del fondo. */
+.card--text .card__icon {
+  background: #fff;
+}
+
+a.card:hover .card__icon {
+  transform: translateY(-2px) scale(1.06);
+}
+
+.card--highlight .card__icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.card__foot {
+  margin-top: auto;
+  padding-top: var(--space-m);
+}
+
+/* Variante de texto: caja rellena, sin bordes de color.
+   Las barras de acento a la izquierda se descartaron a propósito: ensucian la
+   rejilla y no aparecen en el lenguaje visual de PPG. */
+/* Tarjeta de texto: deja de ser una caja rellena y pasa a fila numerada.
+   Estas rejillas aparecían dos veces en la portada con el mismo aspecto de
+   cajas azules. Numeradas y separadas por una línea fina se leen como un
+   índice —el recurso de las referencias— y dejan de competir con las
+   tarjetas con foto, que son las que sí deben pesar. */
+.card-grid {
+  counter-reset: fila;
+}
+
+.card--text {
+  counter-increment: fila;
+  position: relative;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--border-secondary);
+}
+
+/* El número grande, en hueco, delante del título. */
+.card--text::after {
+  content: counter(fila, decimal-leading-zero);
+  position: absolute;
+  top: var(--space-l);
+  right: 0;
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-regular);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ppg-blue);
+  opacity: 0.28;
+  transition: opacity var(--dur-base) var(--ease-card);
+}
+
+a.card--text:hover,
+.card--text:hover {
+  background: transparent;
+  border-color: transparent;
+  border-top-color: var(--ppg-blue);
+  box-shadow: none;
+  transform: none;
+}
+
+.card--text:hover::after {
+  opacity: 1;
+}
+
+/* El filo superior de la tarjeta genérica sobra aquí: ya hay una línea. */
+.card--text::before {
+  display: none;
+}
+
+.section--dark .card--text {
+  border-top-color: rgba(255, 255, 255, 0.18);
+}
+
+.section--dark .card--text::after {
+  color: var(--ppg-sky);
+}
+
+.card--text .card__title {
+  color: var(--fg-brand-secondary);
+  font-size: var(--fs-h4);
+}
+
+/* --- Tarjeta destacada -----------------------------------------------------
+   Una por rejilla, rellena en color de marca. Rompe la monotonía de la
+   cuadrícula y marca cuál es la opción principal. */
+
+/* Sombra desplazada, medida en las tarjetas de PPG: 5px 8px 22px al 25%.
+   Es más marcada y con más caída que una sombra centrada. */
+.card--highlight {
+  background: var(--bg-brand-solid);
+  border-color: transparent;
+  box-shadow: 5px 8px 22px rgba(0, 0, 0, 0.25);
+}
+
+.card--highlight .card__title,
+.card--highlight .card__description,
+.card--highlight .arrow-link {
+  color: #fff;
+}
+
+.card--highlight .card__description {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.card--highlight .badge {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #fff;
+}
+
+a.card--highlight:hover,
+.card--highlight.card--text:hover {
+  background: var(--bg-brand-solid-hover);
+  border-color: transparent;
+}
+
+/* --- Miniatura lateral -----------------------------------------------------
+   La foto va pequeña y cuadrada junto al texto, en lugar de ocupar la tarjeta
+   entera. Es lo que permite que originales de 266×154 se vean nítidos: a
+   112 px de lado sobra resolución incluso al doble de densidad. */
+
+/* Tarjeta de sector: de fila con miniatura a placa vertical con el texto
+   sobre la foto. Era el último bloque de la portada que seguía siendo una
+   lista de cajitas azules con un sello de 112px al lado; así compite de
+   verdad con las tarjetas de producto y la sección se ve, no se lee. */
+.card--thumb {
+  position: relative;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 300px;
+  background: var(--ppg-navy);
+  border-color: transparent;
+}
+
+.card--thumb .card__media {
+  position: absolute;
+  inset: 0;
+  flex: none;
+  aspect-ratio: auto;
+  min-height: 0;
+  z-index: 0;
+}
+
+.card--thumb .card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.55;
+  /* El trigal de ACE y las butacas de Mueblero metian un amarillo y un rojo
+     que el cliente pidio desterrar del sitio. Desaturar y virar a azul deja
+     las seis fotos como una familia en vez de seis acentos peleados. */
+  filter: saturate(0.5) hue-rotate(-8deg);
+  transition:
+    transform 700ms var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+}
+
+.card--thumb:hover .card__media img {
+  transform: scale(1.06);
+  opacity: 0.68;
+  /* Al pasar el raton recupera algo de color: premia la interaccion. */
+  filter: saturate(0.72) hue-rotate(-8deg);
+}
+
+/* Velo en dos capas: uno arriba para el titulo y otro abajo para el enlace.
+   El degradado unico arrancaba casi transparente y el texto blanco se perdia
+   sobre las fotos claras -el cielo de Arquitectura, el trigal de ACE-, que es
+   justo donde mas hacia falta. Medido: pasaba de 2,4:1. */
+.card--thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(8, 32, 49, 0.86) 0%, rgba(8, 32, 49, 0.34) 46%),
+    linear-gradient(0deg, rgba(8, 32, 49, 0.9) 0%, rgba(8, 32, 49, 0) 42%);
+}
+
+/* El texto se reparte: titulo arriba, enlace abajo, cada uno sobre su velo. */
+.card--thumb .card__body {
+  justify-content: space-between;
+  height: 100%;
+}
+
+.card--thumb .card__body {
+  position: relative;
+  z-index: 2;
+  padding: var(--space-l);
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.card--thumb .card__title {
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-regular);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.card--thumb .card__description {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.card--thumb .card__description {
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.card--thumb .card__foot {
+  padding-top: var(--space-xs);
+}
+
+.card--thumb .arrow-link {
+  font-size: var(--fs-sm);
+  /* Sobre el velo oscuro de la foto el azul PPG se queda en 3,01:1.
+     El blanco da 12,6:1 y ademas iguala el resto del texto de la tarjeta. */
+  color: #fff;
+}
+
+@media (max-width: 30rem) {
+  .card--thumb .card__media {
+    flex-basis: 88px;
+    min-height: 88px;
+  }
+}
+
+/* --- Etiqueta sobre la imagen ----------------------------------------------
+   Patrón de las tarjetas de destino: el título se apoya sobre la foto con un
+   degradado, en lugar de ir debajo en un bloque de texto aparte. */
+
+.card--overlay {
+  position: relative;
+  border: none;
+  min-height: 300px;
+  justify-content: flex-end;
+}
+
+.card--overlay .card__media {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+  z-index: 0;
+}
+
+.card--overlay .card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 21, 32, 0) 30%,
+    rgba(8, 21, 32, 0.82) 100%
+  );
+}
+
+.card--overlay .card__body {
+  position: relative;
+  z-index: 1;
+  flex: 0;
+  padding: var(--space-xl);
+}
+
+.card--overlay .card__title {
+  color: #fff;
+  font-size: var(--fs-h3);
+}
+
+.card--overlay .card__description {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: var(--fs-sm);
+}
+
+.card--overlay .card__foot {
+  padding-top: var(--space-s);
+}
+
+.card--overlay .arrow-link {
+  color: #fff;
+}
+
+/* --- Badge / Chip --------------------------------------------------------- */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-xs);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-brand-secondary);
+  background: var(--bg-brand-primary);
+  border: 1px solid var(--border-brand-secondary);
+  border-radius: var(--radius-2xs);
+}
+
+.badge--solid {
+  background: var(--bg-brand-solid);
+  border-color: var(--bg-brand-solid);
+  color: var(--fg-brand-on-solid);
+}
+
+/* --- Breadcrumb ----------------------------------------------------------- */
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-block: var(--space-m);
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+.breadcrumb a {
+  color: var(--fg-tertiary);
+}
+
+.breadcrumb a:hover {
+  color: var(--fg-brand-tertiary);
+}
+
+.breadcrumb__sep {
+  color: var(--fg-quaternary);
+}
+
+.breadcrumb [aria-current='page'] {
+  color: var(--fg-primary);
+  font-weight: var(--fw-medium);
+}
+
+/* --- Imagen con skeleton -------------------------------------------------- */
+
+.smart-image {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.smart-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.smart-image img.is-loaded {
+  opacity: 1;
+}
+
+/* ============================================================================
+   Rejilla en mosaico — variante `thumb`
+   Seis sectores en tres alturas distintas en vez de dos filas iguales. La
+   asimetria es lo que hace que la seccion se mire en lugar de leerse como
+   una tabla, y de paso las piezas grandes dan sitio a las fotos.
+   ========================================================================== */
+
+/* Selector doblado a proposito: `[data-columns]` tiene la misma especificidad
+   y va despues en la hoja, asi que ganaba y dejaba la rejilla en 2 columnas
+   -con la tercera ficha aplastada a 16 px-. El mosaico define sus propias
+   columnas por diseño; el numero que venga del CMS no aplica aqui. */
+.card-grid[data-variant='thumb'][data-variant='thumb'] {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-rows: 150px;
+  gap: var(--space-m);
+}
+
+/* Base: tres por fila. Cada patrón de abajo ajusta las que hagan falta.
+   Todo suma seis por fila, que es lo que evita los huecos. */
+.card-grid[data-variant='thumb'] > * {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+/* Seis: dos anchas arriba, tres en medio, una ancha de cierre. */
+.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(1) {
+  grid-column: span 4;
+}
+.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(6) {
+  grid-column: span 6;
+  grid-row: span 1;
+}
+
+/* Cinco: la primera manda y las tres últimas cierran la segunda fila.
+   Antes la quinta se iba a una fila propia a todo lo ancho y dejaba la de
+   en medio con cuatro de seis columnas: ese era el hueco. */
+.card-grid[data-variant='thumb'][data-count='5'] > *:nth-child(1) {
+  grid-column: span 4;
+}
+
+/* Cuatro: dos y dos, en mitades. */
+.card-grid[data-variant='thumb'][data-count='4'] > * {
+  grid-column: span 3;
+}
+
+/* Dos: una junto a la otra. */
+.card-grid[data-variant='thumb'][data-count='2'] > * {
+  grid-column: span 3;
+}
+
+/* Una sola ocupa la fila entera, y baja de alto: a seis columnas y dos filas
+   la foto se estiraría sin nada al lado. */
+.card-grid[data-variant='thumb'][data-count='1'] > * {
+  grid-column: span 6;
+  grid-row: span 1;
+}
+
+/* En las piezas anchas y bajas el texto va a un lado, no debajo. */
+.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(6) .card__body,
+.card-grid[data-variant='thumb'][data-count='1'] > * .card__body {
+  max-width: 46ch;
+}
+
+.card-grid[data-variant='thumb'] .card--thumb {
+  min-height: 0;
+}
+
+/* El selector va doblado igual que arriba: si no, la regla de escritorio
+   —que lo dobla para ganarle a `[data-columns]`— tiene más especificidad que
+   estas y el mosaico se quedaba a seis columnas en el móvil, con las fichas
+   a un tercio de ancho. */
+@media (max-width: 62rem) {
+  .card-grid[data-variant='thumb'][data-variant='thumb'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-rows: 130px;
+  }
+  .card-grid[data-variant='thumb'][data-variant='thumb'] > * {
+    grid-column: span 1 !important;
+    grid-row: span 2 !important;
+  }
+}
+
+/* La primera cruza las dos columnas cuando el total es impar; con un número
+   par partiría la rejilla y dejaría a la última sola.
+   El rango se acota por abajo a propósito: si esta regla llegara al móvil de
+   una columna, la ficha pediría una columna que no existe y el navegador
+   creaba una implícita de 0 px con tarjetas de 2 px de ancho. */
+@media (min-width: 40.0625rem) and (max-width: 62rem) {
+  .card-grid[data-variant='thumb'][data-variant='thumb'][data-count='3'] > *:nth-child(1),
+  .card-grid[data-variant='thumb'][data-variant='thumb'][data-count='5'] > *:nth-child(1) {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (max-width: 40rem) {
+  .card-grid[data-variant='thumb'][data-variant='thumb'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .card-grid[data-variant='thumb'][data-variant='thumb'] > * {
+    grid-column: span 1 !important;
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "products": [
+    {
+      "slug": "pintura-electrostatica-ppg",
+      "name": "Pintura Electrostática PPG",
+      "sku": null,
+      "tagline": "Recubrimiento en polvo de marca",
+      "description": "Acabado duro y uniforme sobre metal, sin disolventes y con muy poco desperdicio.",
+      "image": {
+        "src": "/assets/csmx/pintura-polvo-azul.webp",
+        "alt": "Pintura electrostática en polvo PPG"
+      },
+      "highlights": [
+        "83 referencias con equivalencia RAL",
+        "Brillante, mate, texturizado y gofrado"
+      ],
+      "cta": { "label": "Ver la carta de colores", "href": "/colores" }
+    },
+    {
+      "slug": "aerosol-retoque-w49180cl",
+      "name": "Aerosol de Retoque",
+      "sku": "W49180CL",
+      "tagline": "Black Ed Touch Up",
+      "description": "Corrige marcas y raspones sin repintar la pieza entera.",
+      "image": {
+        "src": "/assets/csmx/aerosol-retoque.webp",
+        "alt": "Aerosol de retoque PPG Black Ed Touch Up W49180CL"
+      },
+      "highlights": ["Listo para aplicar, sin preparación"],
+      "cta": { "label": "Consultar disponibilidad", "href": "/contacto" }
+    },
+    {
+      "slug": "marcador-retoque-w43042p",
+      "name": "Marcador de Retoque",
+      "sku": "W43042P",
+      "tagline": "Hi Gloss Ed Black Touch Up Pen",
+      "description": "Retoques de alto brillo donde el aerosol resulta excesivo.",
+      "image": {
+        "src": "/assets/csmx/marcador-retoque.webp",
+        "alt": "Marcador de retoque PPG Hi Gloss Ed Black Touch Up Pen W43042P"
+      },
+      "highlights": ["Punta fina para cantos y tornillería"],
+      "cta": { "label": "Consultar disponibilidad", "href": "/contacto" }
+    }
+  ]
+}

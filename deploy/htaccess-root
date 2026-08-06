@@ -1,0 +1,110 @@
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php8_module>
+   php_value error_log "/home/pinturaenpolvomx/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+<IfModule lsapi_module>
+   php_value error_log "/home/pinturaenpolvomx/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# ---------------------------------------------------------------------------
+# PPG COATINGS — SPA (React Router) + API PHP
+# ---------------------------------------------------------------------------
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # El reto de Let's Encrypt se sirve tal cual, antes de cualquier otra regla.
+  # Va la primera a propósito: si la renovación tuviera que pasar por la
+  # redirección a HTTPS de abajo, el certificado dejaría de renovarse solo.
+  RewriteRule ^\.well-known/ - [L]
+
+  # Todo a HTTPS.
+  # Sin esto, quien teclea el dominio sin escribir «https://» carga el sitio
+  # en claro y el navegador lo marca como no seguro. Se comprueba `%{HTTPS}`
+  # y también `X-Forwarded-Proto`, porque tras el proxy de LiteSpeed la
+  # primera puede llegar apagada aunque la visita sí venga cifrada.
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # /api/... → front controller. La URI original se conserva, que es de donde
+  # el Router de PHP lee la ruta.
+  RewriteCond %{REQUEST_URI} ^/api/
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ /api/index.php [L]
+
+  # Cualquier otra ruta que no sea un archivo o directorio real la resuelve
+  # el enrutador del cliente. Permite recargar /color o /productos/aerospace.
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ /index.html [L]
+</IfModule>
+
+# --- Caché ------------------------------------------------------------------
+# Los bundles llevan hash en el nombre, así que son inmutables.
+# index.html nunca se cachea: es quien apunta al bundle vigente.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(jpg|jpeg|png|gif|svg|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  # El video del hero salia sin TTL en PageSpeed: se volvia a descargar en
+  # cada visita. Es inmutable -su nombre no cambia, pero tampoco su contenido-.
+  <FilesMatch "\.(mp4|webm|m4v)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(html|json)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # --- Cabeceras de seguridad ---
+  # HSTS: el navegador recuerda que este dominio es sólo HTTPS y ni siquiera
+  # llega a hacer la primera petición en claro. Seis meses, sin `preload` ni
+  # `includeSubDomains`: afecta sólo a este host y se puede dar marcha atrás
+  # bajando el `max-age` sin afectar a ningún otro host.
+  Header always set Strict-Transport-Security "max-age=15552000"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# --- Compresión -------------------------------------------------------------
+# El envoltorio `<IfModule>` es obligatorio aquí: sin él, este servidor
+# devuelve 500 en cada petición porque no reconoce la directiva. Y con él,
+# la condición da falsa y no se comprime nada. Es decir, la compresión NO
+# se puede activar desde .htaccess en este hosting: hay que encenderla en
+# cPanel (Optimizar sitio web) o en la configuración de LiteSpeed.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
+  AddOutputFilterByType DEFLATE application/json image/svg+xml
+</IfModule>
+
+# --- Tipos MIME -------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType application/json .json
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+</IfModule>
+
+# --- Archivos que nunca deben servirse --------------------------------------
+<FilesMatch "(^\.|\.(jsonl|md|log)$)">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>

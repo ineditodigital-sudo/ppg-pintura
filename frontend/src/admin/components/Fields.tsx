@@ -1,0 +1,601 @@
+import { useEffect, useId, useState, type ReactNode } from 'react'
+import type { FieldDef } from '../schema'
+import { listMedia, uploadMedia, type MediaItem } from '../api'
+
+/* --- Envoltorio común ------------------------------------------------------ */
+
+export function Field({
+  label,
+  help,
+  required,
+  htmlFor,
+  children,
+}: {
+  label: string
+  help?: string
+  required?: boolean
+  htmlFor?: string
+  children: ReactNode
+}) {
+  return (
+    <div className="adm-field">
+      <label htmlFor={htmlFor} className="adm-field__label">
+        {label}
+        {required && <span className="adm-required"> *</span>}
+      </label>
+      {children}
+      {help && <span className="adm-field__help">{help}</span>}
+    </div>
+  )
+}
+
+/* --- Selector de imagen ----------------------------------------------------- */
+
+interface MediaValue {
+  src?: string
+  alt?: string
+}
+
+export function MediaPicker({
+  open,
+  onClose,
+  onPick,
+}: {
+  open: boolean
+  onClose: () => void
+  onPick: (item: MediaItem) => void
+}) {
+  const [items, setItems] = useState<MediaItem[]>([])
+  const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    listMedia()
+      .then(setItems)
+      .catch((e) => setError(e.message))
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open, onClose])
+
+  if (!open) return null
+
+  async function handleUpload(file: File | undefined) {
+    if (!file) return
+    setBusy(true)
+    setError('')
+    try {
+      const item = await uploadMedia(file)
+      setItems((prev) => [item, ...prev])
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'No se pudo subir el archivo.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="adm-modal" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="adm-modal__panel" onClick={(e) => e.stopPropagation()}>
+        <div className="adm-modal__head">
+          <h2>Biblioteca de medios</h2>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <label className="adm-btn adm-btn--ghost" style={{ cursor: 'pointer' }}>
+              {busy ? 'Subiendo…' : 'Subir imagen'}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                hidden
+                disabled={busy}
+                onChange={(e) => {
+                  void handleUpload(e.target.files?.[0])
+                  e.target.value = ''
+                }}
+              />
+            </label>
+            <button type="button" className="adm-btn adm-btn--ghost" onClick={onClose}>
+              Cerrar
+            </button>
+          </div>
+        </div>
+        <div className="adm-modal__body">
+          {error && <div className="adm-alert adm-alert--error">{error}</div>}
+          <div className="adm-media">
+            {items.map((item) => (
+              <button
+                type="button"
+                key={item.src}
+                className="adm-media__item"
+                onClick={() => {
+                  onPick(item)
+                  onClose()
+                }}
+              >
+                <div className="adm-media__thumb">
+                  <img src={item.src} alt="" loading="lazy" />
+                </div>
+                <div className="adm-media__meta">
+                  <div className="adm-media__name">{item.name}</div>
+                  <div className="adm-media__folder">{item.folder}</div>
+                </div>
+              </button>
+            ))}
+          </div>
+          {items.length === 0 && !error && (
+            <p className="adm-field__help">Cargando biblioteca…</p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function ImageField({
+  label,
+  required,
+  value,
+  onChange,
+}: {
+  label: string
+  required?: boolean
+  value: MediaValue | undefined
+  onChange: (value: MediaValue | undefined) => void
+}) {
+  const [picking, setPicking] = useState(false)
+  const src = value?.src ?? ''
+
+  return (
+    <Field label={label} required={required}>
+      <div className="adm-image">
+        <div className="adm-image__preview">
+          {src ? <img src={src} alt="" /> : <span>Sin imagen</span>}
+        </div>
+        <div className="adm-image__fields">
+          <input
+            type="text"
+            value={src}
+            placeholder="/assets/business/aerospace.jpg"
+            onChange={(e) => onChange({ ...value, src: e.target.value })}
+          />
+          <input
+            type="text"
+            value={value?.alt ?? ''}
+            placeholder="Texto alternativo (accesibilidad)"
+            onChange={(e) => onChange({ ...value, src, alt: e.target.value })}
+          />
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              type="button"
+              className="adm-btn adm-btn--ghost adm-btn--sm"
+              onClick={() => setPicking(true)}
+            >
+              Elegir de la biblioteca
+            </button>
+            {src && (
+              <button
+                type="button"
+                className="adm-btn adm-btn--danger adm-btn--sm"
+                onClick={() => onChange(undefined)}
+              >
+                Quitar
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      <MediaPicker
+        open={picking}
+        onClose={() => setPicking(false)}
+        onPick={(item) => onChange({ src: item.src, alt: value?.alt ?? '' })}
+      />
+    </Field>
+  )
+}
+
+/* --- Enlace ------------------------------------------------------------------ */
+
+interface LinkValue {
+  label?: string
+  href?: string
+  external?: boolean
+}
+
+export function LinkField({
+  label,
+  value,
+  onChange,
+}: {
+  label: string
+  value: LinkValue | undefined
+  onChange: (value: LinkValue | undefined) => void
+}) {
+  const filled = Boolean(value?.label || value?.href)
+
+  return (
+    <Field label={label} help="Deja ambos campos vacíos para no mostrar el botón.">
+      <div className="adm-link">
+        <input
+          type="text"
+          value={value?.label ?? ''}
+          placeholder="Texto del botón"
+          onChange={(e) => onChange({ ...value, label: e.target.value })}
+        />
+        <input
+          type="text"
+          value={value?.href ?? ''}
+          placeholder="/contacto o https://…"
+          onChange={(e) => onChange({ ...value, href: e.target.value })}
+        />
+        {filled && (
+          <button
+            type="button"
+            className="adm-btn adm-btn--icon"
+            title="Quitar el botón"
+            onClick={() => onChange(undefined)}
+          >
+            ✕
+          </button>
+        )}
+      </div>
+    </Field>
+  )
+}
+
+/* --- Lista de textos simples --------------------------------------------------- */
+
+export function StringListField({
+  label,
+  help,
+  required,
+  value,
+  onChange,
+}: {
+  label: string
+  help?: string
+  required?: boolean
+  value: string[] | undefined
+  onChange: (value: string[]) => void
+}) {
+  const items = Array.isArray(value) ? value : []
+
+  const update = (index: number, next: string) =>
+    onChange(items.map((item, i) => (i === index ? next : item)))
+
+  const move = (index: number, delta: number) => {
+    const target = index + delta
+    if (target < 0 || target >= items.length) return
+    const next = [...items]
+    ;[next[index], next[target]] = [next[target], next[index]]
+    onChange(next)
+  }
+
+  return (
+    <Field label={label} help={help} required={required}>
+      <div className="adm-list">
+        {items.map((item, index) => (
+          <div className="adm-list__bar" key={index}>
+            <textarea
+              value={item}
+              rows={2}
+              style={{ flex: 1 }}
+              onChange={(e) => update(index, e.target.value)}
+            />
+            <button
+              type="button"
+              className="adm-btn adm-btn--icon"
+              title="Subir"
+              disabled={index === 0}
+              onClick={() => move(index, -1)}
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              className="adm-btn adm-btn--icon"
+              title="Bajar"
+              disabled={index === items.length - 1}
+              onClick={() => move(index, 1)}
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              className="adm-btn adm-btn--icon"
+              title="Eliminar"
+              onClick={() => onChange(items.filter((_, i) => i !== index))}
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="adm-btn adm-btn--ghost adm-btn--sm"
+          onClick={() => onChange([...items, ''])}
+        >
+          + Añadir
+        </button>
+      </div>
+    </Field>
+  )
+}
+
+/* --- Lista de objetos ------------------------------------------------------------ */
+
+export function ListField({
+  label,
+  help,
+  required,
+  itemFields,
+  itemLabelKey,
+  value,
+  onChange,
+}: {
+  label: string
+  help?: string
+  required?: boolean
+  itemFields: FieldDef[]
+  itemLabelKey?: string
+  value: Record<string, unknown>[] | undefined
+  onChange: (value: Record<string, unknown>[]) => void
+}) {
+  const items = Array.isArray(value) ? value : []
+  const [open, setOpen] = useState<number | null>(null)
+
+  const update = (index: number, next: Record<string, unknown>) =>
+    onChange(items.map((item, i) => (i === index ? next : item)))
+
+  const move = (index: number, delta: number) => {
+    const target = index + delta
+    if (target < 0 || target >= items.length) return
+    const next = [...items]
+    ;[next[index], next[target]] = [next[target], next[index]]
+    onChange(next)
+    setOpen(target)
+  }
+
+  const blank = () =>
+    Object.fromEntries(
+      itemFields.map((f) => [f.key, f.type === 'list' || f.type === 'stringList' ? [] : '']),
+    )
+
+  return (
+    <Field label={label} help={help} required={required}>
+      <div className="adm-list">
+        {items.map((item, index) => {
+          const isOpen = open === index
+          const heading =
+            (itemLabelKey && typeof item[itemLabelKey] === 'string'
+              ? (item[itemLabelKey] as string)
+              : '') || `Elemento ${index + 1}`
+
+          return (
+            <div className={`adm-list__item${isOpen ? ' is-open' : ''}`} key={index}>
+              <div className="adm-list__bar">
+                <button
+                  type="button"
+                  className="adm-list__handle"
+                  onClick={() => setOpen(isOpen ? null : index)}
+                  aria-expanded={isOpen}
+                >
+                  {isOpen ? '▾' : '▸'} {heading}
+                </button>
+                <button
+                  type="button"
+                  className="adm-btn adm-btn--icon"
+                  title="Subir"
+                  disabled={index === 0}
+                  onClick={() => move(index, -1)}
+                >
+                  ↑
+                </button>
+                <button
+                  type="button"
+                  className="adm-btn adm-btn--icon"
+                  title="Bajar"
+                  disabled={index === items.length - 1}
+                  onClick={() => move(index, 1)}
+                >
+                  ↓
+                </button>
+                <button
+                  type="button"
+                  className="adm-btn adm-btn--icon"
+                  title="Eliminar"
+                  onClick={() => {
+                    onChange(items.filter((_, i) => i !== index))
+                    setOpen(null)
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              {isOpen && (
+                <div className="adm-list__body">
+                  {itemFields.map((field) => (
+                    <FieldRenderer
+                      key={field.key}
+                      field={field}
+                      value={item[field.key]}
+                      onChange={(next) => update(index, { ...item, [field.key]: next })}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )
+        })}
+        <button
+          type="button"
+          className="adm-btn adm-btn--ghost adm-btn--sm"
+          onClick={() => {
+            onChange([...items, blank()])
+            setOpen(items.length)
+          }}
+        >
+          + Añadir
+        </button>
+      </div>
+    </Field>
+  )
+}
+
+/* --- Despachador genérico ---------------------------------------------------------- */
+
+export function FieldRenderer({
+  field,
+  value,
+  onChange,
+}: {
+  field: FieldDef
+  value: unknown
+  onChange: (value: unknown) => void
+}) {
+  const id = useId()
+
+  switch (field.type) {
+    case 'textarea':
+      return (
+        <Field label={field.label} help={field.help} required={field.required} htmlFor={id}>
+          <textarea
+            id={id}
+            value={typeof value === 'string' ? value : ''}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        </Field>
+      )
+
+    case 'select':
+      return (
+        <Field label={field.label} help={field.help} required={field.required} htmlFor={id}>
+          <select
+            id={id}
+            value={value === undefined || value === null ? '' : String(value)}
+            onChange={(e) => {
+              const raw = e.target.value
+              const match = field.options?.find((o) => String(o.value) === raw)
+              onChange(match ? match.value : raw)
+            }}
+          >
+            <option value="">—</option>
+            {field.options?.map((option) => (
+              <option key={String(option.value)} value={String(option.value)}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+      )
+
+    case 'number':
+      return (
+        <Field label={field.label} help={field.help} required={field.required} htmlFor={id}>
+          <input
+            id={id}
+            type="number"
+            value={typeof value === 'number' ? value : ''}
+            onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+          />
+        </Field>
+      )
+
+    case 'boolean':
+      return (
+        <div className="adm-field">
+          <label className="adm-check" htmlFor={id}>
+            <input
+              id={id}
+              type="checkbox"
+              checked={value === true}
+              // `undefined` en vez de `false` para que BlockForm borre la
+              // clave y el JSON no se llene de banderas apagadas.
+              onChange={(e) => onChange(e.target.checked ? true : undefined)}
+            />
+            <span>{field.label}</span>
+          </label>
+          {field.help && <span className="adm-field__help">{field.help}</span>}
+        </div>
+      )
+
+    case 'color':
+      return (
+        <Field label={field.label} help={field.help} required={field.required} htmlFor={id}>
+          <div className="adm-color">
+            <input
+              type="color"
+              value={typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value) ? value : '#0078a9'}
+              onChange={(e) => onChange(e.target.value)}
+              aria-label={`${field.label}: selector`}
+            />
+            <input
+              id={id}
+              type="text"
+              value={typeof value === 'string' ? value : ''}
+              placeholder="#0078A9"
+              onChange={(e) => onChange(e.target.value)}
+            />
+          </div>
+        </Field>
+      )
+
+    case 'image':
+      return (
+        <ImageField
+          label={field.label}
+          required={field.required}
+          value={value as MediaValue | undefined}
+          onChange={onChange}
+        />
+      )
+
+    case 'link':
+      return (
+        <LinkField
+          label={field.label}
+          value={value as LinkValue | undefined}
+          onChange={onChange}
+        />
+      )
+
+    case 'stringList':
+      return (
+        <StringListField
+          label={field.label}
+          help={field.help}
+          required={field.required}
+          value={value as string[] | undefined}
+          onChange={onChange}
+        />
+      )
+
+    case 'list':
+      return (
+        <ListField
+          label={field.label}
+          help={field.help}
+          required={field.required}
+          itemFields={field.itemFields ?? []}
+          itemLabelKey={field.itemLabelKey}
+          value={value as Record<string, unknown>[] | undefined}
+          onChange={onChange}
+        />
+      )
+
+    default:
+      return (
+        <Field label={field.label} help={field.help} required={field.required} htmlFor={id}>
+          <input
+            id={id}
+            type="text"
+            value={typeof value === 'string' ? value : ''}
+            onChange={(e) => onChange(e.target.value)}
+          />
+        </Field>
+      )
+  }
+}

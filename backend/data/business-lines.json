@@ -1,0 +1,53 @@
+[
+  {
+    "slug": "pintura-en-polvo",
+    "name": "Pintura en Polvo",
+    "headline": "Poliéster, híbridos, epóxicos y poliuretanos",
+    "description": "Recubrimiento en polvo PPG para aplicación electrostática: acabado duro, uniforme y de color estable, sin disolventes ni compuestos orgánicos volátiles. Disponible en más de 100 colores y en acabados metálico texturizado, mate, martillado y brillante.",
+    "image": {
+      "src": "/assets/video/hero-poster.jpg",
+      "alt": "Pintura en polvo PPG"
+    },
+    "href": "/productos/pintura-en-polvo",
+    "stats": [
+      {
+        "value": "83",
+        "label": "Referencias de catálogo",
+        "detail": "Cada una con su equivalencia RAL y su rango de brillo."
+      },
+      {
+        "value": "95%",
+        "label": "Eficiencia de transferencia",
+        "detail": "Lo que no se adhiere se recupera y se vuelve a usar.",
+        "highlight": true
+      },
+      {
+        "value": "4",
+        "label": "Tecnologías PPG",
+        "detail": "Epóxica, poliéster, híbrida y uretano."
+      }
+    ]
+  },
+  {
+    "slug": "pintura-liquida",
+    "name": "Pintura Líquida",
+    "headline": "Recubrimientos de alto desempeño",
+    "description": "Sistemas líquidos para piezas y estructuras que no pueden pasar por horno de curado o que requieren retoques en sitio. Incluye primarios, acabados y productos de retoque como el aerosol Black Ed Touch Up y el marcador Hi Gloss Ed Black.",
+    "image": {
+      "src": "/assets/csmx/aerosol-retoque.webp",
+      "alt": "Aerosol de retoque PPG"
+    },
+    "href": "/productos/pintura-liquida"
+  },
+  {
+    "slug": "pretratamientos-metalicos",
+    "name": "Pre Tratamientos Metálicos",
+    "headline": "Desengrasantes, desoxidantes y fosfatizantes",
+    "description": "La preparación de la superficie decide la vida útil del recubrimiento. Suministramos la química de limpieza, desoxidado y conversión que garantiza la adherencia y la resistencia a la corrosión antes de aplicar el acabado.",
+    "image": {
+      "src": "/assets/csmx/industria.webp",
+      "alt": "Pre tratamiento de superficies metálicas"
+    },
+    "href": "/productos/pretratamientos-metalicos"
+  }
+]

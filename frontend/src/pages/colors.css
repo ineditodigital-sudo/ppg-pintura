@@ -1,0 +1,273 @@
+/* ============================================================================
+   Carta de colores
+   La muestra manda: el color ocupa la mayor parte de la ficha y los datos
+   quedan debajo, en letra pequeña. Es como se lee una carta física.
+   ========================================================================== */
+
+/* Sube por detrás de la cabecera, igual que el hero de la portada, y compensa
+   con relleno propio. Sin esto quedaba una franja blanca de migas entre la
+   barra y el azul, y la página abría distinto al resto del sitio. */
+.carta__portada {
+  margin-top: calc((var(--header-height) + 4px) * -1);
+  padding-top: calc(var(--header-height) + var(--space-4xl));
+}
+
+.carta__portada .container > * + * {
+  margin-top: var(--space-m);
+}
+
+.carta__portada h1 {
+  max-width: 16ch;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.carta__entradilla {
+  max-width: 54ch;
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.carta__aviso {
+  max-width: 54ch;
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+/* --- Controles -------------------------------------------------------------- */
+
+.carta__controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-l);
+  margin-bottom: var(--space-l);
+}
+
+.carta__familias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.carta__pestana {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-secondary);
+  background: var(--bg-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.carta__pestana span {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-regular);
+  opacity: 0.7;
+}
+
+.carta__pestana:hover {
+  background: var(--bg-brand-secondary);
+  color: var(--fg-brand-secondary);
+}
+
+.carta__pestana.is-active {
+  background: var(--ppg-blue);
+  color: #fff;
+}
+
+.carta__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-m);
+}
+
+.carta__buscador input {
+  width: min(300px, 70vw);
+  padding: 10px 16px;
+  font: inherit;
+  font-size: var(--fs-sm);
+  color: var(--fg-primary);
+  background: var(--bg-secondary);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+}
+
+.carta__buscador input::placeholder {
+  color: #5f6c7c;
+  opacity: 1;
+}
+
+.carta__buscador input:focus {
+  outline: none;
+  background: var(--bg-primary);
+  border-color: var(--ppg-blue);
+  box-shadow: 0 0 0 3px var(--bg-brand-secondary);
+}
+
+.carta__check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--fs-sm);
+  color: var(--fg-secondary);
+  cursor: pointer;
+}
+
+.carta__descripcion {
+  max-width: 64ch;
+  margin-bottom: var(--space-s);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--fg-secondary);
+}
+
+.carta__cuenta {
+  margin-bottom: var(--space-l);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+.carta__vacio {
+  padding: var(--space-4xl) 0;
+  text-align: center;
+  color: var(--fg-secondary);
+}
+
+/* --- Rejilla ---------------------------------------------------------------- */
+
+.carta__rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: var(--space-l);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.carta__muestra {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* La ficha es una placa recubierta, no un rectángulo de color: el recorte y el
+   relieve los pone la utilidad `.placa` de `base.css`. Aquí sólo va la forma de
+   la ficha. */
+.carta__color {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  aspect-ratio: 5 / 4;
+  padding: 12px;
+  border-radius: var(--radius-xl);
+  /* Filo interior en vez de borde: sobre un blanco casi puro la muestra se
+     perdería contra el fondo, y un borde de color contaminaría el tono. */
+  box-shadow:
+    inset 0 0 0 1px rgba(16, 34, 46, 0.08),
+    var(--shadow-s);
+  transition:
+    transform var(--dur-base) var(--ease-card),
+    box-shadow var(--dur-base) var(--ease-card);
+}
+
+.carta__muestra:hover .carta__color {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px rgba(16, 34, 46, 0.08),
+    var(--shadow-l);
+}
+
+.carta__codigo,
+.carta__sello {
+  padding: 3px 9px;
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
+  /* Placa clara con tinta oscura: sobre una muestra clara la placa casi no se
+     ve pero el texto sigue leyéndose, y sobre una oscura destaca sola. Es lo
+     que hace que el contraste no dependa del color de la muestra. */
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: var(--radius-full);
+}
+
+.carta__codigo {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.03em;
+  color: var(--fg-primary);
+}
+
+.carta__sello {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ppg-blue-deep);
+}
+
+.carta__nombre {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.carta__datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  color: var(--fg-secondary);
+}
+
+@media (max-width: 48rem) {
+  .carta__rejilla {
+    grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+    gap: var(--space-m);
+  }
+
+  .carta__controles {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* El campo se quedaba en 195px porque la etiqueta que lo envuelve no crecía
+     con el contenedor; sin esto, `width: 100%` del input no sirve de nada. */
+  .carta__filtros {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .carta__buscador {
+    display: block;
+    width: 100%;
+  }
+
+  .carta__buscador input {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carta__color,
+  .carta__pestana {
+    transition: none;
+  }
+
+  .carta__muestra:hover .carta__color {
+    transform: none;
+  }
+}

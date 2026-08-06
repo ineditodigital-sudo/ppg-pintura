@@ -1,0 +1,37 @@
+node_modules/
+dist/
+*.local
+.DS_Thumbs
+Thumbs.db
+
+# Material en bruto (vídeos sin comprimir): pesa y no entra en ningún build
+fuentes/*
+!fuentes/LEEME.md
+
+# Se regenera desde backend/data con `npm run sync:content`
+frontend/src/content/
+
+# Mensajes de contacto recibidos y estado de la sesión
+backend/storage/
+
+# Credenciales del panel (se siembran con deploy.ps1 -SeedAuth)
+backend/config/users.json
+
+# Credenciales del FTP en claro: nunca deben viajar en un commit
+ftp.txt
+NUEVAS CREDENCIALES FTP NUEVO DOMINIO.txt
+*CREDENCIALES*.txt
+
+# Estado del último despliegue: es de esta máquina, no del proyecto
+deploy/.manifiesto.json
+
+# Copias de seguridad que genera el CMS al guardar
+backend/data/.backups/
+
+# Medios subidos desde el panel (el .htaccess sí se versiona)
+frontend/public/assets/uploads/*
+!frontend/public/assets/uploads/.htaccess
+
+.vscode/*
+!.vscode/extensions.json
+.idea/

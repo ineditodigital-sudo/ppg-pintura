@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" fill="none" aria-hidden="true">
+  <!--
+    Malla esférica del hero.
+
+    Es el grafismo que aparece en las referencias: una retícula curva que
+    sugiere volumen sin competir con el texto. Va en SVG y no en mapa de bits
+    porque son unos pocos kilobytes, escala a cualquier pantalla y su color
+    se controla desde el CSS.
+  -->
+  <defs>
+    <radialGradient id="brillo" cx="72%" cy="34%" r="52%">
+      <stop offset="0%" stop-color="#2C7FB8" stop-opacity=".55"/>
+      <stop offset="60%" stop-color="#0F4C6B" stop-opacity=".18"/>
+      <stop offset="100%" stop-color="#0A2A3F" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="hilo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8FD3F0" stop-opacity=".55"/>
+      <stop offset="55%" stop-color="#4FA9D6" stop-opacity=".22"/>
+      <stop offset="100%" stop-color="#0078A9" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="recorte">
+      <rect width="1600" height="900"/>
+    </clipPath>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#brillo)"/>
+
+  <g clip-path="url(#recorte)" stroke="url(#hilo)" stroke-width="1">
+    <!-- Meridianos: elipses cada vez más estrechas, como los gajos de un globo -->
+    <g transform="translate(1180 420)">
+      <ellipse rx="430" ry="430"/>
+      <ellipse rx="372" ry="430"/>
+      <ellipse rx="300" ry="430"/>
+      <ellipse rx="214" ry="430"/>
+      <ellipse rx="112" ry="430"/>
+      <line x1="0" y1="-430" x2="0" y2="430"/>
+
+      <!-- Paralelos: elipses achatadas a distintas alturas -->
+      <ellipse cx="0" cy="-330" rx="276" ry="34"/>
+      <ellipse cx="0" cy="-232" rx="362" ry="46"/>
+      <ellipse cx="0" cy="-118" rx="414" ry="54"/>
+      <ellipse cx="0" cy="0" rx="430" ry="58"/>
+      <ellipse cx="0" cy="118" rx="414" ry="54"/>
+      <ellipse cx="0" cy="232" rx="362" ry="46"/>
+      <ellipse cx="0" cy="330" rx="276" ry="34"/>
+    </g>
+
+    <!-- Arcos sueltos a la izquierda: dan profundidad sin cerrar la composición -->
+    <g opacity=".5">
+      <path d="M-120 900 Q 320 520 900 560"/>
+      <path d="M-120 820 Q 300 420 880 430"/>
+      <path d="M-120 740 Q 280 320 860 300"/>
+    </g>
+  </g>
+</svg>

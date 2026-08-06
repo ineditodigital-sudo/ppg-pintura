@@ -1,0 +1,206 @@
+[
+    {
+        "slug":  "arquitectura",
+        "name":  "Arquitectura",
+        "headline":  "Acabados que aguantan a la intemperie",
+        "description":  "Fachadas, cancelería, perfilería de aluminio, barandales y mobiliario urbano. Piezas que pasan años expuestas a radiación solar, lluvia y cambios de temperatura sin que se les permita perder color.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/arquitectura.webp",
+                      "alt":  "Fachadas de aluminio y vidrio"
+                  },
+        "sustratos":  [
+                          "Aluminio extruido",
+                          "Acero galvanizado",
+                          "Lámina de acero"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Estabilidad de color",
+                               "description":  "La radiación ultravioleta degrada el pigmento. Los sistemas de poliéster para exterior están formulados para retener color y brillo mucho más tiempo que un recubrimiento estándar.",
+                               "icon":  "sol"
+                           },
+                           {
+                               "title":  "Resistencia a la corrosión",
+                               "description":  "El pre tratamiento decide la vida útil real del acabado. Sin una conversión adecuada, la mejor pintura se levanta desde el sustrato.",
+                               "icon":  "escudo"
+                           },
+                           {
+                               "title":  "Uniformidad entre lotes",
+                               "description":  "Una fachada se monta por partes y a lo largo de meses. El color tiene que coincidir entre piezas fabricadas en fechas distintas.",
+                               "icon":  "paleta"
+                           }
+                       ],
+        "recomendado":  "Poliéster para exterior con pre tratamiento de conversión, en acabado mate o brillante según el proyecto.",
+        "icon":  "edificio"
+    },
+    {
+        "slug":  "automotriz",
+        "name":  "Automotriz",
+        "headline":  "Piezas que responden a especificación de fabricante",
+        "description":  "Rines, chasis, componentes de suspensión, soportes y piezas de acabado. Es el sector con los requisitos más cerrados: lo que se especifica es lo que se entrega.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/automotriz.webp",
+                      "alt":  "Detalle frontal de un automóvil"
+                  },
+        "sustratos":  [
+                          "Acero",
+                          "Aluminio",
+                          "Fundición"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Cumplimiento OEM",
+                               "description":  "Los recubrimientos en polvo PPG que distribuimos cumplen especificaciones de fabricante original, que es lo que permite entrar en cadena de suministro.",
+                               "icon":  "check"
+                           },
+                           {
+                               "title":  "Resistencia química",
+                               "description":  "Combustibles, aceites, líquido de frenos y sales de camino atacan el acabado. El sistema tiene que aguantarlos sin ablandarse ni decolorar.",
+                               "icon":  "gota"
+                           },
+                           {
+                               "title":  "Impacto y abrasión",
+                               "description":  "La grava y el rodaje golpean constantemente. Un acabado frágil se despostilla y abre la puerta a la corrosión.",
+                               "icon":  "escudo"
+                           }
+                       ],
+        "recomendado":  "Sistemas epóxico-poliéster o poliuretano según la exposición, con pre tratamiento fosfatizante.",
+        "icon":  "coche"
+    },
+    {
+        "slug":  "industria-general",
+        "name":  "Industria General",
+        "headline":  "Protección para el equipo que produce",
+        "description":  "Maquinaria, gabinetes eléctricos, estructura metálica, estantería y equipo de proceso. Volumen alto, piezas grandes y una exigencia clara: que el acabado no sea el primero en fallar.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/industria-general.webp",
+                      "alt":  "Maquinaria industrial"
+                  },
+        "sustratos":  [
+                          "Acero al carbono",
+                          "Acero galvanizado",
+                          "Lámina rolada"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Cobertura de bordes",
+                               "description":  "Los cantos y las soldaduras son donde primero aparece el óxido. Un polvo con buen comportamiento de borde cubre donde el líquido se retira.",
+                               "icon":  "regla"
+                           },
+                           {
+                               "title":  "Costo por pieza",
+                               "description":  "En serie, la diferencia la marca la eficiencia de transferencia: el polvo que no se adhiere se recupera y se vuelve a usar.",
+                               "icon":  "reciclar"
+                           },
+                           {
+                               "title":  "Limpieza y mantenimiento",
+                               "description":  "Superficies lisas que se limpian con facilidad y no retienen suciedad ni residuos de proceso.",
+                               "icon":  "brillo"
+                           }
+                       ],
+        "recomendado":  "Poliéster o híbrido según si la pieza queda a interior o a la intemperie.",
+        "icon":  "engrane"
+    },
+    {
+        "slug":  "ace",
+        "name":  "ACE",
+        "headline":  "Agrícola, construcción y movimiento de tierra",
+        "description":  "Equipos que trabajan a la intemperie todo el año, con abrasión constante, golpes y contacto con fertilizantes, combustibles y tierra húmeda. Es el uso más duro que puede recibir un recubrimiento.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/ace.webp",
+                      "alt":  "Cosechadora agrícola en el campo"
+                  },
+        "sustratos":  [
+                          "Acero estructural",
+                          "Fundición",
+                          "Acero granallado"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Espesor y adherencia",
+                               "description":  "La capa tiene que ser gruesa y estar bien anclada. Sobre acero granallado, el perfil de anclaje es lo que sostiene el sistema.",
+                               "icon":  "capas"
+                           },
+                           {
+                               "title":  "Resistencia química agresiva",
+                               "description":  "Fertilizantes, urea y combustibles atacan el acabado de forma continua, no ocasional.",
+                               "icon":  "gota"
+                           },
+                           {
+                               "title":  "Retoque en campo",
+                               "description":  "Estos equipos se golpean. Conviene prever producto de retoque líquido del mismo color para reparar sin desmontar.",
+                               "icon":  "caja"
+                           }
+                       ],
+        "recomendado":  "Sistema de alto espesor con primario anticorrosivo, más producto líquido de retoque a juego.",
+        "icon":  "planta"
+    },
+    {
+        "slug":  "mueblero",
+        "name":  "Mueblero",
+        "headline":  "Mobiliario metálico de contacto diario",
+        "description":  "Butacas, estantería, mobiliario de oficina, salas de espera, aeropuertos y espacios públicos. Piezas que la gente toca todo el día y que se limpian con frecuencia.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/mueblero.webp",
+                      "alt":  "Butacas metálicas en una sala de espera"
+                  },
+        "sustratos":  [
+                          "Tubo de acero",
+                          "Lámina",
+                          "Alambrón"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Tacto y apariencia",
+                               "description":  "Aquí el acabado se ve y se toca de cerca. Es donde los acabados texturizados y martillados aportan más: disimulan marcas de uso.",
+                               "icon":  "brillo"
+                           },
+                           {
+                               "title":  "Resistencia a la limpieza",
+                               "description":  "Productos de limpieza frecuentes, en algunos casos desinfectantes. El acabado no debe opacarse ni perder color.",
+                               "icon":  "gota"
+                           },
+                           {
+                               "title":  "Color de catálogo",
+                               "description":  "El mobiliario suele especificarse por color exacto y repetirse en pedidos sucesivos a lo largo de años.",
+                               "icon":  "paleta"
+                           }
+                       ],
+        "recomendado":  "Poliéster en acabado texturizado o martillado, con carta de color reproducible entre lotes.",
+        "icon":  "silla"
+    },
+    {
+        "slug":  "iluminacion",
+        "name":  "Iluminación",
+        "headline":  "Luminarias que trabajan en caliente",
+        "description":  "Carcasas, reflectores, postes y luminarias de exterior. El propio equipo genera calor y, en instalación exterior, se suma la intemperie.",
+        "image":  {
+                      "src":  "/assets/csmx/mercados/iluminacion.webp",
+                      "alt":  "Luminaria de diseño"
+                  },
+        "sustratos":  [
+                          "Aluminio inyectado",
+                          "Aluminio extruido",
+                          "Lámina de acero"
+                      ],
+        "exigencias":  [
+                           {
+                               "title":  "Estabilidad térmica",
+                               "description":  "El calor continuo del equipo amarillea los acabados que no están formulados para soportarlo.",
+                               "icon":  "termometro"
+                           },
+                           {
+                               "title":  "Reflectancia estable",
+                               "description":  "En las superficies interiores del reflector, cualquier pérdida de blancura se traduce directamente en menos luz aprovechada.",
+                               "icon":  "sol"
+                           },
+                           {
+                               "title":  "Piezas de geometría compleja",
+                               "description":  "Aletas de disipación y formas cerradas exigen buena penetración del polvo en zonas de difícil acceso.",
+                               "icon":  "engrane"
+                           }
+                       ],
+        "recomendado":  "Recubrimiento formulado para resistencia térmica; blanco de alta reflectancia en las caras interiores.",
+        "icon":  "lampara"
+    }
+]

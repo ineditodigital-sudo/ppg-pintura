@@ -1,0 +1,50 @@
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php8_module>
+   php_value error_log "/home/inedito/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+<IfModule lsapi_module>
+   php_value error_log "/home/inedito/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# ---------------------------------------------------------------------------
+# powdercoatings.inedito.digital — RETIRADO
+#
+# El sitio vive en https://pinturaenpolvo-mx.com. Este host sólo redirige,
+# para que el dominio viejo no compita en buscadores con el nuevo y para que
+# cualquier enlace repartido por ahí siga llegando a su sitio.
+#
+# Es 301 (permanente) a propósito: le dice al buscador que traslade el
+# posicionamiento al dominio nuevo, cosa que un 302 no hace. Mientras este
+# subdominio exista, esta es toda su configuración; cuando se borre, deja de
+# hacer falta.
+# ---------------------------------------------------------------------------
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Excepción: la validación del certificado. Si se redirige también esto, la
+  # renovación de SSL falla y el subdominio empieza a dar avisos de seguridad
+  # antes de que a nadie le dé tiempo a borrarlo.
+  #
+  # Va como RewriteCond sobre %{REQUEST_URI} y no como un `RewriteRule … - [L]`
+  # delante: esa forma se probó y seguía redirigiendo, porque el [L] no corta
+  # la ronda de forma fiable en contexto .htaccess. La condición sí.
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+
+  # Todo lo demás al dominio nuevo, conservando ruta y query string.
+  # `R=301` permanente, `L` corta aquí, `QSA` arrastra los parámetros.
+  RewriteRule ^(.*)$ https://pinturaenpolvo-mx.com/$1 [R=301,L,QSA]
+</IfModule>
+
+# Si mod_rewrite no estuviera disponible, al menos la portada redirige.
+<IfModule !mod_rewrite.c>
+  Redirect 301 / https://pinturaenpolvo-mx.com/
+</IfModule>

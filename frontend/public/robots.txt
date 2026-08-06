@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# El panel y la API no aportan nada a un buscador y no deben indexarse.
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://pinturaenpolvo-mx.com/sitemap.xml

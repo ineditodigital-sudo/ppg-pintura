@@ -1,0 +1,214 @@
+{
+  "slug": "home",
+  "seo": {
+    "title": "Pintura en Polvo PPG en Aguascalientes | Distribuidor Autorizado",
+    "description": "Distribuidor autorizado PPG en Aguascalientes. Pintura en polvo con 83 referencias de catalogo, retoques y maquila de recubrimiento."
+  },
+  "blocks": [
+    {
+      "type": "heroSlider",
+      "autoplaySeconds": 7,
+      "slides": [
+        {
+          "eyebrow": "Distribuidor autorizado PPG",
+          "title": "Pintura en polvo PPG",
+          "subtitle": "Recubrimiento electrostático de marca, con respaldo técnico y existencia en Aguascalientes. 83 referencias de catálogo con equivalencia RAL.",
+          "image": {
+            "src": "/assets/csmx/pintura-polvo-azul.webp",
+            "alt": "Pintura en polvo PPG"
+          },
+          "cta": {
+            "label": "Ver la carta de colores",
+            "href": "/colores"
+          },
+          "secondaryCta": {
+            "label": "Solicitar cotización",
+            "href": "/contacto"
+          }
+        },
+        {
+          "eyebrow": "Catálogo PPG",
+          "title": "El color que pidas",
+          "subtitle": "Poliéster para exterior, híbridos para interior, y sus versiones texturizadas y gofradas. Cada referencia con su rango de brillo.",
+          "image": {
+            "src": "/assets/video/hero-poster.jpg",
+            "alt": "Muestras de pintura en polvo"
+          },
+          "cta": {
+            "label": "Ver las 83 referencias",
+            "href": "/colores"
+          }
+        },
+        {
+          "eyebrow": "Aplicación y maquila",
+          "title": "También lo aplicamos",
+          "subtitle": "Si no tienes línea propia, recubrimos tus piezas en nuestras instalaciones y te las devolvemos listas para montar.",
+          "image": {
+            "src": "/assets/csmx/aplicacion-polvo.webp",
+            "alt": "Aplicación electrostática de pintura en polvo"
+          },
+          "cta": {
+            "label": "Consultar maquila",
+            "href": "/contacto"
+          }
+        }
+      ]
+    },
+    {
+      "type": "productShowcase"
+    },
+    {
+      "type": "colorCarousel"
+    },
+    {
+      "type": "cardGrid",
+      "eyebrow": "Mercados",
+      "title": "Dónde trabajamos",
+      "description": "Cada industria impone sus propias exigencias de acabado, resistencia y normativa.",
+      "columns": 3,
+      "variant": "thumb",
+      "items": [
+        {
+          "title": "Arquitectura",
+          "description": "Fachadas, cancelería y perfilería a la intemperie.",
+          "image": {
+            "src": "/assets/csmx/mercados/arquitectura.webp",
+            "alt": "Arquitectura"
+          },
+          "href": "/mercados/arquitectura"
+        },
+        {
+          "title": "Automotriz",
+          "description": "Rines, chasis y componentes con especificación OEM.",
+          "image": {
+            "src": "/assets/csmx/mercados/automotriz.webp",
+            "alt": "Automotriz"
+          },
+          "href": "/mercados/automotriz"
+        },
+        {
+          "title": "Industria General",
+          "description": "Maquinaria, gabinetes y estructura metálica.",
+          "image": {
+            "src": "/assets/csmx/mercados/industria-general.webp",
+            "alt": "Industria general"
+          },
+          "href": "/mercados/industria-general"
+        },
+        {
+          "title": "ACE",
+          "description": "Agrícola, construcción y movimiento de tierra.",
+          "image": {
+            "src": "/assets/csmx/mercados/ace.webp",
+            "alt": "ACE"
+          },
+          "href": "/mercados/ace"
+        },
+        {
+          "title": "Mueblero",
+          "description": "Mobiliario metálico de contacto frecuente.",
+          "image": {
+            "src": "/assets/csmx/mercados/mueblero.webp",
+            "alt": "Mueblero"
+          },
+          "href": "/mercados/mueblero"
+        },
+        {
+          "title": "Iluminación",
+          "description": "Luminarias y carcasas expuestas al calor.",
+          "image": {
+            "src": "/assets/csmx/mercados/iluminacion.webp",
+            "alt": "Iluminación"
+          },
+          "href": "/mercados/iluminacion"
+        }
+      ]
+    },
+    {
+      "type": "cardGrid",
+      "eyebrow": "Por qué pintura en polvo",
+      "title": "Lo que aporta frente a otros recubrimientos",
+      "columns": 3,
+      "variant": "text",
+      "theme": "light",
+      "items": [
+        {
+          "title": "Bajo costo por unidad",
+          "description": "Menor costo de producción por pieza que otros sistemas de recubrimiento.",
+          "icon": "caja"
+        },
+        {
+          "title": "Formulada sin COV",
+          "description": "Sin compuestos orgánicos volátiles: es una decisión de formulación, no un añadido.",
+          "icon": "planta"
+        },
+        {
+          "title": "Se recupera y se recicla",
+          "description": "El polvo que no se adhiere se recoge y vuelve al proceso.",
+          "icon": "reciclar"
+        },
+        {
+          "title": "Durabilidad extendida",
+          "description": "Color y película estables frente a la intemperie y el paso del tiempo.",
+          "icon": "escudo"
+        },
+        {
+          "title": "Resiste desconchado y abrasión",
+          "description": "Resistencia excepcional al impacto y al rozamiento sobre la pieza terminada.",
+          "icon": "capas"
+        },
+        {
+          "title": "95% de eficiencia de transferencia",
+          "description": "Casi todo el material aplicado acaba sobre la pieza.",
+          "icon": "check"
+        }
+      ]
+    },
+    {
+      "type": "statGrid",
+      "theme": "dark",
+      "eyebrow": "En números",
+      "items": [
+        {
+          "value": "83",
+          "label": "Referencias de catálogo",
+          "detail": "Cada una con su equivalencia RAL y su rango de brillo."
+        },
+        {
+          "value": "95%",
+          "label": "Eficiencia de transferencia",
+          "detail": "Lo que no se adhiere se recupera y se vuelve a usar.",
+          "highlight": true
+        },
+        {
+          "value": "4",
+          "label": "Tecnologías PPG",
+          "detail": "Epóxica, poliéster, híbrida y uretano."
+        },
+        {
+          "value": "0",
+          "label": "Compuestos orgánicos volátiles",
+          "detail": "Formulada sin COV."
+        }
+      ],
+      "title": "Lo que respalda cada pedido"
+    },
+    {
+      "type": "ctaBanner",
+      "title": "Cuéntanos qué necesitas recubrir",
+      "description": "Dinos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización. Si no tienes línea de aplicación propia, lo maquilamos nosotros.",
+      "image": {
+        "src": "/assets/video/hero-poster.jpg",
+        "alt": "Pintura en polvo lista para aplicar"
+      },
+      "cta": {
+        "label": "Solicitar cotización",
+        "href": "/contacto"
+      },
+      "secondaryCta": {
+        "label": "WhatsApp",
+        "href": "https://api.whatsapp.com/send?phone=523333892775"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Directorio interno de la API: nada aquí debe servirse por HTTP.
+# Sólo api/index.php es público; el resto se alcanza vía require de PHP.
+<IfModule mod_authz_core.c>
+  Require all denied
+</IfModule>
+<IfModule !mod_authz_core.c>
+  Order allow,deny
+  Deny from all
+</IfModule>

@@ -1,0 +1,132 @@
+{
+  "slug": "quienes-somos",
+  "seo": {
+    "title": "Quiénes somos | Distribuidor autorizado PPG en Aguascalientes",
+    "description": "Coating Systems MX suministra y aplica recubrimiento en polvo PPG en Aguascalientes, con el respaldo técnico del fabricante y su planta de San Juan del Río."
+  },
+  "breadcrumbs": [
+    {
+      "label": "Inicio",
+      "href": "/"
+    },
+    {
+      "label": "Quiénes Somos"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "variant": "compact",
+      "eyebrow": "Quiénes somos",
+      "title": "Distribuidor autorizado PPG en Aguascalientes",
+      "subtitle": "Coating Systems Mx S de RL de CV suministra y aplica recubrimiento en polvo PPG. El producto y su respaldo técnico son del fabricante; la asesoría, la existencia y la maquila las ponemos aquí."
+    },
+    {
+      "type": "statGrid",
+      "eyebrow": "El fabricante",
+      "title": "PPG en cifras",
+      "theme": "brand",
+      "items": [
+        {
+          "value": "+130",
+          "label": "Años en el mercado",
+          "detail": "Compañía de recubrimientos con sede global en Pittsburgh, Pensilvania."
+        },
+        {
+          "value": "+70",
+          "label": "Países con presencia",
+          "detail": "Operación global en recubrimientos industriales."
+        },
+        {
+          "value": "+30",
+          "label": "Años en pintura en polvo",
+          "detail": "Suministrando a fabricantes y aplicadores en todo el mundo."
+        },
+        {
+          "value": "95%",
+          "label": "Eficiencia de transferencia",
+          "detail": "Lo que no se adhiere se recupera y se vuelve a usar.",
+          "highlight": true
+        }
+      ]
+    },
+    {
+      "type": "richText",
+      "eyebrow": "PPG en México",
+      "title": "La planta de San Juan del Río",
+      "paragraphs": [
+        "La sede principal de PPG en México es la planta de San Juan del Río, en Querétaro. Ahí se desarrollan nuevos códigos de color y las tecnologías epóxica, poliéster, híbrida y uretano de pintura en polvo.",
+        "De ese catálogo salen las 83 referencias que manejamos, cada una con su equivalencia RAL y su rango de brillo."
+      ]
+    },
+    {
+      "type": "cardGrid",
+      "eyebrow": "Respaldo del fabricante",
+      "title": "Lo que PPG pone detrás de cada pedido",
+      "columns": 3,
+      "variant": "text",
+      "theme": "light",
+      "items": [
+        {
+          "title": "Laboratorio y pruebas",
+          "description": "Servicios de laboratorio y ensayo para validar el sistema antes de llevarlo a línea."
+        },
+        {
+          "title": "Soporte en sitio",
+          "description": "Capacitación, acompañamiento y diagnóstico de problemas en la propia línea de aplicación."
+        },
+        {
+          "title": "Desarrollo de color",
+          "description": "Centros de investigación propios y desarrollo de nuevos códigos de color."
+        }
+      ]
+    },
+    {
+      "type": "cardGrid",
+      "eyebrow": "Aplicaciones",
+      "title": "Dónde se aplica",
+      "columns": 3,
+      "variant": "text",
+      "items": [
+        {
+          "title": "Electrodomésticos"
+        },
+        {
+          "title": "Artículos de cocina y repostería"
+        },
+        {
+          "title": "Aparatos electrónicos"
+        },
+        {
+          "title": "Equipos de industria pesada"
+        },
+        {
+          "title": "Muebles para hogar y oficina"
+        },
+        {
+          "title": "Acabados generales"
+        }
+      ]
+    },
+    {
+      "type": "richText",
+      "align": "center",
+      "paragraphs": [
+        "El logotipo PPG es una marca registrada y «We protect and beautify the world» es una marca de PPG Industries Ohio, Inc. Coating Systems MX es distribuidor autorizado."
+      ]
+    },
+    {
+      "type": "ctaBanner",
+      "title": "¿Hablamos de tu proyecto?",
+      "description": "Cuéntanos qué necesitas recubrir: el sustrato, el volumen y las condiciones a las que va a estar expuesta la pieza.",
+      "image": {
+        "src": "/assets/csmx/aplicacion-polvo.webp",
+        "alt": "Aplicación de recubrimiento en polvo"
+      },
+      "cta": {
+        "label": "Solicitar cotización",
+        "href": "/contacto"
+      }
+    }
+  ]
+}

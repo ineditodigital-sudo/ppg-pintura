@@ -1,0 +1,471 @@
+/**
+ * Modelo de contenido por bloques.
+ *
+ * Refleja la arquitectura del sitio original (Kentico Kontent), donde cada
+ * página es una lista ordenada de componentes tipados. Es también el contrato
+ * que consumirá el CMS personalizado: añadir un tipo de bloque = añadir una
+ * entrada aquí, un componente en `components/blocks` y una fila en el editor.
+ */
+
+export type Theme = 'light' | 'dark' | 'transparent' | 'brand'
+
+export interface Link {
+  label: string
+  href: string
+  external?: boolean
+}
+
+export interface Media {
+  src: string
+  alt: string
+  width?: number
+  height?: number
+}
+
+/* --- Bloques -------------------------------------------------------------- */
+
+export interface HeroBlock {
+  type: 'hero'
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  image?: Media
+  cta?: Link
+  secondaryCta?: Link
+  theme?: Theme
+  /** Icono del juego de `lib/icons`, sólo en la variante `feature`. */
+  icon?: string
+  /**
+   * `full` ocupa el ancho completo con imagen de fondo; `split` parte en dos;
+   * `feature` es el panel de las landings de sector, pensado para fotos de
+   * origen pequeño (ver `.hero--feature` en `blocks.css`).
+   */
+  variant?: 'full' | 'split' | 'compact' | 'feature'
+}
+
+export interface HeroSlide {
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  image: Media
+  cta?: Link
+  secondaryCta?: Link
+}
+
+/** Hero con varias diapositivas. */
+export interface HeroSliderBlock {
+  type: 'heroSlider'
+  slides: HeroSlide[]
+  /** Segundos entre diapositivas. 0 desactiva el avance automático. */
+  autoplaySeconds?: number
+}
+
+export interface RichTextBlock {
+  type: 'richText'
+  eyebrow?: string
+  title?: string
+  /** Cada entrada es un párrafo. */
+  paragraphs: string[]
+  align?: 'left' | 'center'
+}
+
+export interface CardItem {
+  title: string
+  description?: string
+  image?: Media
+  href?: string
+  external?: boolean
+  label?: string
+  /** Rellena la tarjeta en color de marca para romper la rejilla. Usar una por grupo. */
+  highlight?: boolean
+  /** Nombre de icono de `lib/icons.tsx`. Se dibuja sobre el título. */
+  icon?: string
+}
+
+export interface CardGridBlock {
+  type: 'cardGrid'
+  eyebrow?: string
+  title?: string
+  description?: string
+  columns?: 2 | 3 | 4
+  variant?: 'image' | 'overlay' | 'thumb' | 'text' | 'compact'
+  theme?: Theme
+  items: CardItem[]
+}
+
+export interface MediaItem {
+  title: string
+  label?: string
+  thumbnail: Media
+  href: string
+}
+
+export interface MediaGridBlock {
+  type: 'mediaGrid'
+  title?: string
+  items: MediaItem[]
+}
+
+export interface ContentBannerBlock {
+  type: 'contentBanner'
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  body?: string
+  image?: Media
+  cta?: Link
+  theme?: Theme
+  /** Lado en el que se coloca la imagen. Las páginas alternan para dar ritmo. */
+  imageSide?: 'left' | 'right'
+  /**
+   * `cover` recorta la imagen al marco apaisado; `natural` respeta su propia
+   * proporción. Hace falta cuando la imagen lleva texto incrustado o es
+   * vertical: recortada, se pierde justo lo que había que leer.
+   */
+  fit?: 'cover' | 'natural'
+  children?: CardItem[]
+}
+
+export interface StatItem {
+  value: string
+  label: string
+  detail?: string
+  /** Igual que en las tarjetas: destaca un mosaico dentro del grupo. */
+  highlight?: boolean
+}
+
+/** Vídeo destacado a dos columnas; el reproductor se abre en un diálogo. */
+export interface VideoFeatureBlock {
+  type: 'videoFeature'
+  eyebrow?: string
+  title: string
+  paragraphs?: string[]
+  /** URL de YouTube en cualquier formato: watch, youtu.be, embed o shorts. */
+  video: string
+  videoTitle?: string
+  thumbnail: Media
+  theme?: Theme
+}
+
+export interface StatGridBlock {
+  type: 'statGrid'
+  eyebrow?: string
+  title?: string
+  description?: string
+  theme?: Theme
+  items: StatItem[]
+}
+
+export interface TimelineEntry {
+  period: string
+  title?: string
+  description: string
+}
+
+export interface TimelineBlock {
+  type: 'timeline'
+  eyebrow?: string
+  title?: string
+  entries: TimelineEntry[]
+}
+
+export interface CtaBannerBlock {
+  type: 'ctaBanner'
+  title: string
+  description?: string
+  cta: Link
+  secondaryCta?: Link
+  theme?: Theme
+  /** Si se indica, sangra por la derecha del panel. */
+  image?: Media
+}
+
+export interface LinkGroup {
+  title: string
+  description?: string
+  links: Link[]
+}
+
+export interface LinkListBlock {
+  type: 'linkList'
+  eyebrow?: string
+  title?: string
+  description?: string
+  columns?: 2 | 3 | 4
+  groups: LinkGroup[]
+}
+
+export interface QuoteBlock {
+  type: 'quote'
+  quote: string
+  author: string
+  role?: string
+}
+
+export interface ContactDetail {
+  label: string
+  value: string
+  href?: string
+  note?: string
+}
+
+export interface ContactFormBlock {
+  type: 'contactForm'
+  title: string
+  description?: string
+  topics: string[]
+  /** Datos que se muestran junto al formulario, en la columna lateral. */
+  aside?: {
+    title?: string
+    /** Línea secundaria: el distribuidor, debajo del rótulo de marca. */
+    subtitle?: string
+    details: ContactDetail[]
+    addresses?: { label: string; value: string }[]
+  }
+}
+
+export interface SpecItem {
+  /** El término de la ficha: un sustrato, un acabado, una norma. */
+  term: string
+  /** Qué implica en la práctica. Es lo que evita que la lista sea decorativa. */
+  note?: string
+  icon?: string
+}
+
+/**
+ * Ficha técnica: listado de términos con su nota.
+ *
+ * Existe porque una rejilla de tarjetas con dos palabras dentro se lee como
+ * relleno. Aquí la unidad es la fila, no la tarjeta: entra el doble de
+ * información en menos espacio y sin aire muerto.
+ */
+export interface SpecListBlock {
+  type: 'specList'
+  eyebrow?: string
+  title?: string
+  description?: string
+  theme?: Theme
+  columns?: 1 | 2
+  items: SpecItem[]
+}
+
+export interface BrandItem {
+  name: string
+  logo: Media
+  description?: string
+  href?: string
+}
+
+/** Tira de marcas representadas. */
+export interface BrandStripBlock {
+  type: 'brandStrip'
+  eyebrow?: string
+  title?: string
+  description?: string
+  theme?: Theme
+  brands: BrandItem[]
+}
+
+export interface Swatch {
+  /** Color en hexadecimal, tal como se muestra en la muestra. */
+  hex: string
+  /** Referencia del color. Se usan códigos RAL, estándar público del sector. */
+  code?: string
+  name?: string
+}
+
+export interface FinishItem {
+  name: string
+  description?: string
+}
+
+/** Muestrario de color y acabados. */
+export interface ColorShowcaseBlock {
+  type: 'colorShowcase'
+  eyebrow?: string
+  title: string
+  description?: string
+  note?: string
+  theme?: Theme
+  finishes?: FinishItem[]
+  swatches: Swatch[]
+  cta?: Link
+}
+
+export type Block =
+  | HeroBlock
+  | HeroSliderBlock
+  | RichTextBlock
+  | CardGridBlock
+  | MediaGridBlock
+  | ContentBannerBlock
+  | StatGridBlock
+  | VideoFeatureBlock
+  | TimelineBlock
+  | CtaBannerBlock
+  | LinkListBlock
+  | QuoteBlock
+  | ContactFormBlock
+  | BrandStripBlock
+  | ColorShowcaseBlock
+  | SpecListBlock
+  | ProductShowcaseBlock
+  | ColorCarouselBlock
+
+/* --- Página y datos globales ---------------------------------------------- */
+
+/** Una referencia del catálogo de pintura en polvo PPG. */
+export interface CatalogColor {
+  /** Código PPG, p. ej. `PCTH80109`. */
+  code: string
+  name: string
+  /** Equivalencia RAL sin el prefijo, p. ej. `9016`. */
+  ral: string | null
+  /**
+   * Nombre con el que PPG publica ese RAL en su catálogo, p. ej. `Traffic
+   * White`. Nulo cuando PPG no lo nombra: se deja vacío antes que suponerlo.
+   */
+  ralName?: string | null
+  /** `Gofrado`, `Texturizado`… Nulo si es liso. */
+  finish: string | null
+  /** Rango de brillo tal como lo publica el catálogo, p. ej. `80-100`. */
+  gloss: string | null
+  hex: string
+  family: string
+  textured: boolean
+  /** Existencia en México. Lo marca el cliente desde el CMS. */
+  stock: boolean
+}
+
+export interface ColorFamily {
+  id: string
+  name: string
+  description: string
+}
+
+export interface ColorCatalog {
+  families: ColorFamily[]
+  colors: CatalogColor[]
+}
+
+export interface FeaturedProduct {
+  slug: string
+  name: string
+  sku: string | null
+  tagline: string
+  description: string
+  image: Media
+  highlights: string[]
+  cta?: Link
+}
+
+/** Los tres productos que abren el sitio. Se leen de `featured-products.json`. */
+export interface ProductShowcaseBlock {
+  type: 'productShowcase'
+}
+
+/** Adelanto del catálogo de color en la portada. */
+export interface ColorCarouselBlock {
+  type: 'colorCarousel'
+}
+
+export interface Seo {
+  title: string
+  description: string
+  /** Pide a los buscadores que no indexen esta página. */
+  noindex?: boolean
+}
+
+export interface Breadcrumb {
+  label: string
+  href?: string
+}
+
+export interface Page {
+  slug: string
+  seo: Seo
+  breadcrumbs?: Breadcrumb[]
+  blocks: Block[]
+}
+
+export interface NavItem {
+  label: string
+  href?: string
+  /** Cuando trae hijos, el header lo abre como panel del mega-menú. */
+  children?: NavItem[]
+  description?: string
+  featured?: boolean
+}
+
+export interface Navigation {
+  main: NavItem[]
+  cta: Link
+  locale: string
+  footer: LinkGroup[]
+  legal: Link[]
+}
+
+export interface SocialLink {
+  network: string
+  href: string
+}
+
+export interface Site {
+  /** Marca que encabeza el sitio: PPG. */
+  name: string
+  tagline: string
+  logo: Media
+  /** Versión calada en blanco, para cabecera y bloques oscuros. */
+  logoLight?: Media
+  footerLogo: Media
+  /**
+   * Distribuidor autorizado.
+   *
+   * El sitio es de PPG; Coating Systems aparece como quien lo representa en
+   * México, no como la marca del sitio. Va en un sello discreto, no en el
+   * lugar del logotipo.
+   */
+  distributor?: {
+    name: string
+    legalName?: string
+    logo?: Media
+    label?: string
+  }
+  social: SocialLink[]
+  copyright: string
+}
+
+export interface MarketRequirement {
+  title: string
+  description: string
+  icon?: string
+}
+
+/** Sector de mercado con su propia página. */
+export interface Market {
+  slug: string
+  name: string
+  headline: string
+  description: string
+  image: Media
+  icon?: string
+  sustratos: string[]
+  exigencias: MarketRequirement[]
+  recomendado: string
+}
+
+export interface BusinessLine {
+  slug: string
+  name: string
+  headline: string
+  description: string
+  image: Media
+  href: string
+  /**
+   * Cifras propias de la línea. Estaban escritas en la plantilla, así que las
+   * tres enseñaban las mismas —«25 kg por caja» salía también en pintura
+   * líquida—. Si una línea no las trae, su página no monta el bloque: antes
+   * un hueco que un dato prestado de otra.
+   */
+  stats?: StatItem[]
+}

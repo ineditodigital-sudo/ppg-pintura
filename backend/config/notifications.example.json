@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "recipients": ["ventas@coatingsystemsmx.com"],
+  "fromName": "Coating Systems MX",
+  "fromEmail": "no-responder@pinturaenpolvo-mx.com",
+  "subjectPrefix": "Nuevo mensaje del sitio",
+  "copyToSender": false
+}

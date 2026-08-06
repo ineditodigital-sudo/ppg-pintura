@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0078A9" />
+    <meta
+      name="description"
+      content="Coating Systems Mx es una empresa mexicana dedicada a la aplicación y comercialización de recubrimientos industriales: pintura en polvo, pintura líquida y pre tratamientos metálicos."
+    />
+
+    <!-- La fuente se sirve desde este mismo dominio, así que no hay ningún
+         `preconnect` a terceros que hacer. Se precarga sólo el peso 400: es
+         el del cuerpo de texto y el primero que se necesita para pintar. -->
+    <link
+      rel="preload"
+      href="/assets/fuentes/noto-sans-latin-400.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <title>Pintura en Polvo PPG | Distribuidor Autorizado en Aguascalientes</title>
+
+    <!-- Ficha de la empresa para buscadores. Va en el HTML y no inyectada por
+         JavaScript para que se lea aunque el rastreador no ejecute scripts. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Coating Systems Mx S de RL de CV",
+        "alternateName": "Coating Systems MX",
+        "description": "Distribuidor autorizado PPG. Pintura electrostática en polvo, aerosoles y marcadores de retoque, y maquila de recubrimiento en Aguascalientes, México.",
+        "url": "https://pinturaenpolvo-mx.com",
+        "logo": "https://pinturaenpolvo-mx.com/assets/marcas/ppg-azul.png",
+        "image": "https://pinturaenpolvo-mx.com/assets/csmx/aplicacion-polvo.jpg",
+        "telephone": "+523333892775",
+        "email": "ventas@coatingsystemsmx.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "República del Salvador, Col. Santa Elena",
+          "postalCode": "20238",
+          "addressLocality": "Aguascalientes",
+          "addressRegion": "Aguascalientes",
+          "addressCountry": "MX"
+        },
+        "areaServed": { "@type": "Country", "name": "México" },
+        "sameAs": [
+          "https://facebook.com/profile.php?id=100085940283950",
+          "https://instagram.com/coatingsystemsmx",
+          "https://linkedin.com/in/coatingsystemsmx"
+        ],
+        "makesOffer": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pintura en polvo" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pintura líquida" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Pretratamientos metálicos" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Maquila de recubrimiento" } }
+        ]
+      }
+    </script>
+      <!-- El LCP es el video del hero y tardaba 1,47 s en renderizar. Precargar
+         el poster hace que el primer fotograma pintado sea la imagen, que pesa
+         40 KB, en vez de esperar a que el mp4 tenga datos suficientes. -->
+    <link rel="preload" as="image" href="/assets/video/hero-poster.jpg" fetchpriority="high" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

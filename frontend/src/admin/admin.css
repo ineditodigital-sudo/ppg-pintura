@@ -1,0 +1,1041 @@
+/* ============================================================================
+   Panel de administración — reutiliza los tokens del sitio público
+   ========================================================================== */
+
+.admin {
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+}
+
+/* --- Acceso ---------------------------------------------------------------- */
+
+.admin-login {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: var(--space-l);
+  background: linear-gradient(150deg, var(--bg-menu-primary), var(--bg-menu-secondary));
+}
+
+.admin-login__card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-3xl);
+  box-shadow: var(--shadow-l);
+}
+
+.admin-login__logo {
+  height: 34px;
+  width: auto;
+  margin-bottom: var(--space-xl);
+}
+
+.admin-login__card h1 {
+  font-size: var(--fs-h3);
+  margin-bottom: var(--space-2xs);
+}
+
+.admin-login__card p {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+  margin-bottom: var(--space-xl);
+}
+
+/* --- Estructura ------------------------------------------------------------ */
+
+.admin-shell {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100vh;
+}
+
+/* Barra lateral clara: el azul marino anterior resultaba frío y pesado.
+   Blanca sobre el gris del área de trabajo, como en los paneles modernos. */
+.admin-side {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border-tertiary);
+  color: var(--fg-secondary);
+  padding: var(--space-l) var(--space-s);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.admin-side__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s) var(--space-xl);
+}
+
+.admin-side__brand img {
+  height: 30px;
+  width: auto;
+}
+
+.admin-side__brand span {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-quaternary);
+  line-height: 1.2;
+}
+
+.admin-side nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+}
+
+/* Grupos: Contenido · Biblioteca · Sistema */
+.admin-side__group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-side__group-title {
+  font-size: 10px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-quaternary);
+  padding: 0 var(--space-s) var(--space-2xs);
+}
+
+.admin-side__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-xs) var(--space-s);
+  border-radius: var(--radius-m);
+  color: var(--fg-secondary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.admin-side__link svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.admin-side__link:hover {
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+}
+
+/* El activo es una píldora rellena, como en las referencias. */
+.admin-side__link.is-active {
+  background: var(--bg-brand-solid);
+  color: #fff;
+  font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-xs);
+}
+
+.admin-side__link.is-active svg {
+  opacity: 1;
+}
+
+.admin-side__foot {
+  margin-top: auto;
+  padding-top: var(--space-l);
+  border-top: 1px solid var(--border-tertiary);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-side__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s) var(--space-s);
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+}
+
+.admin-side__avatar {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: var(--tint-brand);
+  color: var(--fg-brand-secondary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+}
+
+.admin-main {
+  padding: var(--space-2xl) var(--space-3xl) var(--space-6xl);
+  max-width: 1100px;
+  width: 100%;
+  /* Sin esto, un hijo ancho —la tabla de la carta de color— impide que la
+     columna del grid encoja y es la página entera la que scrollea en
+     horizontal, en vez de la rejilla dentro de su caja. */
+  min-width: 0;
+}
+
+.admin-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-bottom: var(--space-2xl);
+}
+
+.admin-head h1 {
+  font-size: var(--fs-h2);
+}
+
+.admin-head p {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+  margin-top: var(--space-2xs);
+  max-width: 62ch;
+}
+
+.admin-head__actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+
+/* --- Tarjetas y tablas ------------------------------------------------------ */
+
+.admin-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-2xl);
+  margin-bottom: var(--space-m);
+}
+
+.admin-card > h2 {
+  font-size: var(--fs-h4);
+  margin-bottom: var(--space-m);
+}
+
+/* --- Mosaicos de la pantalla de inicio ---------------------------------------- */
+
+.adm-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-m);
+  margin-bottom: var(--space-l);
+}
+
+.adm-tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-xl);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-2xl);
+  color: inherit;
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.adm-tile:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--shadow-m);
+  color: inherit;
+}
+
+.adm-tile__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-l);
+  background: var(--tint-brand);
+  color: var(--fg-brand-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.adm-tile__value {
+  font-size: 2.5rem;
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.adm-tile__label {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+.adm-tile__foot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  margin-top: var(--space-s);
+  padding-top: var(--space-s);
+  border-top: 1px solid var(--border-tertiary);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-tertiary);
+}
+
+.adm-tile__foot svg {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.adm-tile:hover .adm-tile__foot svg {
+  transform: translateX(3px);
+}
+
+/* Uno de los mosaicos va relleno, igual que en el sitio público. */
+.adm-tile--highlight {
+  background: var(--bg-brand-solid);
+  border-color: var(--bg-brand-solid);
+  box-shadow: var(--shadow-brand);
+}
+
+.adm-tile--highlight:hover {
+  background: var(--bg-brand-solid-hover);
+  border-color: var(--bg-brand-solid-hover);
+}
+
+.adm-tile--highlight .adm-tile__icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.adm-tile--highlight .adm-tile__value {
+  color: #fff;
+}
+
+.adm-tile--highlight .adm-tile__label {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.adm-tile--highlight .adm-tile__foot {
+  border-top-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* --- Accesos rápidos ----------------------------------------------------------- */
+
+.adm-quick__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: var(--space-xs);
+}
+
+.adm-quick__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-m);
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.adm-quick__item svg {
+  color: var(--fg-brand-tertiary);
+  flex-shrink: 0;
+}
+
+.adm-quick__item:hover {
+  background: var(--tint-brand);
+  color: var(--fg-brand-secondary);
+}
+
+.adm-help {
+  font-size: var(--fs-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--fg-secondary);
+  max-width: 72ch;
+}
+
+.adm-help + .adm-help {
+  margin-top: var(--space-s);
+}
+
+.admin-list {
+  display: grid;
+  gap: var(--space-s);
+}
+
+.admin-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding: var(--space-m) var(--space-xl);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-s);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.admin-row:hover {
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--shadow-xs);
+}
+
+.admin-row__main {
+  min-width: 0;
+}
+
+.admin-row__title {
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.admin-row__meta {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+.admin-row__actions {
+  display: flex;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* --- Campos ----------------------------------------------------------------- */
+
+.adm-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-m);
+}
+
+.adm-field > label,
+.adm-field__label {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.adm-field__help {
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+}
+
+.adm-field input[type='text'],
+.adm-field input[type='password'],
+.adm-field input[type='number'],
+.adm-field select,
+.adm-field textarea {
+  width: 100%;
+  padding: var(--space-xs) var(--space-s);
+  font-size: var(--fs-body);
+  font-family: inherit;
+  color: var(--fg-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xs);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.adm-field textarea {
+  min-height: 92px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.adm-field input:focus,
+.adm-field select:focus,
+.adm-field textarea:focus {
+  outline: none;
+  border-color: var(--bg-brand-solid);
+  box-shadow: 0 0 0 3px var(--bg-brand-secondary);
+}
+
+.adm-required {
+  color: var(--fg-error);
+}
+
+/* --- Casilla y color --------------------------------------------------------- */
+
+.adm-check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+  cursor: pointer;
+}
+
+.adm-check input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--bg-brand-solid);
+  cursor: pointer;
+}
+
+.adm-color {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: center;
+}
+
+.adm-color input[type='color'] {
+  width: 46px;
+  height: 38px;
+  padding: 2px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-xs);
+  background: var(--bg-primary);
+  cursor: pointer;
+}
+
+.adm-color input[type='text'] {
+  flex: 1;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  text-transform: uppercase;
+}
+
+/* --- Editor de enlaces ------------------------------------------------------- */
+
+.adm-link {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: var(--space-xs);
+  align-items: start;
+}
+
+/* --- Listas ------------------------------------------------------------------ */
+
+.adm-list {
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-s);
+  background: var(--bg-secondary);
+  padding: var(--space-s);
+  display: grid;
+  gap: var(--space-xs);
+}
+
+.adm-list__item {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+}
+
+.adm-list__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  background: var(--bg-primary);
+}
+
+.adm-list__handle {
+  flex: 1;
+  text-align: left;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  color: var(--fg-primary);
+  padding: var(--space-2xs) 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-list__body {
+  padding: var(--space-m);
+  border-top: 1px solid var(--border-tertiary);
+  background: var(--bg-secondary);
+}
+
+.adm-list__body .adm-field:last-child {
+  margin-bottom: 0;
+}
+
+/* --- Bloques ------------------------------------------------------------------ */
+
+.adm-block {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-l);
+  margin-bottom: var(--space-s);
+  overflow: hidden;
+}
+
+.adm-block.is-open {
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--shadow-s);
+}
+
+.adm-block__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+}
+
+.adm-block__type {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-brand-secondary);
+  background: var(--bg-brand-primary);
+  border: 1px solid var(--border-brand-secondary);
+  border-radius: var(--radius-2xs);
+  padding: 2px var(--space-xs);
+  flex-shrink: 0;
+}
+
+.adm-block__summary {
+  flex: 1;
+  text-align: left;
+  font-size: var(--fs-sm);
+  color: var(--fg-secondary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-block__body {
+  padding: var(--space-xl);
+  border-top: 1px solid var(--border-tertiary);
+  background: var(--bg-secondary);
+}
+
+/* --- Botones ------------------------------------------------------------------ */
+
+.adm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  padding: var(--space-xs) var(--space-m);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.adm-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.adm-btn--primary {
+  background: var(--bg-brand-solid);
+  color: #fff;
+}
+.adm-btn--primary:hover:not(:disabled) {
+  background: var(--bg-brand-solid-hover);
+  color: #fff;
+}
+
+.adm-btn--ghost {
+  background: var(--bg-primary);
+  color: var(--fg-secondary);
+  border-color: var(--border-primary);
+}
+.adm-btn--ghost:hover:not(:disabled) {
+  border-color: var(--border-brand-primary);
+  color: var(--fg-brand-secondary);
+}
+
+.adm-btn--danger {
+  background: transparent;
+  color: var(--fg-error);
+  border-color: var(--fg-error);
+}
+.adm-btn--danger:hover:not(:disabled) {
+  background: var(--bg-error-primary);
+}
+
+.adm-btn--icon {
+  padding: var(--space-2xs) var(--space-xs);
+  min-width: 30px;
+  background: var(--bg-primary);
+  border-color: var(--border-secondary);
+  color: var(--fg-tertiary);
+}
+.adm-btn--icon:hover:not(:disabled) {
+  color: var(--fg-brand-tertiary);
+  border-color: var(--border-brand-primary);
+}
+
+.adm-btn--sm {
+  font-size: var(--fs-xs);
+  padding: var(--space-2xs) var(--space-xs);
+}
+
+/* --- Avisos -------------------------------------------------------------------- */
+
+.adm-alert {
+  padding: var(--space-s) var(--space-m);
+  border-radius: var(--radius-xs);
+  font-size: var(--fs-sm);
+  border: 1px solid transparent;
+  margin-bottom: var(--space-m);
+}
+
+.adm-alert--ok {
+  background: var(--bg-success-primary);
+  border-color: var(--fg-success);
+  color: var(--fg-success);
+}
+
+.adm-alert--error {
+  background: var(--bg-error-primary);
+  border-color: var(--fg-error);
+  color: var(--fg-error);
+}
+
+.adm-alert ul {
+  margin-top: var(--space-2xs);
+  padding-left: var(--space-m);
+  list-style: disc;
+}
+
+/* --- Barra fija de guardado ------------------------------------------------------ */
+
+.adm-savebar {
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-top: var(--space-xl);
+  padding: var(--space-m) var(--space-xl);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-m);
+}
+
+.adm-savebar__state {
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+.adm-savebar__state.is-dirty {
+  color: var(--fg-warning);
+  font-weight: var(--fw-semibold);
+}
+
+/* --- Biblioteca de medios --------------------------------------------------------- */
+
+.adm-media {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-m);
+}
+
+.adm-media__item {
+  border: 2px solid var(--border-tertiary);
+  border-radius: var(--radius-s);
+  overflow: hidden;
+  background: var(--bg-primary);
+  text-align: left;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+.adm-media__item:hover {
+  border-color: var(--border-brand-primary);
+  transform: translateY(-2px);
+}
+
+.adm-media__item.is-selected {
+  border-color: var(--bg-brand-solid);
+}
+
+.adm-media__thumb {
+  aspect-ratio: 4 / 3;
+  background: var(--bg-tertiary);
+}
+
+.adm-media__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adm-media__meta {
+  padding: var(--space-xs);
+  font-size: var(--fs-xs);
+}
+
+.adm-media__name {
+  color: var(--fg-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adm-media__folder {
+  color: var(--fg-quaternary);
+}
+
+/* --- Selector de imagen ------------------------------------------------------------ */
+
+.adm-image {
+  display: flex;
+  gap: var(--space-m);
+  align-items: flex-start;
+  padding: var(--space-s);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-s);
+  background: var(--bg-primary);
+}
+
+.adm-image__preview {
+  width: 96px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  background: var(--bg-tertiary);
+  display: grid;
+  place-items: center;
+  font-size: var(--fs-xs);
+  color: var(--fg-quaternary);
+}
+
+.adm-image__preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adm-image__fields {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: var(--space-xs);
+}
+
+/* --- Diálogo ------------------------------------------------------------------------ */
+
+.adm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: var(--alpha-black-50);
+  backdrop-filter: blur(3px);
+  display: grid;
+  place-items: center;
+  padding: var(--space-l);
+}
+
+.adm-modal__panel {
+  background: var(--bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-l);
+  width: 100%;
+  max-width: 860px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.adm-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding: var(--space-l) var(--space-xl);
+  border-bottom: 1px solid var(--border-tertiary);
+}
+
+.adm-modal__head h2 {
+  font-size: var(--fs-h4);
+}
+
+.adm-modal__body {
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+/* --- Mensajes ------------------------------------------------------------------------ */
+
+.adm-message__meta {
+  font-size: var(--fs-xs);
+  color: var(--fg-tertiary);
+  margin-bottom: var(--space-xs);
+}
+
+.adm-message__text {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--fg-secondary);
+  white-space: pre-wrap;
+}
+
+.adm-empty {
+  padding: var(--space-4xl);
+  text-align: center;
+  color: var(--fg-tertiary);
+  background: var(--bg-primary);
+  border: 1px dashed var(--border-primary);
+  border-radius: var(--radius-l);
+}
+
+/* --- Carta de color --------------------------------------------------------
+   Tabla editable: 83 referencias que se revisan de un vistazo y se corrigen
+   celda a celda, sin abrir un formulario por fila. */
+
+.adm-carta__filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  align-items: center;
+  margin-bottom: var(--space-m);
+}
+
+.adm-carta__filtros input[type='search'] {
+  flex: 1 1 18rem;
+}
+
+.adm-carta__cuenta {
+  font-size: 13px;
+  color: var(--fg-tertiary);
+}
+
+/* La tabla se desborda antes que la página: el panel nunca scrollea en
+   horizontal, sólo la rejilla de referencias.
+   `relative` no es decorativo: sin él, el bloque contenedor de lo posicionado
+   en absoluto de dentro —los rótulos `visually-hidden`— es el viewport, así
+   que se quedan fuera del recorte y es la página la que acaba desbordada. */
+.adm-carta__scroll {
+  position: relative;
+  overflow-x: auto;
+}
+
+.adm-carta {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.adm-carta th {
+  padding: 0 8px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--fg-tertiary);
+  white-space: nowrap;
+}
+
+.adm-carta td {
+  padding: 4px 8px;
+  border-top: 1px solid var(--border-primary);
+  vertical-align: middle;
+}
+
+.adm-carta .adm-input {
+  min-width: 7rem;
+  padding: 6px 8px;
+}
+
+.adm-carta select {
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--fg-primary);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+}
+
+.adm-carta__corto {
+  min-width: 4.5rem;
+  max-width: 6rem;
+}
+
+.adm-carta__centro {
+  text-align: center;
+}
+
+.adm-carta__muestra {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.adm-carta__muestra input[type='color'] {
+  width: 34px;
+  height: 30px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--border-primary);
+  border-radius: 4px;
+}
+
+.adm-carta__hex {
+  min-width: 6rem;
+  max-width: 6.5rem;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 62rem) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-side {
+    position: static;
+    height: auto;
+  }
+
+  .admin-side nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .admin-main {
+    padding: var(--space-xl) var(--space-m) var(--space-4xl);
+  }
+
+  .adm-link {
+    grid-template-columns: 1fr;
+  }
+}

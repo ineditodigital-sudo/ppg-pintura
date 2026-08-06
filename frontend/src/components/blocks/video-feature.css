@@ -1,0 +1,223 @@
+/* ============================================================================
+   Vídeo destacado a dos columnas
+   ========================================================================== */
+
+.video-feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(var(--space-xl), 4vw, var(--space-4xl));
+}
+
+.video-feature__texto {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-m);
+}
+
+.video-feature__texto h2 {
+  font-size: clamp(1.9rem, 1rem + 2.6vw, 3.1rem);
+  font-weight: var(--fw-regular);
+  line-height: 1.08;
+  letter-spacing: -0.032em;
+  text-wrap: balance;
+}
+
+.video-feature__texto p {
+  font-size: var(--fs-body);
+  line-height: 1.7;
+  color: var(--fg-secondary);
+  text-wrap: pretty;
+}
+
+/* --- Miniatura ------------------------------------------------------------ */
+
+.video-feature__disparador {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+  transition:
+    transform 460ms var(--ease-card),
+    box-shadow 460ms var(--ease-card);
+}
+
+.video-feature__disparador:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-flotante);
+}
+
+.video-feature__disparador img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.video-feature__disparador:hover img {
+  transform: scale(1.04);
+}
+
+/* Velo: sostiene el botón de play y el pie sobre cualquier fotograma. */
+.video-feature__disparador::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(6, 28, 43, 0.12) 0%,
+    rgba(6, 28, 43, 0.62) 100%
+  );
+}
+
+.video-feature__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  /* El glifo de play es un triángulo: descentrado a la izquierda parece
+     centrado, así que se compensa un par de píxeles. */
+  padding-left: 4px;
+  color: var(--ppg-blue);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: var(--radius-full);
+  transform: translate(-50%, -50%);
+  transition:
+    transform var(--dur-base) var(--ease-out),
+    background-color var(--dur-base) var(--ease-out);
+}
+
+.video-feature__disparador:hover .video-feature__play {
+  background: #fff;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.video-feature__pie {
+  position: absolute;
+  right: var(--space-l);
+  bottom: var(--space-l);
+  left: var(--space-l);
+  z-index: 2;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  color: #fff;
+  text-align: left;
+}
+
+/* --- Diálogo -------------------------------------------------------------- */
+
+.video-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: clamp(12px, 4vw, 40px);
+  background: rgba(4, 18, 28, 0.88);
+  backdrop-filter: blur(6px);
+  animation: video-modal-entra 220ms var(--ease-out);
+}
+
+.video-modal__caja {
+  position: relative;
+  width: min(1040px, 100%);
+}
+
+.video-modal__marco {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #000;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.video-modal__marco iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.video-modal__cerrar {
+  position: absolute;
+  top: -46px;
+  right: 0;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+
+.video-modal__cerrar:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+@keyframes video-modal-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* --- Adaptación ----------------------------------------------------------- */
+
+@media (max-width: 60rem) {
+  .video-feature {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-xl);
+  }
+
+  .video-feature__play {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Arriba no cabe sin pisar el vídeo: pasa debajo, dentro del velo. */
+  .video-modal__cerrar {
+    top: auto;
+    right: 8px;
+    bottom: -50px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-feature__disparador,
+  .video-feature__disparador img,
+  .video-feature__play {
+    transition: none;
+  }
+
+  .video-feature__disparador:hover,
+  .video-feature__disparador:hover img,
+  .video-feature__disparador:hover .video-feature__play {
+    transform: none;
+  }
+
+  .video-feature__play {
+    transform: translate(-50%, -50%);
+  }
+
+  .video-modal {
+    animation: none;
+  }
+}

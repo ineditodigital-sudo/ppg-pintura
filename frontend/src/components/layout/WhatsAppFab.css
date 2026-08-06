@@ -1,0 +1,68 @@
+/* ============================================================================
+   Botón flotante de WhatsApp
+   ========================================================================== */
+
+.wa-fab {
+  position: fixed;
+  right: clamp(16px, 3vw, 28px);
+  bottom: clamp(16px, 3vw, 28px);
+  z-index: 60;
+
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+
+  color: #fff;
+  /* Verde oficial de la marca WhatsApp: no se sustituye por el azul PPG
+     porque el botón se reconoce antes por el color que por el glifo. */
+  background: #25d366;
+  border-radius: var(--radius-full);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.22),
+    0 2px 6px rgba(0, 0, 0, 0.12);
+
+  /* Oculto hasta pasar la portada. `visibility` además lo saca del recorrido
+     de tabulación mientras no se ve. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.9);
+  transition:
+    opacity var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out),
+    visibility var(--dur-base) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+
+.wa-fab.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.wa-fab:hover {
+  background: #1eb958;
+}
+
+.wa-fab:active {
+  transform: scale(0.94);
+}
+
+/* El anillo de foco global es azul PPG y sobre el verde no se distingue. */
+.wa-fab:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(37, 211, 102, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-fab {
+    transition: opacity var(--dur-fast) linear;
+    transform: none;
+  }
+
+  .wa-fab.is-visible,
+  .wa-fab:active {
+    transform: none;
+  }
+}

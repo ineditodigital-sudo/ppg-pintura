@@ -1,0 +1,150 @@
+{
+  "slug": "contacto",
+  "seo": {
+    "title": "Contacto | Distribuidor autorizado PPG en Aguascalientes",
+    "description": "Cotiza con nosotros. Oficinas y bodega en Aguascalientes, Ags. Teléfono 33 3389 2775 y ventas@coatingsystemsmx.com."
+  },
+  "breadcrumbs": [
+    {
+      "label": "Inicio",
+      "href": "/"
+    },
+    {
+      "label": "Contacto"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "hero",
+      "variant": "compact",
+      "eyebrow": "Contacto",
+      "title": "Contáctanos y cotiza con nosotros",
+      "subtitle": "Cuéntanos qué pieza necesitas recubrir, en qué volumen y a qué condiciones estará expuesta. Con eso podemos proponerte el sistema adecuado.",
+      "image": {
+        "src": "/assets/csmx/aplicacion-polvo.webp",
+        "alt": "Aplicacion de recubrimiento en polvo"
+      }
+    },
+    {
+      "type": "contactForm",
+      "title": "Escríbenos",
+      "description": "Responderemos en un plazo de dos días hábiles. Los campos marcados con asterisco son obligatorios.",
+      "topics": [
+        "Cotización de pintura en polvo",
+        "Cotización de pintura líquida",
+        "Pre tratamientos metálicos",
+        "Servicio de maquila",
+        "Carta de colores",
+        "Ficha técnica o de seguridad",
+        "Otra consulta"
+      ],
+      "aside": {
+        "title": "Distribuidor autorizado PPG",
+        "details": [
+          {
+            "label": "Teléfono",
+            "value": "33 3389 2775",
+            "href": "tel:+523333892775"
+          },
+          {
+            "label": "WhatsApp",
+            "value": "Escribir por WhatsApp",
+            "href": "https://api.whatsapp.com/send?phone=523333892775",
+            "note": "Respuesta más rápida en horario de oficina."
+          },
+          {
+            "label": "Ventas",
+            "value": "ventas@coatingsystemsmx.com",
+            "href": "mailto:ventas@coatingsystemsmx.com"
+          },
+          {
+            "label": "Correos alternos",
+            "value": "coatingsystemsmx@outlook.com",
+            "href": "mailto:coatingsystemsmx@outlook.com",
+            "note": "También coatingsystemsmx@gmail.com"
+          }
+        ],
+        "addresses": [
+          {
+            "label": "Oficinas",
+            "value": "República del Salvador, Col. Santa Elena, C.P. 20238. Aguascalientes, Ags."
+          },
+          {
+            "label": "Bodega",
+            "value": "Av. Siglo XXI No. 3160, Col. Villas de Pilar, C.P. 20286. Aguascalientes, Ags."
+          }
+        ],
+        "subtitle": "Coating Systems Mx S de RL de CV · Aguascalientes"
+      }
+    },
+    {
+      "type": "linkList",
+      "eyebrow": "Atajos",
+      "title": "Ir directo a lo que buscas",
+      "columns": 3,
+      "groups": [
+        {
+          "title": "Productos",
+          "description": "Las tres líneas que distribuimos y maquilamos.",
+          "links": [
+            {
+              "label": "Pintura en Polvo",
+              "href": "/productos/pintura-en-polvo"
+            },
+            {
+              "label": "Pintura Líquida",
+              "href": "/productos/pintura-liquida"
+            },
+            {
+              "label": "Pre Tratamientos Metálicos",
+              "href": "/productos/pretratamientos-metalicos"
+            }
+          ]
+        },
+        {
+          "title": "Tu sector",
+          "description": "Exigencias y sistema recomendado por industria.",
+          "links": [
+            {
+              "label": "Arquitectura",
+              "href": "/mercados/arquitectura"
+            },
+            {
+              "label": "Automotriz",
+              "href": "/mercados/automotriz"
+            },
+            {
+              "label": "Industria General",
+              "href": "/mercados/industria-general"
+            },
+            {
+              "label": "Ver los seis sectores",
+              "href": "/mercados"
+            }
+          ]
+        },
+        {
+          "title": "Síguenos",
+          "description": "Novedades, proyectos y acabados.",
+          "links": [
+            {
+              "label": "Facebook",
+              "href": "https://facebook.com/profile.php?id=100085940283950",
+              "external": true
+            },
+            {
+              "label": "Instagram",
+              "href": "https://instagram.com/coatingsystemsmx",
+              "external": true
+            },
+            {
+              "label": "LinkedIn",
+              "href": "https://linkedin.com/in/coatingsystemsmx",
+              "external": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
