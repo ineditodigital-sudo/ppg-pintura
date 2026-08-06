@@ -19,16 +19,33 @@
 }
 
 .admin-login__card {
+  position: relative;
   width: 100%;
   max-width: 400px;
   background: var(--bg-primary);
-  border-radius: var(--radius-2xl);
+  /* 4px, el radio de tarjeta del sistema PPG. Antes eran 8px: el redondeo
+     generoso es justo lo que aleja el panel del lenguaje del sitio. */
+  border-radius: var(--radius-s);
   padding: var(--space-3xl);
   box-shadow: var(--shadow-l);
+  overflow: hidden;
+}
+
+/* Franja azul de remate, la misma que corona la cabecera del sitio público.
+   Es la seña que ata el panel a la marca sin repintarlo entero. */
+.admin-login__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--bg-brand-solid);
 }
 
 .admin-login__logo {
-  height: 34px;
+  display: block;
+  height: 42px;
   width: auto;
   margin-bottom: var(--space-xl);
 }
@@ -53,12 +70,15 @@
 }
 
 /* Barra lateral clara: el azul marino anterior resultaba frío y pesado.
-   Blanca sobre el gris del área de trabajo, como en los paneles modernos. */
+   Blanca sobre el gris del área de trabajo, como en los paneles modernos.
+   La corona la misma franja azul de 4px que la cabecera del sitio. */
 .admin-side {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--bg-primary);
   border-right: 1px solid var(--border-tertiary);
+  border-top: 4px solid var(--bg-brand-solid);
   color: var(--fg-secondary);
   padding: var(--space-l) var(--space-s);
   position: sticky;
@@ -75,7 +95,7 @@
 }
 
 .admin-side__brand img {
-  height: 30px;
+  height: 34px;
   width: auto;
 }
 

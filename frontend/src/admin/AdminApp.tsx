@@ -27,7 +27,16 @@ import {
 } from './components/Icons'
 import './admin.css'
 
-const LOGO = '/assets/csmx/logo-isotipo.svg'
+/**
+ * El panel administra un sitio de marca PPG, así que lleva el logotipo de PPG.
+ * Antes usaba el isotipo de Coating Systems con `alt="PPG"`: ni la marca ni el
+ * texto alternativo correspondían.
+ *
+ * Va la versión azul en los dos sitios donde aparece —la tarjeta de acceso y la
+ * barra lateral—, porque ambas superficies son blancas. La versión en blanco
+ * está en `assets/marcas/ppg-blanco.png` por si alguna pasa a fondo oscuro.
+ */
+const LOGO = '/assets/marcas/ppg-azul.png'
 
 /* --- Acceso ------------------------------------------------------------------ */
 
@@ -55,7 +64,13 @@ function LoginScreen({ onSuccess }: { onSuccess: (user: string) => void }) {
   return (
     <div className="admin-login">
       <form className="admin-login__card" onSubmit={(e) => void submit(e)}>
-        <img className="admin-login__logo" src={LOGO} alt="PPG" />
+        <img
+          className="admin-login__logo"
+          src={LOGO}
+          alt="PPG"
+          width={291}
+          height={226}
+        />
         <h1>Panel de contenido</h1>
         <p>Accede para editar el sitio.</p>
 
@@ -150,7 +165,7 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
     <div className="admin-shell">
       <aside className="admin-side">
         <div className="admin-side__brand">
-          <img src={LOGO} alt="" />
+          <img src={LOGO} alt="" width={291} height={226} />
           <span>Contenido</span>
         </div>
 
