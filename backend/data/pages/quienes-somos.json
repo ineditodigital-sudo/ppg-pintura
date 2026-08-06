@@ -62,7 +62,7 @@
     {
       "type": "cardGrid",
       "eyebrow": "Respaldo del fabricante",
-      "title": "Lo que PPG pone detrás de cada pedido",
+      "title": "Lo que PPG pone detrás del suministro",
       "columns": 3,
       "variant": "text",
       "theme": "light",

@@ -190,6 +190,28 @@
   box-shadow: var(--shadow-brand);
 }
 
+/* Cualquier CTA que lleve a WhatsApp, sea cual sea la variante con la que lo
+   pidieran. El selector va doblado —igual que en la rejilla de fotos— para
+   ganarle a `--secondary` y a `--on-dark` sin depender de en qué orden queden
+   en la hoja: el destino manda sobre el estilo pedido.
+   El verde es el de la marca WhatsApp: se reconoce antes por el color que por
+   el glifo. */
+.btn--whatsapp.btn--whatsapp {
+  background: #1eb958;
+  color: #fff;
+  border-color: #1eb958;
+}
+
+.btn--whatsapp.btn--whatsapp:hover {
+  background: #17a34b;
+  border-color: #17a34b;
+  color: #fff;
+}
+
+.btn--whatsapp.btn--whatsapp:focus-visible {
+  outline-color: #0f7a38;
+}
+
 .btn--secondary {
   background: transparent;
   color: var(--fg-brand-secondary);
@@ -687,16 +709,16 @@ a.card--highlight:hover,
   font-weight: var(--fw-semibold);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--fg-brand-secondary);
-  background: var(--bg-brand-primary);
-  border: 1px solid var(--border-brand-secondary);
-  border-radius: var(--radius-2xs);
-}
-
-.badge--solid {
-  background: var(--bg-brand-solid);
-  border-color: var(--bg-brand-solid);
+  /* Sólida, no en azul pálido. Antes era texto #026A94 sobre un fondo #EDF3F6
+     con borde #CFE4ED: el borde daba 1,31:1 contra el blanco de la página y el
+     fondo 1,12:1, así que la píldora no se veía como píldora —era una mancha
+     azulada— y el texto se quedaba en 4,40:1, por debajo del mínimo. En sólido
+     el blanco sobre el azul de marca da 4,93:1 y es el mismo azul del botón
+     primario, así que la pieza se lee como parte del sistema. */
   color: var(--fg-brand-on-solid);
+  background: var(--bg-brand-solid);
+  border: 1px solid var(--bg-brand-solid);
+  border-radius: var(--radius-2xs);
 }
 
 /* --- Breadcrumb ----------------------------------------------------------- */
@@ -751,96 +773,41 @@ a.card--highlight:hover,
 }
 
 /* ============================================================================
-   Rejilla en mosaico — variante `thumb`
-   Seis sectores en tres alturas distintas en vez de dos filas iguales. La
-   asimetria es lo que hace que la seccion se mire en lugar de leerse como
-   una tabla, y de paso las piezas grandes dan sitio a las fotos.
+   Rejilla de fotos — variante `thumb`
+   Tarjetas con la foto de fondo y el texto encima. Todas del mismo tamaño:
+   los seis mercados pesan lo mismo en el negocio y la rejilla lo refleja.
    ========================================================================== */
 
 /* Selector doblado a proposito: `[data-columns]` tiene la misma especificidad
    y va despues en la hoja, asi que ganaba y dejaba la rejilla en 2 columnas
    -con la tercera ficha aplastada a 16 px-. El mosaico define sus propias
-   columnas por diseño; el numero que venga del CMS no aplica aqui. */
+   columnas por diseño; el numero que venga del CMS no aplica aqui.
+
+   Antes esto era un mosaico de seis columnas con tramos de distinto ancho:
+   dos anchas arriba, tres en medio y una a todo lo largo abajo. Se veía, pero
+   dejaba fichas de un tercio de ancho junto a otras del doble, y con seis
+   mercados de igual peso esa jerarquía no representaba nada. Rejilla regular:
+   todas las tarjetas valen lo mismo y ninguna queda angosta. */
 .card-grid[data-variant='thumb'][data-variant='thumb'] {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  grid-auto-rows: 150px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: auto;
   gap: var(--space-m);
 }
 
-/* Base: tres por fila. Cada patrón de abajo ajusta las que hagan falta.
-   Todo suma seis por fila, que es lo que evita los huecos. */
-.card-grid[data-variant='thumb'] > * {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-/* Seis: dos anchas arriba, tres en medio, una ancha de cierre. */
-.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(1) {
-  grid-column: span 4;
-}
-.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(6) {
-  grid-column: span 6;
-  grid-row: span 1;
-}
-
-/* Cinco: la primera manda y las tres últimas cierran la segunda fila.
-   Antes la quinta se iba a una fila propia a todo lo ancho y dejaba la de
-   en medio con cuatro de seis columnas: ese era el hueco. */
-.card-grid[data-variant='thumb'][data-count='5'] > *:nth-child(1) {
-  grid-column: span 4;
-}
-
-/* Cuatro: dos y dos, en mitades. */
-.card-grid[data-variant='thumb'][data-count='4'] > * {
-  grid-column: span 3;
-}
-
-/* Dos: una junto a la otra. */
-.card-grid[data-variant='thumb'][data-count='2'] > * {
-  grid-column: span 3;
-}
-
-/* Una sola ocupa la fila entera, y baja de alto: a seis columnas y dos filas
-   la foto se estiraría sin nada al lado. */
-.card-grid[data-variant='thumb'][data-count='1'] > * {
-  grid-column: span 6;
-  grid-row: span 1;
-}
-
-/* En las piezas anchas y bajas el texto va a un lado, no debajo. */
-.card-grid[data-variant='thumb'][data-count='6'] > *:nth-child(6) .card__body,
-.card-grid[data-variant='thumb'][data-count='1'] > * .card__body {
-  max-width: 46ch;
+/* Sin tramos: cada tarjeta ocupa una celda. El alto lo fija la propia tarjeta
+   (`.card--thumb` pide 300px), así que todas las filas salen iguales. */
+.card-grid[data-variant='thumb'][data-variant='thumb'] > * {
+  grid-column: auto;
+  grid-row: auto;
 }
 
 .card-grid[data-variant='thumb'] .card--thumb {
-  min-height: 0;
+  min-height: 300px;
 }
 
-/* El selector va doblado igual que arriba: si no, la regla de escritorio
-   —que lo dobla para ganarle a `[data-columns]`— tiene más especificidad que
-   estas y el mosaico se quedaba a seis columnas en el móvil, con las fichas
-   a un tercio de ancho. */
 @media (max-width: 62rem) {
   .card-grid[data-variant='thumb'][data-variant='thumb'] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: 130px;
-  }
-  .card-grid[data-variant='thumb'][data-variant='thumb'] > * {
-    grid-column: span 1 !important;
-    grid-row: span 2 !important;
-  }
-}
-
-/* La primera cruza las dos columnas cuando el total es impar; con un número
-   par partiría la rejilla y dejaría a la última sola.
-   El rango se acota por abajo a propósito: si esta regla llegara al móvil de
-   una columna, la ficha pediría una columna que no existe y el navegador
-   creaba una implícita de 0 px con tarjetas de 2 px de ancho. */
-@media (min-width: 40.0625rem) and (max-width: 62rem) {
-  .card-grid[data-variant='thumb'][data-variant='thumb'][data-count='3'] > *:nth-child(1),
-  .card-grid[data-variant='thumb'][data-variant='thumb'][data-count='5'] > *:nth-child(1) {
-    grid-column: span 2 !important;
   }
 }
 
@@ -848,7 +815,7 @@ a.card--highlight:hover,
   .card-grid[data-variant='thumb'][data-variant='thumb'] {
     grid-template-columns: minmax(0, 1fr);
   }
-  .card-grid[data-variant='thumb'][data-variant='thumb'] > * {
-    grid-column: span 1 !important;
+  .card-grid[data-variant='thumb'] .card--thumb {
+    min-height: 240px;
   }
 }

@@ -36,9 +36,38 @@ const localPages: Record<string, unknown> = {
 /** Marca si la API respondió, para poder mostrarlo en desarrollo. */
 export let usingLocalContent = false
 
+/**
+ * Peticiones que `index.html` lanzó al analizarse, antes de que existiera este
+ * bundle. Son las tres que hacen falta para pintar la portada. Cada promesa se
+ * consume una sola vez: si la misma ruta se vuelve a pedir —al navegar y
+ * regresar—, se va por la red como siempre.
+ */
+declare global {
+  interface Window {
+    __ppgContenido?: Record<string, Promise<unknown> | undefined>
+  }
+}
+
+function adelantada(url: string): Promise<unknown> | undefined {
+  const cache = typeof window !== 'undefined' ? window.__ppgContenido : undefined
+  const promesa = cache?.[url]
+  if (promesa) delete cache![url]
+  return promesa
+}
+
 async function request<T>(path: string, fallback: T): Promise<T> {
+  const url = `/api${path}`
+
+  const anticipada = adelantada(url)
+  if (anticipada) {
+    const datos = await anticipada
+    // `null` significa que aquella petición falló. No se da por perdida: se
+    // reintenta por el camino normal antes de caer a la copia local.
+    if (datos !== null && datos !== undefined) return datos as T
+  }
+
   try {
-    const response = await fetch(`/api${path}`, {
+    const response = await fetch(url, {
       headers: { Accept: 'application/json' },
       signal: AbortSignal.timeout(3000),
     })

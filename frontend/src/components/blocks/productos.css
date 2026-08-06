@@ -1,98 +1,46 @@
 /* ============================================================================
-   Productos PPG — carrusel
+   Productos PPG — rejilla de fotos
+   Mismo lenguaje que la rejilla de mercados: foto de fondo, velo y texto
+   encima. Que las dos secciones de la portada se lean igual es lo que hace
+   que la página se recorra en vez de leerse.
    ========================================================================== */
 
+.productos-seccion {
+  background: var(--bg-primary);
+}
+
 .productos__cabecera {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: var(--space-l);
-  margin-bottom: var(--space-3xl);
-  padding-bottom: var(--space-l);
-  border-bottom: 1px solid var(--border-tertiary);
+  margin-bottom: var(--space-xl);
+  max-width: 62ch;
 }
 
 .productos__cabecera h2 {
-  margin-top: var(--space-m);
-  font-size: clamp(2rem, 1.1rem + 2.8vw, 3.4rem);
-  font-weight: var(--fw-regular);
-  line-height: 1.06;
-  letter-spacing: -0.035em;
-}
-
-.productos__acciones {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--space-xl);
+  margin-top: var(--space-2xs);
 }
 
 .productos__nota {
-  max-width: 34ch;
-  font-size: var(--fs-sm);
-  line-height: 1.6;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-body);
   color: var(--fg-secondary);
 }
 
-.productos__flechas {
-  display: flex;
-  gap: var(--space-2xs);
-  flex-shrink: 0;
-}
-
-.productos__flechas button {
+.productos__rejilla {
   display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  color: var(--ppg-blue);
-  background: var(--bg-brand-primary);
-  border: 1px solid transparent;
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition:
-    background-color var(--dur-base) var(--ease-out),
-    color var(--dur-base) var(--ease-out),
-    opacity var(--dur-base) var(--ease-out);
-}
-
-.productos__flechas button:hover:not(:disabled) {
-  background: var(--ppg-blue);
-  color: #fff;
-}
-
-/* Deshabilitada, no oculta: si desaparece, la fila de controles salta. */
-.productos__flechas button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-/* --- Pista ------------------------------------------------------------------ */
-
-.productos__pista {
-  display: flex;
-  gap: var(--space-l);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding-bottom: var(--space-s);
-  /* Sangra a los bordes de la ventana pero arranca alineada con el contenedor:
-     así la última tarjeta se corta y se ve que la fila sigue. */
-  margin-inline: calc(50% - 50vw);
-  padding-inline: max(
-    var(--page-padding-x),
-    calc(50vw - var(--container-max) / 2 + var(--page-padding-x))
-  );
-  scrollbar-width: thin;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .producto {
-  flex: 0 0 auto;
-  width: clamp(280px, 30vw, 400px);
-  scroll-snap-align: start;
+  position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
+  min-height: 380px;
   overflow: hidden;
-  background: var(--bg-primary);
+  background: var(--ppg-navy);
   border-radius: var(--radius-2xl);
   box-shadow: var(--shadow-xs);
   transition:
@@ -106,9 +54,9 @@
 }
 
 .producto__foto {
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: var(--bg-secondary);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .producto__foto img {
@@ -116,20 +64,37 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--dur-slow) var(--ease-out);
+  opacity: 0.62;
+  transition:
+    transform 700ms var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
 }
 
 .producto:hover .producto__foto img {
-  transform: scale(1.05);
+  transform: scale(1.06);
+  opacity: 0.74;
+}
+
+/* Velo en dos capas, igual que en las tarjetas de mercado: uno arriba y otro
+   abajo, para que el texto blanco aguante sobre fotos claras y oscuras. */
+.producto::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(8, 32, 49, 0.72) 0%, rgba(8, 32, 49, 0.18) 40%),
+    linear-gradient(0deg, rgba(8, 32, 49, 0.94) 0%, rgba(8, 32, 49, 0) 58%);
 }
 
 .producto__cuerpo {
+  position: relative;
+  z-index: 2;
   display: flex;
-  flex: 1;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--space-2xs);
-  padding: var(--space-xl);
+  gap: 6px;
+  padding: var(--space-l);
 }
 
 .producto__tagline {
@@ -137,7 +102,7 @@
   font-weight: var(--fw-semibold);
   letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
-  color: var(--ppg-blue);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .producto__nombre {
@@ -145,60 +110,41 @@
   font-weight: var(--fw-regular);
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: var(--fg-primary);
+  color: #fff;
 }
 
 .producto__sku {
   font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
   font-size: var(--fs-xs);
   letter-spacing: 0.02em;
-  color: var(--fg-tertiary);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .producto__texto {
+  margin-top: 2px;
   font-size: var(--fs-sm);
-  line-height: 1.65;
-  color: var(--fg-secondary);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.88);
   text-wrap: pretty;
 }
 
-.producto__puntos {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin: var(--space-2xs) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.producto__puntos li {
-  position: relative;
-  padding-left: 22px;
-  font-size: var(--fs-sm);
-  line-height: 1.5;
-  color: var(--fg-secondary);
-}
-
-/* Marca de verificación con dos bordes: sin icono que cargar. */
-.producto__puntos li::before {
-  content: '';
-  position: absolute;
-  left: 2px;
-  top: 6px;
-  width: 6px;
-  height: 10px;
-  border: solid var(--ppg-blue);
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-}
-
 .producto__enlace {
-  margin-top: auto;
-  padding-top: var(--space-m);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-xs);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
-  color: var(--ppg-blue);
+  color: #fff;
   text-decoration: none;
+}
+
+.producto__enlace svg {
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.producto:hover .producto__enlace svg {
+  transform: translate(2px, -2px);
 }
 
 .producto__enlace:hover {
@@ -206,76 +152,17 @@
 }
 
 @media (max-width: 62rem) {
-  .productos__acciones {
-    width: 100%;
-    justify-content: space-between;
+  .productos__rejilla {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* ---------------------------------------------------------------------------
-   Móvil: la fila deja de ser carrusel.
-
-   Tres fichas altas —foto, nombre, referencia, descripción y tres puntos—
-   dentro de una pista horizontal obligaban a dos gestos cruzados: deslizar de
-   lado para cambiar de producto y hacia abajo para terminar de leer cada uno.
-   Y la sangría a los bordes cortaba la tercera, que en una pantalla de 375 px
-   ya no se lee como «hay más» sino como algo mal encajado.
-
-   Aquí se apilan a lo ancho de la pantalla, con la foto apaisada para que el
-   nombre y el precio entren sin hacer scroll y el pulgar sólo tenga que ir en
-   una dirección.
-   -------------------------------------------------------------------------- */
-
-@media (max-width: 48rem) {
-  .productos__pista {
-    display: grid;
-    grid-auto-flow: row;
-    gap: var(--space-l);
-    overflow-x: visible;
-    scroll-snap-type: none;
-    /* Sin sangría: en vertical no hay nada que cortar por el borde. */
-    margin-inline: 0;
-    padding-inline: var(--page-padding-x);
-    padding-bottom: 0;
+@media (max-width: 40rem) {
+  .productos__rejilla {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .producto {
-    width: auto;
-    scroll-snap-align: none;
-  }
-
-  /* Apaisada en vez de 4:3: recorta casi un tercio del alto de cada ficha y
-     deja ver dos productos por pantalla en lugar de uno. */
-  .producto__foto {
-    aspect-ratio: 16 / 9;
-  }
-
-  .productos__flechas {
-    display: none;
-  }
-
-  /* La nota pasa a ocupar su propia línea bajo el titular. */
-  .productos__acciones {
-    margin-top: var(--space-2xs);
-  }
-
-  .productos__nota {
-    max-width: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .productos__pista {
-    scroll-behavior: auto;
-  }
-
-  .producto,
-  .producto__foto img {
-    transition: none;
-  }
-
-  .producto:hover,
-  .producto:hover .producto__foto img {
-    transform: none;
+    min-height: 320px;
   }
 }

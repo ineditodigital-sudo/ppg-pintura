@@ -355,7 +355,6 @@ export interface FeaturedProduct {
   tagline: string
   description: string
   image: Media
-  highlights: string[]
   cta?: Link
 }
 

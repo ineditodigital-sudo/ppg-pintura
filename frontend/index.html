@@ -22,6 +22,44 @@
       crossorigin
     />
 
+    <!-- El póster del vídeo del hero es el elemento LCP de la portada. -->
+    <link
+      rel="preload"
+      href="/assets/video/hero-poster.jpg"
+      as="image"
+      fetchpriority="high"
+    />
+
+    <!--
+      Arranca el contenido antes que el bundle.
+
+      El LCP estaba en 3,2 s con 2 s de «retraso en la renderización»: la
+      cadena era HTML → bundle (849 ms) → /api/pages/home (1.147 ms) → pintar.
+      Las peticiones no salían hasta que React arrancaba, así que los 343 KB de
+      JavaScript se descargaban con la red ociosa.
+
+      Esto las lanza al analizar el HTML, en paralelo con el bundle. No es
+      `rel=preload as=fetch` porque la API no manda `Cache-Control` y la
+      reutilización del precargado depende de que casen modo y credenciales;
+      con la promesa en `window` no hay nada que casar. `lib/api.ts` la
+      recoge si está, y si algo falla devuelve null y sigue el camino normal
+      —incluida la copia local—, así que esto no puede romper la página.
+    -->
+    <script>
+      window.__ppgContenido = {}
+      for (const ruta of ['/api/site', '/api/navigation', '/api/pages/home']) {
+        window.__ppgContenido[ruta] = fetch(ruta, {
+          headers: { Accept: 'application/json' },
+        })
+          .then(function (r) {
+            return r.ok ? r.json() : null
+          })
+          .catch(function () {
+            return null
+          })
+      }
+    </script>
+
     <title>Pintura en Polvo PPG | Distribuidor Autorizado en Aguascalientes</title>
 
     <!-- Ficha de la empresa para buscadores. Va en el HTML y no inyectada por

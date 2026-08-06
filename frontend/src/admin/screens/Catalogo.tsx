@@ -107,12 +107,6 @@ export function FeaturedProductsScreen() {
             { key: 'tagline', label: 'Antetítulo', type: 'text', required: true },
             { key: 'description', label: 'Descripción', type: 'textarea', required: true },
             { key: 'image', label: 'Imagen', type: 'image', required: true },
-            {
-              key: 'highlights',
-              label: 'Puntos destacados',
-              type: 'stringList',
-              help: 'Tres entradas es lo que mejor equilibra las tarjetas.',
-            },
             { key: 'cta', label: 'Botón', type: 'link' },
           ]}
           value={s.value as unknown as Record<string, unknown>[]}

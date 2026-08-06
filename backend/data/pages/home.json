@@ -22,33 +22,33 @@
             "href": "/colores"
           },
           "secondaryCta": {
-            "label": "Solicitar cotización",
+            "label": "Cotizar un proyecto",
             "href": "/contacto"
           }
         },
         {
-          "eyebrow": "Catálogo PPG",
-          "title": "El color que pidas",
-          "subtitle": "Poliéster para exterior, híbridos para interior, y sus versiones texturizadas y gofradas. Cada referencia con su rango de brillo.",
+          "eyebrow": "Especificación de color",
+          "title": "El color de tu especificación",
+          "subtitle": "Poliéster para exterior e híbridos para interior, lisos o texturizados, con equivalencia RAL y rango de brillo por referencia. Igualación bajo pedido en la planta PPG de San Juan del Río.",
           "image": {
             "src": "/assets/video/hero-poster.jpg",
             "alt": "Muestras de pintura en polvo"
           },
           "cta": {
-            "label": "Ver las 83 referencias",
+            "label": "Ver la carta de colores",
             "href": "/colores"
           }
         },
         {
           "eyebrow": "Aplicación y maquila",
           "title": "También lo aplicamos",
-          "subtitle": "Si no tienes línea propia, recubrimos tus piezas en nuestras instalaciones y te las devolvemos listas para montar.",
+          "subtitle": "Si no tienes línea propia, recubrimos tus piezas en nuestras instalaciones de Aguascalientes y te las devolvemos listas para montar.",
           "image": {
             "src": "/assets/csmx/aplicacion-polvo.webp",
             "alt": "Aplicación electrostática de pintura en polvo"
           },
           "cta": {
-            "label": "Consultar maquila",
+            "label": "Plantear un volumen",
             "href": "/contacto"
           }
         }
@@ -191,12 +191,12 @@
           "detail": "Formulada sin COV."
         }
       ],
-      "title": "Lo que respalda cada pedido"
+      "title": "Lo que respalda el suministro"
     },
     {
       "type": "ctaBanner",
       "title": "Cuéntanos qué necesitas recubrir",
-      "description": "Dinos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización. Si no tienes línea de aplicación propia, lo maquilamos nosotros.",
+      "description": "Dinos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización. Trabajamos programas de suministro continuo y proyectos multiplanta.",
       "image": {
         "src": "/assets/video/hero-poster.jpg",
         "alt": "Pintura en polvo lista para aplicar"

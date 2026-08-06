@@ -563,11 +563,6 @@ final class ContentValidator
                 $errors[] = "El producto {$name} necesita una imagen.";
             }
 
-            $errors = [
-                ...$errors,
-                ...$this->validateStringList($product['highlights'] ?? null, "Los puntos del producto {$name}"),
-            ];
-
             $cta = $product['cta'] ?? null;
 
             if (

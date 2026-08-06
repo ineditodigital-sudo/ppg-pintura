@@ -7,11 +7,25 @@
   top: 0;
   z-index: var(--z-header);
   background: var(--bg-primary);
-  border-bottom: 1px solid var(--border-tertiary);
   transition:
     box-shadow var(--dur-base) var(--ease-out),
-    background-color 320ms var(--ease-out),
-    border-color 320ms var(--ease-out);
+    background-color 320ms var(--ease-out);
+}
+
+/* El filete inferior es un pseudo-elemento y no un `border-bottom`.
+   Lighthouse marcaba «animación no compuesta» porque se transicionaba
+   `border-bottom-color`, que obliga a repintar en cada fotograma; sobre una
+   cabecera fija, en cada scroll. Con una capa propia lo que cambia es
+   `opacity`, que se resuelve en la GPU. */
+.header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--border-tertiary);
+  transition: opacity 320ms var(--ease-out);
 }
 
 /* Franja azul superior: el remate de marca del propio sitio de PPG. */
@@ -45,7 +59,10 @@
    -------------------------------------------------------------------------- */
 body.con-hero .header:not(.header--scrolled) {
   background: transparent;
-  border-bottom-color: transparent;
+}
+
+body.con-hero .header:not(.header--scrolled)::after {
+  opacity: 0;
 }
 
 body.con-hero .header:not(.header--scrolled)::before {
