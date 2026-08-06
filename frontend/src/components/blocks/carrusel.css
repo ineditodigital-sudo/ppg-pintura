@@ -2,6 +2,16 @@
    Carrusel de colores de la portada
    ========================================================================== */
 
+/* La pista sangra a los bordes con `calc(50% - 50vw)`, y `vw` cuenta la barra
+   de desplazamiento mientras que `%` no: con barra visible la pista se pasaba
+   ~8px por cada lado y la página entera cogía scroll horizontal. `clip` corta
+   ese sobrante sin crear un contenedor de scroll propio —`hidden` sí lo crea,
+   y eso rompería el `position: sticky` de la cabecera—. El eje vertical se
+   deja visible a propósito. */
+.carrusel {
+  overflow-x: clip;
+}
+
 .carrusel__cabecera {
   display: flex;
   flex-wrap: wrap;

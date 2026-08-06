@@ -523,16 +523,20 @@
   border-radius: var(--radius-full);
 }
 
-/* Display grande y de peso ligero: es el cambio que mas se nota respecto a
-   la version anterior, que iba en versales apretadas. */
+/* Versales y en negrita, por decisión de marca.
+   El tamaño baja respecto a la version en caja baja: el titular sigue en una
+   sola linea y en mayusculas el mismo texto ocupa cerca de un 15% mas ancho,
+   asi que con el clamp anterior «EL COLOR DE TU ESPECIFICACION» se salia del
+   contenedor. El tracking pasa de -0.035em a casi cero porque el apretado
+   fuerte esta pensado para caja baja: en versales pega las letras. */
 .hero-slide h1,
 .hero-slide__titulo-inactivo {
   color: var(--fg-white);
-  font-size: clamp(1.9rem, 0.4rem + 5.4vw, 5rem);
-  font-weight: var(--fw-regular);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-  text-transform: none;
+  font-size: clamp(1.5rem, 0.35rem + 4.1vw, 3.75rem);
+  font-weight: var(--fw-bold);
+  line-height: 1.06;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
   /* Una sola linea: el `max-width: 15ch` con `balance` los partia en dos.
      El tamaño se recorta con el ancho para que quepa sin desbordar. */
   white-space: nowrap;
@@ -719,9 +723,16 @@
 }
 
 @media (max-width: 48rem) {
+  /* En movil el titular envuelve. En versales el texto largo no cabe en una
+     linea —«EL COLOR DE TU ESPECIFICACION» pedia 398px sobre 375 y se cortaba—
+     y seguir encogiendo la fuente para forzar una sola linea lo dejaba
+     ilegible. Dos lineas equilibradas leen mejor que una diminuta. */
   .hero-slide h1,
   .hero-slide__titulo-inactivo {
-    font-size: clamp(2rem, 1rem + 6vw, 2.75rem);
+    font-size: clamp(1.5rem, 0.7rem + 4.6vw, 2.1rem);
+    white-space: normal;
+    text-wrap: balance;
+    max-width: 18ch;
   }
 
   .hero-slider__panel::before {
