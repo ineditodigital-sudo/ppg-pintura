@@ -204,11 +204,23 @@ Si no aparece `Content-Encoding`, algo ha cambiado en Cloudflare.
 
 **Cloudflare está delante en modo proxy.** El DNS del dominio no apunta al
 hosting sino a Cloudflare (`104.21.43.176`, `172.67.182.164`), y de ahí al
-origen. Las respuestas traen `cf-cache-status`. Los bundles llevan hash, así que
-son inmutables y no dan problema; `index.html` y los `.json` salen con
-`no-cache, must-revalidate` desde el `.htaccess`, que es lo que evita que el
-borde sirva una versión vieja tras un despliegue. Si alguna vez un cambio no se
-ve, purgar la caché de Cloudflare antes de tocar nada más.
+origen. Los bundles llevan hash en el nombre, así que son inmutables y no dan
+problema.
+
+> **Las rutas de la API salían sin cabecera de caché.** La regla de `no-cache`
+> del `.htaccess` va por extensión (`.html`, `.json`) y `/api/pages/quienes-somos`
+> no tiene ninguna, así que la respuesta viajaba sin instrucciones y Cloudflare
+> aplicaba su heurística: llegó a servir la versión anterior de una página ya
+> desplegada mientras el origen devolvía la nueva. Se diagnosticó porque
+> `/api/pages/quienes-somos` daba contenido viejo y `…?x=1` —otra clave de
+> caché— daba el nuevo; pidiéndoselo al origen por IP también salía el nuevo.
+> `Response::json()` manda ahora `no-store` en todas las respuestas.
+
+**Las imágenes no llevan hash.** Salen de `public/` con `max-age` de 30 días, así
+que al sustituir una foto el borde sigue sirviendo la vieja hasta que caduque.
+Mientras siga así, cualquier cambio de imagen exige **purgar la caché de
+Cloudflare**. Comprobación rápida: pedir el archivo con `?v=algo` —otra clave de
+caché— y comparar el tamaño con el de la URL limpia.
 
 ---
 

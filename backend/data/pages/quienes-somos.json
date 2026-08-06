@@ -1,8 +1,8 @@
 {
   "slug": "quienes-somos",
   "seo": {
-    "title": "Quiénes somos | Distribuidor autorizado PPG en Aguascalientes",
-    "description": "Coating Systems MX suministra y aplica recubrimiento en polvo PPG en Aguascalientes, con el respaldo técnico del fabricante y su planta de San Juan del Río."
+    "title": "Quiénes somos | PPG, protegemos y embellecemos el mundo",
+    "description": "Historia, visión y valores de PPG: fundada en 1883 en Pensilvania, con operaciones en más de 50 países y casi 140 años de innovación y liderazgo en color."
   },
   "breadcrumbs": [
     {
@@ -17,94 +17,99 @@
     {
       "type": "hero",
       "variant": "compact",
-      "eyebrow": "Quiénes somos",
-      "title": "Distribuidor autorizado PPG en Aguascalientes",
-      "subtitle": "Coating Systems Mx S de RL de CV suministra y aplica recubrimiento en polvo PPG. El producto y su respaldo técnico son del fabricante; la asesoría, la existencia y la maquila las ponemos aquí."
+      "eyebrow": "Nuestro propósito",
+      "title": "Protegemos y embellecemos el mundo®",
+      "subtitle": "Casi 140 años de innovación y liderazgo en color, desde la primera fábrica de vidrio plano de Estados Unidos hasta una compañía global de pinturas, recubrimientos y materiales especiales."
     },
     {
       "type": "statGrid",
-      "eyebrow": "El fabricante",
-      "title": "PPG en cifras",
+      "eyebrow": "PPG en cifras",
+      "title": "La compañía hoy",
       "theme": "brand",
       "items": [
         {
-          "value": "+130",
-          "label": "Años en el mercado",
-          "detail": "Compañía de recubrimientos con sede global en Pittsburgh, Pensilvania."
+          "value": "1883",
+          "label": "Año de fundación",
+          "detail": "En Creighton, Pensilvania, como Pittsburgh Plate Glass Co."
         },
         {
-          "value": "+70",
-          "label": "Países con presencia",
-          "detail": "Operación global en recubrimientos industriales."
+          "value": "+50",
+          "label": "Países con operaciones",
+          "detail": "Presencia industrial en los cinco continentes."
         },
         {
-          "value": "+30",
-          "label": "Años en pintura en polvo",
-          "detail": "Suministrando a fabricantes y aplicadores en todo el mundo."
-        },
-        {
-          "value": "95%",
-          "label": "Eficiencia de transferencia",
-          "detail": "Lo que no se adhiere se recupera y se vuelve a usar.",
+          "value": "15 900",
+          "label": "Millones de dólares en ventas",
+          "detail": "Cifra de 2025.",
           "highlight": true
+        },
+        {
+          "value": "43%",
+          "label": "Ventas de productos sostenibles",
+          "detail": "En 2025, camino del 50% comprometido para 2030."
         }
       ]
     },
     {
       "type": "richText",
-      "eyebrow": "PPG en México",
-      "title": "La planta de San Juan del Río",
+      "align": "center",
+      "eyebrow": "Nuestra visión",
+      "title": "El socio de primera opción",
       "paragraphs": [
-        "La sede principal de PPG en México es la planta de San Juan del Río, en Querétaro. Ahí se desarrollan nuevos códigos de color y las tecnologías epóxica, poliéster, híbrida y uretano de pintura en polvo.",
-        "De ese catálogo salen las 83 referencias que manejamos, cada una con su equivalencia RAL y su rango de brillo."
+        "Nuestra visión es ser el socio de primera opción para satisfacer las necesidades cambiantes de nuestros clientes en cuanto a pinturas, revestimientos y materiales especiales innovadores."
       ]
     },
     {
-      "type": "cardGrid",
-      "eyebrow": "Respaldo del fabricante",
-      "title": "Lo que PPG pone detrás del suministro",
-      "columns": 3,
-      "variant": "text",
-      "theme": "light",
-      "items": [
+      "type": "timeline",
+      "eyebrow": "Nuestra historia",
+      "title": "De una fábrica de vidrio a una compañía global",
+      "description": "Proteger y embellecer el mundo siempre ha ido de la mano del compromiso con la innovación sostenible.",
+      "entries": [
         {
-          "title": "Laboratorio y pruebas",
-          "description": "Servicios de laboratorio y ensayo para validar el sistema antes de llevarlo a línea."
+          "period": "1883",
+          "title": "Pittsburgh Plate Glass Co.",
+          "description": "El Capitán John B. Ford y John Pitcairn ponen en marcha la primera fábrica de vidrio plano comercialmente exitosa de Estados Unidos, en Creighton, Pensilvania. La empresa nace centrada en la innovación y la calidad."
         },
         {
-          "title": "Soporte en sitio",
-          "description": "Capacitación, acompañamiento y diagnóstico de problemas en la propia línea de aplicación."
+          "period": "1899",
+          "title": "El origen del negocio químico",
+          "description": "El negocio se diversifica con una planta de álcali en Barberton, Ohio, para suministrar materias primas a la fabricación de vidrio. Es el precursor de los negocios químicos de PPG."
         },
         {
-          "title": "Desarrollo de color",
-          "description": "Centros de investigación propios y desarrollo de nuevos códigos de color."
+          "period": "1900",
+          "title": "Entrada en los recubrimientos",
+          "description": "PPG adquiere una participación en Patton Paint Co., en Wisconsin: pintura y vidrio llegaban a los clientes por los mismos canales de distribución."
+        },
+        {
+          "period": "Hoy",
+          "title": "Casi 140 años después",
+          "description": "PPG sigue dedicada a la innovación y la calidad, e invierte cerca del 3% de sus ventas netas en investigación y desarrollo cada año."
         }
       ]
     },
     {
       "type": "cardGrid",
-      "eyebrow": "Aplicaciones",
-      "title": "Dónde se aplica",
-      "columns": 3,
+      "eyebrow": "Nuestros valores",
+      "title": "Lo que ordena las decisiones",
+      "columns": 2,
       "variant": "text",
+      "theme": "light",
       "items": [
         {
-          "title": "Electrodomésticos"
+          "title": "Innovación",
+          "description": "Un equipo global de innovadores y socios motivados por encontrar soluciones que satisfagan las mayores necesidades de nuestros clientes."
         },
         {
-          "title": "Artículos de cocina y repostería"
+          "title": "Color",
+          "description": "Damos vida a las visiones de los clientes a través del color, con procesos que garantizan su mejor rendimiento sin importar el clima o las condiciones de exposición."
         },
         {
-          "title": "Aparatos electrónicos"
+          "title": "Sostenibilidad",
+          "description": "Logramos el éxito ayudando a nuestros clientes a tener éxito, con innovaciones sostenibles líderes en la industria que mejoran la productividad."
         },
         {
-          "title": "Equipos de industria pesada"
-        },
-        {
-          "title": "Muebles para hogar y oficina"
-        },
-        {
-          "title": "Acabados generales"
+          "title": "Comunidades",
+          "description": "Llevar color y brillo a las comunidades donde vivimos y operamos. El programa Colorful Communities® cumplió diez años en 2025."
         }
       ]
     },
@@ -112,7 +117,7 @@
       "type": "richText",
       "align": "center",
       "paragraphs": [
-        "El logotipo PPG es una marca registrada y «We protect and beautify the world» es una marca de PPG Industries Ohio, Inc. Coating Systems MX es distribuidor autorizado."
+        "El logotipo PPG y «Protegemos y embellecemos el mundo» son marcas de PPG Industries Ohio, Inc. Historia, visión y valores según los publica PPG."
       ]
     },
     {

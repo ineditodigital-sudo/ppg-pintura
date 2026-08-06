@@ -16,6 +16,19 @@ final class Response
     {
         http_response_code($status);
         header('Content-Type: application/json; charset=utf-8');
+
+        // El contenido lo edita el cliente desde el panel: una respuesta
+        // cacheada es contenido viejo servido como si fuera el vigente.
+        //
+        // Hacía falta decirlo aquí y no en el `.htaccess`: allí la regla de
+        // `no-cache` va por extensión (`.html`, `.json`) y las rutas de la API
+        // no tienen extensión —`/api/pages/quienes-somos`—, así que salían sin
+        // ninguna cabecera de caché. Sin instrucción, la CDN aplica su propia
+        // heurística: comprobado, Cloudflare servía la versión anterior de una
+        // página ya desplegada mientras el origen devolvía la nueva.
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+
         echo json_encode(
             $data,
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT

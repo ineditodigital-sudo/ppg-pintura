@@ -1069,6 +1069,16 @@
   background: var(--bg-primary);
 }
 
+/* El destacado conserva su azul también aquí.
+   `.section--brand .stat` son dos clases y le ganaba a `.stat--highlight`,
+   que es una: el mosaico destacado se quedaba con fondo blanco mientras su
+   texto seguía en blanco por la regla de arriba. Resultado: la cifra del 95%
+   era invisible sobre el fondo. */
+.section--brand .stat--highlight,
+.section--brand .stat--highlight:hover {
+  background: var(--bg-brand-solid);
+}
+
 .section--dark .stat {
   background: rgba(255, 255, 255, 0.06);
 }
