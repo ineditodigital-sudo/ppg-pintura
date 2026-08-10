@@ -7,7 +7,7 @@ import { ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
 import {
   analizar,
-  COLUMNAS,
+  TITULOS,
   descargar,
   generarCsv,
   generarPlantilla,
@@ -101,7 +101,7 @@ function HojaDeCalculo({
           <p className="adm-hoja__ayuda">
             Descarga el formato correcto, edítalo sin cambiar las columnas y
             vuelve a subirlo. Las columnas deben ser, en este orden:{' '}
-            <code>{COLUMNAS.join(', ')}</code>
+            <code>{TITULOS.join(' · ')}</code>
           </p>
           <div className="adm-hoja__acciones">
             <button

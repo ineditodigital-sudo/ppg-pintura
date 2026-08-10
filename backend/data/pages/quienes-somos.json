@@ -122,8 +122,8 @@
     },
     {
       "type": "ctaBanner",
-      "title": "¿Hablamos de tu proyecto?",
-      "description": "Cuéntanos qué necesitas recubrir: el sustrato, el volumen y las condiciones a las que va a estar expuesta la pieza.",
+      "title": "¿Tienes algún proyecto?",
+      "description": "Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.",
       "image": {
         "src": "/assets/csmx/aplicacion-polvo.webp",
         "alt": "Aplicación de recubrimiento en polvo"

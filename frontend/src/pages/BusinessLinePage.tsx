@@ -58,8 +58,11 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
         },
       ],
     },
-    // La carta completa, sólo donde el catálogo corresponde a la línea.
-    ...(line.showColors ? [{ type: 'colorCarousel' as const }] : []),
+    // La carta completa —con pestañas y buscador—, no el carrusel: quien entra
+    // en la página del producto viene a buscar un color concreto, y quince
+    // muestras sueltas sin filtro no responden a eso.
+    // Sólo donde el catálogo corresponde a la línea.
+    ...(line.showColors ? [{ type: 'colorCatalog' as const }] : []),
     // Las cifras las trae cada línea. Sin ellas no hay bloque: es preferible
     // a repetir en pintura líquida las de la pintura en polvo.
     ...(line.stats?.length
@@ -80,9 +83,9 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
     {
       type: 'ctaBanner',
       theme: 'dark',
-      title: `¿Necesitas ${line.name.toLowerCase()}?`,
+      title: '¿Tienes algún proyecto?',
       description:
-        'Cuéntanos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización.',
+        'Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.',
       // Sin imagen el bloque cae en la variante `plain` y queda como un
       // rectángulo azul liso, que era justo lo que se veía aquí.
       image: line.image,

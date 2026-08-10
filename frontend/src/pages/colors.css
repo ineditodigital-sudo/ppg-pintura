@@ -183,11 +183,18 @@
 /* La ficha es una placa recubierta, no un rectángulo de color: el recorte y el
    relieve los pone la utilidad `.placa` de `base.css`. Aquí sólo va la forma de
    la ficha. */
+/* Código y sello van ABAJO y pueden pasar a dos líneas.
+   Antes iban arriba, uno a cada extremo y con `nowrap`: en las fichas
+   estrechas «EN EXISTENCIA» no cabía junto al código y se salía de la muestra,
+   cortado por el borde. Alineados abajo a la izquierda y con `wrap`, cuando no
+   caben en una línea el sello baja a la siguiente y ambos se leen enteros. */
 .carta__color {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  align-content: flex-end;
+  justify-content: flex-start;
+  gap: 6px;
   aspect-ratio: 5 / 4;
   padding: 12px;
   border-radius: var(--radius-xl);

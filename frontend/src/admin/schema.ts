@@ -536,6 +536,14 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
     defaults: { type: 'colorCarousel' },
   },
 
+  colorCatalog: {
+    label: 'Carta de colores completa',
+    description:
+      'La carta entera con pestañas por familia y buscador. Se alimenta sola de la Carta de color; no hay nada que configurar.',
+    fields: [],
+    defaults: { type: 'colorCatalog' },
+  },
+
   specList: {
     label: 'Ficha técnica',
     description: 'Listado de términos con su nota. Para materiales, normas o acabados.',

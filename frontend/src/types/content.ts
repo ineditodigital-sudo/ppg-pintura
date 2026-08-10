@@ -311,6 +311,7 @@ export type Block =
   | SpecListBlock
   | ProductShowcaseBlock
   | ColorCarouselBlock
+  | ColorCatalogBlock
 
 /* --- Página y datos globales ---------------------------------------------- */
 
@@ -366,6 +367,15 @@ export interface ProductShowcaseBlock {
 /** Adelanto del catálogo de color en la portada. */
 export interface ColorCarouselBlock {
   type: 'colorCarousel'
+}
+
+/**
+ * La carta entera —pestañas, buscador y rejilla— dentro de una página.
+ * A diferencia de `colorCarousel`, que es un adelanto de quince muestras, aquí
+ * se puede buscar y filtrar sin salir de la página.
+ */
+export interface ColorCatalogBlock {
+  type: 'colorCatalog'
 }
 
 export interface Seo {

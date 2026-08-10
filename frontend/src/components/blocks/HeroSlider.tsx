@@ -105,7 +105,7 @@ export function HeroSlider({ block }: { block: HeroSliderBlock }) {
         <video
           className="hero-video"
           ref={videoRef}
-          poster="/assets/video/hero-poster.jpg"
+          poster="/assets/video/hero-poster-2026-08.jpg"
           autoPlay
           muted
           loop
@@ -114,7 +114,7 @@ export function HeroSlider({ block }: { block: HeroSliderBlock }) {
           aria-hidden="true"
           tabIndex={-1}
         >
-          <source src="/assets/video/hero.mp4" type="video/mp4" />
+          <source src="/assets/video/hero-2026-08.mp4" type="video/mp4" />
         </video>
 
         {slides.map((slide, i) => (

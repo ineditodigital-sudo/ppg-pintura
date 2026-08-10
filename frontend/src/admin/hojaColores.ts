@@ -15,19 +15,50 @@ import type { CatalogColor, ColorCatalog } from '@/types/content'
  * directamente en columnas sin pasar por el asistente de importación.
  */
 
-/** Orden y nombre de las columnas. El archivo debe traerlas todas, en orden. */
-export const COLUMNAS = [
-  'codigo',
-  'nombre',
-  'ral',
-  'nombre_ral',
-  'acabado',
-  'brillo',
-  'hex',
-  'familia',
-  'texturizado',
-  'en_stock',
+/**
+ * Columnas de la hoja, en orden.
+ *
+ * `clave` es el identificador interno y `titulo` lo que ve el usuario en
+ * Excel. Se acepta cualquiera de los dos al leer —quien edita no tiene por qué
+ * saber que «en_stock» y «En stock (MTS)» son lo mismo—, y al escribir se usa
+ * siempre el título: una cabecera de `nombre_ral` no dice nada, y `En stock`
+ * con la casilla en `sí`/`no` sí.
+ */
+export const CAMPOS = [
+  { clave: 'codigo', titulo: 'Código PPG' },
+  { clave: 'nombre', titulo: 'Nombre' },
+  { clave: 'ral', titulo: 'RAL' },
+  { clave: 'nombre_ral', titulo: 'Nombre del RAL' },
+  { clave: 'acabado', titulo: 'Acabado' },
+  { clave: 'brillo', titulo: 'Brillo' },
+  { clave: 'hex', titulo: 'Color (hex)' },
+  { clave: 'familia', titulo: 'Familia' },
+  { clave: 'texturizado', titulo: '¿Texturizado?' },
+  { clave: 'en_stock', titulo: '¿En stock (MTS)?' },
 ] as const
+
+/** Sólo las claves, para el resto del módulo. */
+export const COLUMNAS = CAMPOS.map((c) => c.clave) as unknown as readonly string[]
+
+/** Cabecera legible, la que se escribe en el archivo. */
+export const TITULOS = CAMPOS.map((c) => c.titulo)
+
+/** Normaliza una cabecera para compararla: sin tildes, signos ni espacios. */
+function normalizarCabecera(s: string): string {
+  return s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+}
+
+/** Mapa de cualquier forma aceptada de cabecera → clave interna. */
+const ALIAS = new Map<string, string>()
+for (const c of CAMPOS) {
+  ALIAS.set(normalizarCabecera(c.clave), c.clave)
+  ALIAS.set(normalizarCabecera(c.titulo), c.clave)
+}
 
 const SEPARADOR = ';'
 const BOM = '﻿'
@@ -52,7 +83,7 @@ function celda(valor: string | null | undefined): string {
 /* --- Exportar -------------------------------------------------------------- */
 
 export function generarCsv(catalogo: ColorCatalog): string {
-  const lineas = [COLUMNAS.join(SEPARADOR)]
+  const lineas = [TITULOS.join(SEPARADOR)]
 
   for (const c of catalogo.colors) {
     lineas.push(
@@ -79,7 +110,7 @@ export function generarCsv(catalogo: ColorCatalog): string {
 /** Hoja vacía con sólo la cabecera, para quien necesite el formato correcto. */
 export function generarPlantilla(catalogo: ColorCatalog): string {
   const ejemplo = catalogo.colors[0]
-  const filas = [COLUMNAS.join(SEPARADOR)]
+  const filas = [TITULOS.join(SEPARADOR)]
   if (ejemplo) {
     filas.push(
       [
@@ -192,16 +223,17 @@ export function analizar(texto: string, actual: ColorCatalog): Analisis {
   const cabeceraCruda = lineas[0]
   const sep = cabeceraCruda.split(';').length >= cabeceraCruda.split(',').length ? ';' : ','
 
-  const cabecera = partirLinea(cabeceraCruda, sep).map((h) =>
-    h.trim().toLowerCase().replace(/\s+/g, '_'),
-  )
+  // Se acepta la cabecera legible («Código PPG») y también la clave interna
+  // («codigo»): quien edita el archivo no tiene por qué distinguirlas, y una
+  // hoja guardada por una versión anterior sigue siendo válida.
+  const crudas = partirLinea(cabeceraCruda, sep).map((h) => h.trim())
+  const cabecera = crudas.map((h) => ALIAS.get(normalizarCabecera(h)) ?? h)
 
-  const esperada = COLUMNAS.join(', ')
   if (cabecera.length !== COLUMNAS.length || COLUMNAS.some((c, i) => cabecera[i] !== c)) {
     errores.push(
-      `Las columnas no coinciden. El archivo trae: ${cabecera.join(', ') || '(ninguna)'}.`,
+      `Las columnas no coinciden. El archivo trae: ${crudas.join(', ') || '(ninguna)'}.`,
     )
-    errores.push(`Se esperaban exactamente estas, en este orden: ${esperada}.`)
+    errores.push(`Se esperaban exactamente estas, en este orden: ${TITULOS.join(', ')}.`)
     return { ok: false, errores, avisos, cambios: [], nuevas: [], ausentes: [], filasLeidas: 0 }
   }
 
@@ -216,7 +248,7 @@ export function analizar(texto: string, actual: ColorCatalog): Analisis {
   for (let i = 1; i < lineas.length; i++) {
     const fila = partirLinea(lineas[i], sep)
     const nFila = i + 1
-    const val = (n: (typeof COLUMNAS)[number]) => (fila[COLUMNAS.indexOf(n)] ?? '').trim()
+    const val = (n: string) => (fila[COLUMNAS.indexOf(n)] ?? '').trim()
 
     const code = val('codigo')
     if (!code) {

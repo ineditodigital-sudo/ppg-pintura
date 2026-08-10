@@ -22,6 +22,7 @@ import { ColorShowcase } from './ColorShowcase'
 import { SpecList } from './SpecList'
 import { ProductShowcase } from './ProductShowcase'
 import { ColorCarousel } from './ColorCarousel'
+import { ColorCatalogBlock } from './ColorCatalog'
 
 /**
  * ¿Este bloque monta por detrás de la cabecera?
@@ -128,6 +129,8 @@ function renderizar(block: Block, key: string) {
       return <ProductShowcase key={key} />
     case 'colorCarousel':
       return <ColorCarousel key={key} />
+    case 'colorCatalog':
+      return <ColorCatalogBlock key={key} />
     default: {
       // Un bloque desconocido (p. ej. creado en el CMS antes de existir
       // aquí) se ignora en producción en lugar de romper la página.

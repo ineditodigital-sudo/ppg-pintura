@@ -116,9 +116,9 @@ function buildBlocks(market: Market, others: Market[]): Block[] {
     },
     {
       type: 'ctaBanner',
-      title: `¿Tienes piezas de ${market.name.toLowerCase()}?`,
+      title: '¿Tienes algún proyecto?',
       description:
-        'Dinos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización.',
+        'Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.',
       image: { src: '/assets/csmx/industria.webp', alt: 'Planta industrial' },
       cta: { label: 'Solicitar cotización', href: '/contacto' },
     },

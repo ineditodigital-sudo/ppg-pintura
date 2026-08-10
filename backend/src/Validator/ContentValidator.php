@@ -36,6 +36,7 @@ final class ContentValidator
         'specList',
         'productShowcase',
         'colorCarousel',
+        'colorCatalog',
     ];
 
     /** Campos obligatorios por tipo de bloque. */
