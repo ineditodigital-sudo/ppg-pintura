@@ -5,9 +5,189 @@ import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
+import {
+  analizar,
+  COLUMNAS,
+  descargar,
+  generarCsv,
+  generarPlantilla,
+  type Analisis,
+} from '../hojaColores'
 import '../editor.css'
 
 const iconOptions = ICON_NAMES.map((name) => ({ value: name, label: name }))
+
+/* --- Carta de color: hoja de cálculo ------------------------------------------- */
+
+/**
+ * Descarga y carga masiva de la carta.
+ *
+ * Nada se aplica al pulsar «subir»: primero se compara contra el catálogo
+ * actual y se enseña qué cambiaría. Una actualización en bloque sobre 83
+ * referencias no se revisa a ojo después, así que se revisa antes.
+ */
+function HojaDeCalculo({
+  catalogo,
+  analisis,
+  aplicado,
+  onExportar,
+  onSubir,
+  onAplicar,
+  onDescartar,
+  onCerrarAviso,
+}: {
+  catalogo: ColorCatalog
+  analisis: Analisis | null
+  aplicado: string
+  onExportar: () => void
+  onSubir: (archivo: File) => void
+  onAplicar: () => void
+  onDescartar: () => void
+  onCerrarAviso: () => void
+}) {
+  const refs = useMemo(() => new Set(analisis?.cambios.map((c) => c.code)), [analisis])
+
+  return (
+    <section className="adm-hoja">
+      <div className="adm-hoja__cabecera">
+        <div>
+          <h2>Actualización masiva</h2>
+          <p>
+            Descarga la carta, edítala en Excel y vuelve a subirla. Se abre en
+            columnas sin asistente; al guardar, elige «CSV UTF-8».
+          </p>
+        </div>
+        <div className="adm-hoja__acciones">
+          <button type="button" className="adm-btn" onClick={onExportar}>
+            Descargar la carta
+          </button>
+          <label className="adm-btn adm-btn--primary adm-hoja__subir">
+            Subir archivo
+            <input
+              type="file"
+              accept=".csv,text/csv"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f) onSubir(f)
+                // Se limpia para poder volver a subir el mismo archivo tras
+                // corregirlo: sin esto el `change` no se dispararía otra vez.
+                e.target.value = ''
+              }}
+            />
+          </label>
+        </div>
+      </div>
+
+      {aplicado && (
+        <div className="adm-hoja__ok">
+          <p>{aplicado}</p>
+          <button type="button" className="adm-btn adm-btn--ghost" onClick={onCerrarAviso}>
+            Entendido
+          </button>
+        </div>
+      )}
+
+      {analisis && !analisis.ok && (
+        <div className="adm-hoja__error">
+          <h3>El archivo no tiene el formato correcto</h3>
+          <ul>
+            {analisis.errores.slice(0, 12).map((e, i) => (
+              <li key={i}>{e}</li>
+            ))}
+          </ul>
+          {analisis.errores.length > 12 && (
+            <p>…y {analisis.errores.length - 12} problema(s) más.</p>
+          )}
+          <p className="adm-hoja__ayuda">
+            Descarga el formato correcto, edítalo sin cambiar las columnas y
+            vuelve a subirlo. Las columnas deben ser, en este orden:{' '}
+            <code>{COLUMNAS.join(', ')}</code>
+          </p>
+          <div className="adm-hoja__acciones">
+            <button
+              type="button"
+              className="adm-btn adm-btn--primary"
+              onClick={() => descargar('formato-carta-de-color.csv', generarPlantilla(catalogo))}
+            >
+              Descargar el formato correcto
+            </button>
+            <button type="button" className="adm-btn adm-btn--ghost" onClick={onDescartar}>
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {analisis?.ok && (
+        <div className="adm-hoja__diff">
+          <h3>Esto es lo que cambiaría</h3>
+          <p className="adm-hoja__resumen">
+            {analisis.filasLeidas} fila(s) leídas · <strong>{refs.size}</strong> referencia(s)
+            modificada(s) · <strong>{analisis.nuevas.length}</strong> nueva(s) ·{' '}
+            <strong>{analisis.ausentes.length}</strong> sin tocar
+          </p>
+
+          {analisis.avisos.map((a, i) => (
+            <p className="adm-hoja__aviso" key={i}>
+              {a}
+            </p>
+          ))}
+
+          {analisis.cambios.length === 0 && analisis.nuevas.length === 0 ? (
+            <p className="adm-hoja__aviso">
+              El archivo es idéntico al catálogo actual: no hay nada que aplicar.
+            </p>
+          ) : (
+            <div className="adm-hoja__scroll">
+              <table className="adm-hoja__tabla">
+                <thead>
+                  <tr>
+                    <th scope="col">Referencia</th>
+                    <th scope="col">Campo</th>
+                    <th scope="col">Antes</th>
+                    <th scope="col">Después</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analisis.nuevas.map((code) => (
+                    <tr key={`nueva-${code}`}>
+                      <td>{code}</td>
+                      <td colSpan={3}>
+                        <span className="adm-hoja__nueva">Referencia nueva</span>
+                      </td>
+                    </tr>
+                  ))}
+                  {analisis.cambios.map((c, i) => (
+                    <tr key={i}>
+                      <td>{c.code}</td>
+                      <td>{c.campo}</td>
+                      <td className="adm-hoja__antes">{c.antes}</td>
+                      <td className="adm-hoja__despues">{c.despues}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          <div className="adm-hoja__acciones">
+            <button
+              type="button"
+              className="adm-btn adm-btn--primary"
+              onClick={onAplicar}
+              disabled={analisis.cambios.length === 0 && analisis.nuevas.length === 0}
+            >
+              Aplicar los cambios
+            </button>
+            <button type="button" className="adm-btn adm-btn--ghost" onClick={onDescartar}>
+              Descartar
+            </button>
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}
 
 /* --- Mercados ------------------------------------------------------------------ */
 
@@ -150,6 +330,8 @@ export function ColorsScreen() {
   const s = useEditable<ColorCatalog>(api.getColors, api.saveColors)
   const [busqueda, setBusqueda] = useState('')
   const [familia, setFamilia] = useState('todas')
+  const [analisis, setAnalisis] = useState<Analisis | null>(null)
+  const [aplicado, setAplicado] = useState('')
 
   const catalogo = s.value
 
@@ -202,6 +384,28 @@ export function ColorsScreen() {
       ],
     })
 
+  const exportar = () =>
+    descargar(`carta-de-color-${new Date().toISOString().slice(0, 10)}.csv`, generarCsv(catalogo))
+
+  const alSubir = async (archivo: File) => {
+    setAnalisis(null)
+    const texto = await archivo.text()
+    setAnalisis(analizar(texto, catalogo))
+  }
+
+  const aplicar = () => {
+    if (!analisis?.resultado) return
+    s.setValue(analisis.resultado)
+    setAplicado(
+      `Se aplicaron ${analisis.cambios.length} cambio(s) en ${
+        new Set(analisis.cambios.map((c) => c.code)).size
+      } referencia(s)` +
+        (analisis.nuevas.length ? ` y se añadieron ${analisis.nuevas.length}` : '') +
+        '. Revisa y pulsa Guardar para publicarlo.',
+    )
+    setAnalisis(null)
+  }
+
   return (
     <>
       <PageHead
@@ -212,6 +416,17 @@ export function ColorsScreen() {
             Añadir referencia
           </button>
         }
+      />
+
+      <HojaDeCalculo
+        catalogo={catalogo}
+        analisis={analisis}
+        aplicado={aplicado}
+        onExportar={exportar}
+        onSubir={alSubir}
+        onAplicar={aplicar}
+        onDescartar={() => setAnalisis(null)}
+        onCerrarAviso={() => setAplicado('')}
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
       <Alert kind="ok" message={s.notice} />

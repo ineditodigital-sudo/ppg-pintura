@@ -2,8 +2,8 @@
  * Qué implica recubrir cada sustrato.
  *
  * La sección «Sobre qué aplicamos» mostraba sólo el nombre del material, y un
- * nombre de dos palabras no informa a nadie: quien busca maquila ya sabe de qué
- * es su pieza, lo que quiere saber es si sabemos tratarla. Estas notas son
+ * nombre de dos palabras no informa a nadie: quien busca recubrimiento ya sabe
+ * de qué es su pieza, lo que quiere saber es si sabemos tratarla. Estas notas son
  * conocimiento general del recubrimiento en polvo, no especificaciones de
  * producto: el sistema concreto siempre lo fija el técnico.
  */

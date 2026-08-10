@@ -14,7 +14,7 @@ const aqui = dirname(fileURLToPath(import.meta.url))
 const raiz = join(aqui, '..', '..')
 const datos = join(raiz, 'backend', 'data')
 
-const SITIO = process.env.SITE_URL ?? 'https://pinturaenpolvo-mx.com'
+const SITIO = process.env.SITE_URL ?? 'https://ppg.pinturaenpolvo-mx.com'
 
 const leer = (ruta) => JSON.parse(readFileSync(ruta, 'utf8'))
 

@@ -467,4 +467,11 @@ export interface BusinessLine {
    * un hueco que un dato prestado de otra.
    */
   stats?: StatItem[]
+  /**
+   * Monta la carta de color en la página de la línea. Sólo lo lleva la de
+   * pintura en polvo: las 83 referencias son de ese catálogo, y enseñarlas en
+   * pre tratamientos —que son químicos de limpieza, no acabados— sería
+   * sencillamente falso.
+   */
+  showColors?: boolean
 }

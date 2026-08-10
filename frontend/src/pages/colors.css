@@ -86,6 +86,21 @@
   color: #fff;
 }
 
+/* Existencias: la categoría principal. Va marcada en verde también cuando no
+   está seleccionada, porque «lo que hay ahora» es una respuesta distinta a
+   «qué familia es» y tenía que distinguirse de las otras pestañas de un
+   vistazo. Al activarse pasa al azul de marca como las demás. */
+.carta__pestana--stock:not(.is-active) {
+  color: #0f7a38;
+  background: #e7f6ec;
+  border-color: #bfe6cd;
+}
+
+.carta__pestana--stock:not(.is-active):hover {
+  background: #d6efe0;
+  color: #0b5f2b;
+}
+
 .carta__filtros {
   display: flex;
   flex-wrap: wrap;

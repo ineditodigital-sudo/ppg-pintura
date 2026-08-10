@@ -43,17 +43,23 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
             'Te ayudamos a elegir la resina, el brillo y el espesor según el sustrato y las condiciones a las que estará expuesta la pieza.',
         },
         {
-          title: 'Servicio de maquila',
+          title: 'Existencia y entrega',
           description:
-            'Si no cuentas con línea de aplicación propia, recubrimos tus piezas en nuestras instalaciones de Aguascalientes.',
+            'Producto de catálogo disponible en Aguascalientes, con programas de suministro continuo para volumen recurrente.',
         },
         {
           title: 'Color a la carta',
           description:
             'Color de catálogo PPG con equivalencia RAL, e igualación bajo pedido en la planta de San Juan del Río.',
+          // Cada página de producto tiene desde aquí una vía a la carta, aunque
+          // no monte el carrusel completo. Sin `label`: ese campo pinta una
+          // píldora sobre el título, y el enlace ya añade su «Más información».
+          href: '/colores',
         },
       ],
     },
+    // La carta completa, sólo donde el catálogo corresponde a la línea.
+    ...(line.showColors ? [{ type: 'colorCarousel' as const }] : []),
     // Las cifras las trae cada línea. Sin ellas no hay bloque: es preferible
     // a repetir en pintura líquida las de la pintura en polvo.
     ...(line.stats?.length

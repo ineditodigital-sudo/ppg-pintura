@@ -46,10 +46,11 @@
 #>
 [CmdletBinding()]
 param(
-  # El docroot de pinturaenpolvo-mx.com es `/public_html` a secas: es el dominio
-  # principal de la cuenta, no un addon. Subir a `/public_html/<dominio>` deja el
-  # sitio colgando de un subdirectorio y todas las rutas en 404.
-  [string]$RemoteRoot = '/public_html',
+  # El sitio vive ahora en el subdominio ppg.pinturaenpolvo-mx.com, y un
+  # subdominio de cPanel sí cuelga de su propia carpeta. El dominio principal
+  # usaba `/public_html` a secas: equivocar esta ruta deja todas las rutas menos
+  # `/` en 404 sin que el despliegue dé ningún error. Ya pasó una vez.
+  [string]$RemoteRoot = '/public_html/ppg.pinturaenpolvo-mx.com',
   [switch]$SkipBuild,
   [switch]$WhatIfOnly,
   [switch]$SeedContent,

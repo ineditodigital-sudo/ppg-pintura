@@ -1107,3 +1107,173 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================================
+   Carta de color — actualización masiva por hoja de cálculo
+   ========================================================================== */
+
+.adm-hoja {
+  margin-bottom: var(--space-xl);
+  padding: var(--space-l);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-s);
+}
+
+.adm-hoja__cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.adm-hoja__cabecera h2 {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+.adm-hoja__cabecera p {
+  margin-top: 2px;
+  max-width: 62ch;
+  font-size: var(--fs-sm);
+  color: var(--fg-tertiary);
+}
+
+.adm-hoja__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+/* El input de archivo real va oculto: el `label` es el botón. */
+.adm-hoja__subir {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.adm-hoja__subir input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.adm-hoja__error,
+.adm-hoja__diff,
+.adm-hoja__ok {
+  margin-top: var(--space-m);
+  padding: var(--space-m);
+  border-radius: var(--radius-xs);
+  font-size: var(--fs-sm);
+}
+
+.adm-hoja__error {
+  background: #fdf1f1;
+  border: 1px solid #f2c9c9;
+  color: #8a2222;
+}
+
+.adm-hoja__diff {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-tertiary);
+}
+
+.adm-hoja__ok {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  background: #e7f6ec;
+  border: 1px solid #bfe6cd;
+  color: #0f5c2e;
+}
+
+.adm-hoja__error h3,
+.adm-hoja__diff h3 {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  margin-bottom: var(--space-2xs);
+}
+
+.adm-hoja__error ul {
+  margin: 0 0 var(--space-xs);
+  padding-left: 18px;
+}
+
+.adm-hoja__error li {
+  margin-bottom: 3px;
+}
+
+.adm-hoja__ayuda {
+  margin-bottom: var(--space-s);
+}
+
+.adm-hoja__ayuda code {
+  display: block;
+  margin-top: 4px;
+  padding: 6px 8px;
+  font-size: var(--fs-xs);
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: var(--radius-xs);
+  word-break: break-word;
+}
+
+.adm-hoja__resumen {
+  margin-bottom: var(--space-xs);
+  color: var(--fg-secondary);
+}
+
+.adm-hoja__aviso {
+  margin-bottom: var(--space-xs);
+  color: var(--fg-tertiary);
+}
+
+/* Un diff largo no puede empujar la tabla del catálogo fuera de la pantalla. */
+.adm-hoja__scroll {
+  max-height: 320px;
+  overflow: auto;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-xs);
+}
+
+.adm-hoja__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-xs);
+}
+
+.adm-hoja__tabla th,
+.adm-hoja__tabla td {
+  padding: 6px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-tertiary);
+}
+
+.adm-hoja__tabla th {
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  font-weight: var(--fw-semibold);
+}
+
+.adm-hoja__antes {
+  color: #8a2222;
+  text-decoration: line-through;
+}
+
+.adm-hoja__despues {
+  color: #0f5c2e;
+  font-weight: var(--fw-semibold);
+}
+
+.adm-hoja__nueva {
+  color: #0f5c2e;
+  font-weight: var(--fw-semibold);
+}
+
+.adm-hoja__diff .adm-hoja__acciones {
+  margin-top: var(--space-m);
+}

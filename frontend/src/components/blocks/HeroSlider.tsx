@@ -132,7 +132,7 @@ export function HeroSlider({ block }: { block: HeroSliderBlock }) {
                 {i === index && (
                   <img
                     className="hero-slide__logo"
-                    src="/assets/marcas/ppg-blanco.png"
+                    src="/assets/marcas/ppg-blanco.svg"
                     alt="PPG"
                     width={291}
                     height={226}

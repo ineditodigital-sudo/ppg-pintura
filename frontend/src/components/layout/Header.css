@@ -102,7 +102,7 @@ body.con-hero .header:not(.header--scrolled) .header__burger {
 
 /* El logotipo pasa a su versión calada en blanco. */
 body.con-hero .header:not(.header--scrolled) .header__logo img {
-  content: url('/assets/marcas/ppg-blanco.png');
+  content: url('/assets/marcas/ppg-blanco.svg');
 }
 
 .header__bar {

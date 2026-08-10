@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import type { CatalogColor } from '@/types/content'
 import { getColors } from '@/lib/api'
+import { esEnStock } from '@/lib/stock'
 import { Container, Section } from '@/components/ui'
 import './carrusel.css'
 
@@ -17,7 +18,7 @@ import './carrusel.css'
  * adelanto no salga entero en tonos parecidos.
  */
 function seleccionar(colores: CatalogColor[], cuantos = 16): CatalogColor[] {
-  const enStock = colores.filter((c) => c.stock)
+  const enStock = colores.filter(esEnStock)
   if (enStock.length > 0) return enStock.slice(0, cuantos)
 
   // Reparto por familia, tomando de cada una a intervalos regulares.

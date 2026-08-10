@@ -2,7 +2,7 @@
   "slug": "home",
   "seo": {
     "title": "Pintura en Polvo PPG en Aguascalientes | Distribuidor Autorizado",
-    "description": "Distribuidor autorizado PPG en Aguascalientes. Pintura en polvo con 83 referencias de catalogo, retoques y maquila de recubrimiento."
+    "description": "Distribuidor autorizado PPG en Aguascalientes. Pintura en polvo con 83 referencias de catalogo y productos de retoque."
   },
   "blocks": [
     {
@@ -37,19 +37,6 @@
           "cta": {
             "label": "Ver la carta de colores",
             "href": "/colores"
-          }
-        },
-        {
-          "eyebrow": "Aplicación y maquila",
-          "title": "También lo aplicamos",
-          "subtitle": "Si no tienes línea propia, recubrimos tus piezas en nuestras instalaciones de Aguascalientes y te las devolvemos listas para montar.",
-          "image": {
-            "src": "/assets/csmx/aplicacion-polvo.webp",
-            "alt": "Aplicación electrostática de pintura en polvo"
-          },
-          "cta": {
-            "label": "Plantear un volumen",
-            "href": "/contacto"
           }
         }
       ]

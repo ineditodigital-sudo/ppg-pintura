@@ -3,6 +3,7 @@ import type { CatalogColor, ColorCatalog } from '@/types/content'
 import { getColors } from '@/lib/api'
 import { useSeo } from '@/lib/useSeo'
 import { useCabeceraSobreHero } from '@/lib/useCabeceraSobreHero'
+import { esEnStock, FAMILIA_STOCK, NOMBRE_STOCK } from '@/lib/stock'
 import { ButtonLink, Container, Section } from '@/components/ui'
 import { PageSkeleton } from './PageSkeleton'
 import './colors.css'
@@ -62,14 +63,19 @@ function Muestra({ color }: { color: CatalogColor }) {
 
 export function ColorsPage() {
   const [catalogo, setCatalogo] = useState<ColorCatalog | null>(null)
-  const [familia, setFamilia] = useState<string>('todas')
+  const [familia, setFamilia] = useState<string>(FAMILIA_STOCK)
   const [busqueda, setBusqueda] = useState('')
   const [soloExistencia, setSoloExistencia] = useState(false)
 
   useEffect(() => {
     let vivo = true
     getColors().then((d) => {
-      if (vivo) setCatalogo(d)
+      if (!vivo) return
+      setCatalogo(d)
+      // Las existencias son la categoría principal y abre en ella. Pero si aún
+      // no hay ninguna marcada, abrir en una pestaña vacía haría parecer que
+      // la carta está rota: en ese caso arranca en «Todas».
+      if (!d.colors.some(esEnStock)) setFamilia('todas')
     })
     return () => {
       vivo = false
@@ -90,8 +96,14 @@ export function ColorsPage() {
     const q = normalizar(busqueda.trim())
 
     return catalogo.colors.filter((c) => {
-      if (familia !== 'todas' && c.family !== familia) return false
-      if (soloExistencia && !c.stock) return false
+      // La pestaña de existencias no es una familia del catálogo: cruza a
+      // todas, así que se resuelve antes de comparar contra `family`.
+      if (familia === FAMILIA_STOCK) {
+        if (!esEnStock(c)) return false
+      } else if (familia !== 'todas' && c.family !== familia) {
+        return false
+      }
+      if (soloExistencia && !esEnStock(c)) return false
       if (!q) return true
       return (
         normalizar(c.code).includes(q) ||
@@ -106,7 +118,8 @@ export function ColorsPage() {
 
   if (!catalogo) return <PageSkeleton />
 
-  const hayExistencias = catalogo.colors.some((c) => c.stock)
+  const enStock = catalogo.colors.filter(esEnStock)
+  const hayExistencias = enStock.length > 0
 
   return (
     <>
@@ -136,6 +149,20 @@ export function ColorsPage() {
         <Container>
           <div className="carta__controles">
             <div className="carta__familias" role="tablist" aria-label="Familias">
+              {/* Primera y destacada: es la categoría que más se consulta,
+                  porque es lo que se puede servir sin esperar fabricación. */}
+              <button
+                type="button"
+                role="tab"
+                aria-selected={familia === FAMILIA_STOCK}
+                className={`carta__pestana carta__pestana--stock${
+                  familia === FAMILIA_STOCK ? ' is-active' : ''
+                }`}
+                onClick={() => setFamilia(FAMILIA_STOCK)}
+              >
+                {NOMBRE_STOCK}
+                <span>{enStock.length}</span>
+              </button>
               <button
                 type="button"
                 role="tab"
@@ -201,9 +228,23 @@ export function ColorsPage() {
 
           {visibles.length === 0 ? (
             <p className="carta__vacio">
-              Ninguna referencia coincide con «{busqueda}». Prueba con el código
-              PPG (PCTH…), con el número RAL o con el nombre con el que PPG lo
-              publica (Traffic White, Jet Black…).
+              {/* Sin búsqueda escrita, «no coincide nada» sería mentira: lo que
+                  pasa es que esa categoría todavía no tiene referencias. */}
+              {busqueda.trim() ? (
+                <>
+                  Ninguna referencia coincide con «{busqueda}». Prueba con el
+                  código PPG (PCTH…), con el número RAL o con el nombre con el
+                  que PPG lo publica (Traffic White, Jet Black…).
+                </>
+              ) : familia === FAMILIA_STOCK ? (
+                <>
+                  Todavía no hay referencias marcadas en existencia. Se marcan
+                  desde el panel, o llegan con las siglas MTS al actualizar la
+                  carta desde la hoja de Excel.
+                </>
+              ) : (
+                <>Esta familia todavía no tiene referencias.</>
+              )}
             </p>
           ) : (
             <ul className="carta__rejilla">

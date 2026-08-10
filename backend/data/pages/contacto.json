@@ -33,7 +33,6 @@
         "Cotización de pintura en polvo",
         "Cotización de pintura líquida",
         "Pre tratamientos metálicos",
-        "Servicio de maquila",
         "Carta de colores",
         "Ficha técnica o de seguridad",
         "Otra consulta"
@@ -85,7 +84,7 @@
       "groups": [
         {
           "title": "Productos",
-          "description": "Las tres líneas que distribuimos y maquilamos.",
+          "description": "Las tres líneas que distribuimos.",
           "links": [
             {
               "label": "Pintura en Polvo",

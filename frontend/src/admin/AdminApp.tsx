@@ -34,9 +34,9 @@ import './admin.css'
  *
  * Va la versión azul en los dos sitios donde aparece —la tarjeta de acceso y la
  * barra lateral—, porque ambas superficies son blancas. La versión en blanco
- * está en `assets/marcas/ppg-blanco.png` por si alguna pasa a fondo oscuro.
+ * está en `assets/marcas/ppg-blanco.svg` por si alguna pasa a fondo oscuro.
  */
-const LOGO = '/assets/marcas/ppg-azul.png'
+const LOGO = '/assets/marcas/ppg-azul.svg'
 
 /* --- Acceso ------------------------------------------------------------------ */
 

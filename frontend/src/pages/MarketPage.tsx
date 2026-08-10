@@ -86,10 +86,10 @@ function buildBlocks(market: Market, others: Market[]): Block[] {
       type: 'contentBanner',
       imageSide: 'right',
       eyebrow: 'Cómo trabajamos',
-      title: 'Aplicación y maquila',
-      body: 'Si cuentas con línea propia, te suministramos el material y el respaldo técnico. Si no, recubrimos tus piezas en nuestras instalaciones de Aguascalientes y te las devolvemos listas para montar.',
+      title: 'Suministro con respaldo técnico',
+      body: 'Te suministramos el material y el acompañamiento del fabricante: elección de la química, el brillo y el espesor según el sustrato, y validación del sistema antes de llevarlo a línea.',
       image: { src: '/assets/csmx/pintura-polvo-azul.webp', alt: 'Pintura en polvo PPG' },
-      cta: { label: 'Consultar maquila', href: '/contacto' },
+      cta: { label: 'Cotizar un proyecto', href: '/contacto' },
     },
     {
       type: 'richText',
@@ -118,7 +118,7 @@ function buildBlocks(market: Market, others: Market[]): Block[] {
       type: 'ctaBanner',
       title: `¿Tienes piezas de ${market.name.toLowerCase()}?`,
       description:
-        'Dinos el sustrato, el volumen y las condiciones de servicio. Si no tienes línea de aplicación propia, lo maquilamos nosotros.',
+        'Dinos el sustrato, el volumen y las condiciones de servicio, y te preparamos una cotización.',
       image: { src: '/assets/csmx/industria.webp', alt: 'Planta industrial' },
       cta: { label: 'Solicitar cotización', href: '/contacto' },
     },

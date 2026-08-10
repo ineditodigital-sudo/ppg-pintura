@@ -71,7 +71,7 @@ npm run build --prefix frontend
 
 ## Panel de contenido
 
-**https://pinturaenpolvo-mx.com/admin**
+**https://ppg.pinturaenpolvo-mx.com/admin**
 
 Desde ahí se editan las páginas (bloques: añadir, reordenar, eliminar y editar
 cada campo), la navegación, las líneas de negocio, los ajustes del sitio, la
@@ -91,6 +91,39 @@ revisan de un vistazo —qué hay en existencia— y se corrigen celda a celda, 
 que es una tabla con buscador y filtro por familia. Cambiar el identificador de
 una familia sin reasignar sus referencias deja huérfanos los colores, y el
 guardado se rechaza antes de tocar el disco.
+
+### Actualización masiva de la carta
+
+La pantalla de color descarga el catálogo como hoja de cálculo y admite subirlo
+de vuelta. **Nada se aplica al subir**: `admin/hojaColores.ts` compara contra el
+catálogo vigente y la pantalla enseña el diff campo a campo —antes y después—
+para que se confirme. Una actualización en bloque sobre 83 referencias no se
+revisa a ojo después.
+
+- Si las columnas no coinciden, no se aplica nada: se dice qué trae el archivo,
+  qué se esperaba y se ofrece descargar el formato correcto.
+- Lo que el archivo no menciona **se conserva**. Subir una hoja recortada no
+  puede borrar medio catálogo en silencio; se avisa de cuántas quedaron fuera.
+- Acepta `sí/no`, `true/false`, `1/0` y `x` en las casillas, y separador `;` o
+  `,`: Excel guarda distinto según el idioma.
+
+Es CSV y no `.xlsx` a propósito. La única librería de Excel en npm
+(`xlsx@0.18`) arrastra dos vulnerabilidades altas **sin parche** —contaminación
+de prototipo y ReDoS— que se disparan justo al analizar el archivo que sube el
+usuario, que es exactamente lo que hace esta pantalla. El CSV se emite con BOM y
+`;`, que es lo que Excel en español abre en columnas sin pasar por el asistente.
+
+### Colores en existencia (MTS)
+
+`lib/stock.ts` es el único sitio que decide qué cuenta como existencia: la
+marca del panel **o** las siglas `MTS` en el código, que es como las etiqueta el
+catálogo de PPG. Si la comprobación viviera suelta en cada pantalla, la carta y
+el carrusel de la portada acabarían discrepando.
+
+Es la primera pestaña de `/colores` y la que abre por defecto — salvo que no
+haya ninguna marcada, en cuyo caso abre en «Todas»: una pestaña vacía de entrada
+haría parecer que la carta está rota. **Hoy no hay ninguna**: las 83 referencias
+del PDF no traen MTS, así que llegarán al subir la hoja con esa columna.
 
 El formulario de cada bloque no está escrito a mano: lo genera `BlockForm` a
 partir de `src/admin/schema.ts`. Añadir un tipo de bloque al CMS es describirlo
@@ -117,7 +150,7 @@ ahí, crear el componente en `components/blocks/` y registrarlo en el `switch` d
 
 ## Despliegue
 
-En producción: **https://pinturaenpolvo-mx.com** (cPanel, Cloudflare delante,
+En producción: **https://ppg.pinturaenpolvo-mx.com** (cPanel, Cloudflare delante,
 **PHP 8.1.34**).
 
 ```powershell
@@ -125,10 +158,22 @@ $env:FTP_HOST='...'; $env:FTP_USER='...'; $env:FTP_PASS='...'
 .\deploy\deploy.ps1
 ```
 
-**El docroot es `/public_html` a secas.** Es el dominio principal de la cuenta,
-no un addon, así que no cuelga de `/public_html/<dominio>`. Subir ahí deja el
-sitio en un subdirectorio y todas las rutas menos `/` devuelven 404 — pasó en el
-primer intento de migración. `-RemoteRoot` ya trae el valor correcto por defecto.
+**El docroot es `/public_html/ppg.pinturaenpolvo-mx.com`.** Un subdominio de
+cPanel sí cuelga de su propia carpeta; el dominio principal usaba `/public_html`
+a secas. Equivocar esta ruta deja todas las rutas menos `/` en 404 **sin que el
+despliegue dé ningún error** — pasó en la primera migración. `-RemoteRoot` trae
+el valor correcto por defecto.
+
+> **El subdominio no pasa por Cloudflare.** `ppg.pinturaenpolvo-mx.com` resuelve
+> directo a `184.168.20.11`, mientras el apex va proxeado. Consecuencia medida:
+> el apex sirve el bundle con `Content-Encoding: br` en 105 KB y el subdominio lo
+> manda **sin comprimir, 337 KB**. Ni el HTML ni el sitemap salen comprimidos: el
+> origen no comprime nada, lo hacía Cloudflare entero. El bloque `mod_deflate`
+> del `.htaccess` está pero es inerte.
+>
+> Se arregla de una de estas dos formas, ambas fuera del código: proxear el
+> subdominio en Cloudflare —restaura exactamente lo que ya se midió— o activar la
+> compresión en **cPanel → Optimizar sitio web**.
 
 **PHP bajó de 8.3 a 8.1** al cambiar de cuenta. El código no usa nada posterior
 a 8.1 y los once endpoints responden, pero conviene subirlo desde
@@ -197,7 +242,7 @@ borde sin configurar nada:
 | `index-*.css` | 72 KB | **15 KB** (brotli, −79%) |
 
 ```bash
-curl -s -o /dev/null -D - -H "Accept-Encoding: gzip, br" https://pinturaenpolvo-mx.com/assets/index-*.js
+curl -s -o /dev/null -D - -H "Accept-Encoding: gzip, br" https://ppg.pinturaenpolvo-mx.com/assets/index-*.js
 ```
 
 Si no aparece `Content-Encoding`, algo ha cambiado en Cloudflare.
