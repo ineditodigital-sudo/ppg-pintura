@@ -56,7 +56,7 @@
       "hex": "#A12222",
       "family": "poliester",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCTH60101",
@@ -164,7 +164,7 @@
       "hex": "#2F3130",
       "family": "poliester",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCTH70100",
@@ -176,7 +176,7 @@
       "hex": "#5B5E5D",
       "family": "poliester",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCTH70171",
@@ -200,7 +200,7 @@
       "hex": "#EBEDEE",
       "family": "poliester",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCTH70103",
@@ -488,7 +488,7 @@
       "hex": "#9D6743",
       "family": "poliester-especiales",
       "textured": true,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCTH30119",
@@ -632,7 +632,7 @@
       "hex": "#A12222",
       "family": "hibridos",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCFH30100",
@@ -644,7 +644,7 @@
       "hex": "#CB2827",
       "family": "hibridos",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCFH30117",
@@ -884,7 +884,7 @@
       "hex": "#1B1F24",
       "family": "hibridos",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCFH50122",
@@ -956,7 +956,7 @@
       "hex": "#252322",
       "family": "hibridos-especiales",
       "textured": true,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCMH90102",
@@ -968,7 +968,7 @@
       "hex": "#26292B",
       "family": "hibridos-especiales",
       "textured": false,
-      "stock": false
+      "stock": true
     },
     {
       "code": "PCFH70101",

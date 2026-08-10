@@ -3,16 +3,18 @@ import type { CatalogColor } from '@/types/content'
 /**
  * Qué cuenta como color en existencia.
  *
- * Dos vías, y por eso está aquí y no repartido: el catálogo de PPG marca estas
- * referencias con las siglas **MTS** en el código, y además el panel permite
- * marcarlas a mano —o en masa desde la hoja de Excel—. Cualquiera de las dos
- * basta.
+ * En el listado de precios de PPG la existencia va en una columna aparte,
+ * `CLASS`, con tres valores: **MTS** (lo que hay en almacén), `MTO` y `ATO`
+ * (contra pedido). No es parte del código de producto —`PCTH80108` no dice
+ * nada por sí solo—, así que aquí la fuente de verdad es el campo `stock`, que
+ * se marca desde el panel o llega en masa por la hoja de cálculo.
  *
- * Si la comprobación viviera suelta en cada pantalla, la carta y el carrusel
- * acabarían discrepando sobre qué hay en existencia.
+ * Está en un único sitio porque si la comprobación viviera suelta en cada
+ * pantalla, la carta y el carrusel de la portada acabarían discrepando sobre
+ * qué hay disponible.
  */
 export function esEnStock(color: CatalogColor): boolean {
-  return color.stock === true || /mts/i.test(color.code)
+  return color.stock === true
 }
 
 /** Identificador de la pestaña de existencias en la carta de color. */

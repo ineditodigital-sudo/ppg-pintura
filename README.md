@@ -122,8 +122,30 @@ el carrusel de la portada acabarían discrepando.
 
 Es la primera pestaña de `/colores` y la que abre por defecto — salvo que no
 haya ninguna marcada, en cuyo caso abre en «Todas»: una pestaña vacía de entrada
-haría parecer que la carta está rota. **Hoy no hay ninguna**: las 83 referencias
-del PDF no traen MTS, así que llegarán al subir la hoja con esa columna.
+haría parecer que la carta está rota.
+
+**De dónde sale el dato.** El listado de precios para distribuidores lleva una
+columna `CLASS` con tres valores: `MTS` (almacén), `MTO` y `ATO` (contra
+pedido). No es parte del código de producto. De las **16 referencias MTS** del
+listado de mayo de 2026, **10 están en la carta** y son las que aparecen
+marcadas. Las otras seis no existen en las 83 del catálogo de color:
+
+| Código | Descripción en el listado |
+|---|---|
+| `PCFH50100` | HA302 Blue Sgloss Hybrid |
+| `PCTH40170` | Poliéster TGIC verde militar |
+| `PCTH50117` | PA401 Blue Gloss Polyester |
+| `PCTH70102` | PG406 Gray Gloss Polyester |
+| `PCTH90100` | PN205 Smatt Black Polyester |
+| `PCUH20100` | UI206 Beige Smatt Poliurethane |
+
+No se añadieron porque el listado de precios **no trae hexadecimal, RAL ni
+rango de brillo**, y esos tres no se pueden deducir de «Blue Gloss». Hacen falta
+del catálogo de color; con ellos entran por la hoja de cálculo.
+
+> **El listado de precios es confidencial.** De ese PDF sólo se usó la columna
+> `CLASS`. Ningún precio, ni el mínimo de pedido, ni las condiciones comerciales
+> entran en el sitio ni en este repositorio.
 
 El formulario de cada bloque no está escrito a mano: lo genera `BlockForm` a
 partir de `src/admin/schema.ts`. Añadir un tipo de bloque al CMS es describirlo
