@@ -207,6 +207,12 @@ export interface ContactDetail {
   value: string
   href?: string
   note?: string
+  /**
+   * Más valores bajo la misma etiqueta, cada uno con su enlace. Los dos
+   * correos alternos iban antes como un enlace y una nota en texto plano, así
+   * que sólo uno se podía pulsar: el segundo había que copiarlo a mano.
+   */
+  extra?: { value: string; href?: string }[]
 }
 
 export interface ContactFormBlock {
@@ -216,6 +222,8 @@ export interface ContactFormBlock {
   topics: string[]
   /** Datos que se muestran junto al formulario, en la columna lateral. */
   aside?: {
+    /** Logotipo del distribuidor, arriba del todo. */
+    logo?: Media
     title?: string
     /** Línea secundaria: el distribuidor, debajo del rótulo de marca. */
     subtitle?: string

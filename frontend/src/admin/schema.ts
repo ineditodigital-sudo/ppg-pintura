@@ -457,6 +457,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         help: 'Deja la lista vacía si prefieres el formulario solo, a todo el ancho.',
         itemLabelKey: 'title',
         itemFields: [
+          { key: 'logo', label: 'Logotipo', type: 'image', help: 'Va arriba del todo.' },
           { key: 'title', label: 'Título de la columna', type: 'text' },
           { key: 'subtitle', label: 'Línea secundaria', type: 'text' },
           {
@@ -468,6 +469,17 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
               { key: 'label', label: 'Etiqueta', type: 'text', required: true },
               { key: 'value', label: 'Valor', type: 'text', required: true },
               { key: 'href', label: 'Enlace', type: 'text', help: 'tel:, mailto: o URL.' },
+              {
+                key: 'extra',
+                label: 'Valores adicionales',
+                type: 'list',
+                help: 'Bajo la misma etiqueta, cada uno con su propio enlace.',
+                itemLabelKey: 'value',
+                itemFields: [
+                  { key: 'value', label: 'Valor', type: 'text', required: true },
+                  { key: 'href', label: 'Enlace', type: 'text', help: 'tel:, mailto: o URL.' },
+                ],
+              },
               { key: 'note', label: 'Nota', type: 'text' },
             ],
           },

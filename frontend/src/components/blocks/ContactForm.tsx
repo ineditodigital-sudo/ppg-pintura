@@ -133,6 +133,16 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
 
         {block.aside && (
           <aside className="contact-aside">
+            {block.aside.logo && (
+              <img
+                className="contact-aside__logo"
+                src={block.aside.logo.src}
+                alt={block.aside.logo.alt}
+                width={block.aside.logo.width}
+                height={block.aside.logo.height}
+                decoding="async"
+              />
+            )}
             {block.aside.title && <h3>{block.aside.title}</h3>}
             {block.aside.subtitle && (
               <p className="contact-aside__subtitle">{block.aside.subtitle}</p>
@@ -153,6 +163,20 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
                     </a>
                   ) : (
                     <span className="contact-aside__value">{d.value}</span>
+                  )}
+                  {/* Cada valor extra va con su propio enlace, no como nota
+                      suelta: un correo que no se puede pulsar obliga a
+                      copiarlo a mano. */}
+                  {d.extra?.map((e) =>
+                    e.href ? (
+                      <a className="contact-aside__value" href={e.href} key={e.value}>
+                        {e.value}
+                      </a>
+                    ) : (
+                      <span className="contact-aside__value" key={e.value}>
+                        {e.value}
+                      </span>
+                    ),
                   )}
                   {d.note && <span className="contact-aside__note">{d.note}</span>}
                 </li>

@@ -58,9 +58,14 @@
           },
           {
             "label": "Correos alternos",
-            "value": "coatingsystemsmx@outlook.com",
-            "href": "mailto:coatingsystemsmx@outlook.com",
-            "note": "También coatingsystemsmx@gmail.com"
+            "value": "coatingsystemsmx@gmail.com",
+            "href": "mailto:coatingsystemsmx@gmail.com",
+            "extra": [
+              {
+                "value": "coatingsystemsmx@outlook.es",
+                "href": "mailto:coatingsystemsmx@outlook.es"
+              }
+            ]
           }
         ],
         "addresses": [
@@ -73,7 +78,13 @@
             "value": "Av. Siglo XXI No. 3160, Col. Villas de Pilar, C.P. 20286. Aguascalientes, Ags."
           }
         ],
-        "subtitle": "Coating Systems Mx S de RL de CV · Aguascalientes"
+        "subtitle": "Coating Systems Mx S de RL de CV",
+        "logo": {
+          "src": "/assets/csmx/logo.svg",
+          "alt": "Coating Systems MX",
+          "width": 340,
+          "height": 100
+        }
       }
     },
     {

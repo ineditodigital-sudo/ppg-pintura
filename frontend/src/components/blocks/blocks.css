@@ -1758,6 +1758,17 @@ a.brand-strip__item:hover .brand-strip__more svg {
   border-radius: var(--radius-2xl);
 }
 
+/* Logotipo del distribuidor, arriba del recuadro. El bloque es de PPG y este
+   es el único sitio de la columna donde aparece quién atiende. */
+.contact-aside__logo {
+  align-self: flex-start;
+  height: 42px;
+  width: auto;
+  /* El `gap` de la columna es `--space-l` y aquí sobra: el logotipo va pegado
+     a su rótulo, no separado como los demás bloques. */
+  margin-bottom: calc(var(--space-l) * -1 + var(--space-xs));
+}
+
 .contact-aside h3 {
   font-size: var(--fs-h4);
   color: var(--fg-brand-secondary);
@@ -1807,6 +1818,12 @@ a.contact-aside__value {
 a.contact-aside__value:hover {
   color: var(--fg-brand-tertiary);
   text-decoration: underline;
+}
+
+/* Dos correos seguidos necesitan aire entre ellos: con los 2px del `gap` del
+   ítem se leían como una sola línea partida en vez de como dos direcciones. */
+.contact-aside__value + .contact-aside__value {
+  margin-top: 4px;
 }
 
 .contact-aside__note {
