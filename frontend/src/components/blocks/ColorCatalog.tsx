@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import type { CatalogColor, ColorCatalog as Catalogo } from '@/types/content'
 import { getColors } from '@/lib/api'
-import { esEnStock, FAMILIA_STOCK, NOMBRE_STOCK } from '@/lib/stock'
+import { enlaceWhatsApp } from '@/lib/social'
+import { esEnStock, FAMILIA_STOCK, FICHA_POR_DEFECTO, NOMBRE_STOCK } from '@/lib/stock'
+import { useSitio } from '@/lib/useSitio'
 import { Container, Section } from '@/components/ui'
 import '@/pages/colors.css'
 
@@ -81,13 +83,19 @@ export function Muestra({
 function FichaColor({
   color,
   familia,
+  textos,
   onCerrar,
 }: {
   color: CatalogColor | null
   familia?: { name: string; description: string }
+  /** Textos de la ficha, editables desde la Carta de color. */
+  textos?: Catalogo['ficha']
   onCerrar: () => void
 }) {
   const ref = useRef<HTMLDialogElement>(null)
+  // El número sale de Ajustes, no de aquí: estaba escrito a mano y cambiarlo
+  // en el CMS no llegaba a este botón.
+  const whatsapp = enlaceWhatsApp(useSitio())
 
   useEffect(() => {
     const d = ref.current
@@ -173,9 +181,7 @@ function FichaColor({
         {familia && <p className="ficha__nota">{familia.description}</p>}
 
         <p className="ficha__aviso">
-          El color de pantalla es orientativo. Los datos de resistencia,
-          espesor de película y curva de curado vienen en la ficha técnica del
-          producto: pídenosla y te la enviamos.
+          {textos?.aviso ?? FICHA_POR_DEFECTO.aviso}
         </p>
 
         <div className="ficha__acciones">
@@ -183,16 +189,18 @@ function FichaColor({
             className="btn btn--primary"
             href={`/contacto?asunto=${encodeURIComponent(asunto)}`}
           >
-            Solicitar la ficha técnica
+            {textos?.ctaFicha ?? FICHA_POR_DEFECTO.ctaFicha}
           </a>
-          <a
-            className="btn btn--secondary"
-            href={`https://api.whatsapp.com/send?phone=523333892775&text=${encodeURIComponent(cuerpo)}`}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            Preguntar por WhatsApp
-          </a>
+          {whatsapp && (
+            <a
+              className="btn btn--secondary"
+              href={`${whatsapp}${whatsapp.includes('?') ? '&' : '?'}text=${encodeURIComponent(cuerpo)}`}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {textos?.ctaWhatsApp ?? FICHA_POR_DEFECTO.ctaWhatsApp}
+            </a>
+          )}
         </div>
       </div>
     </dialog>
@@ -352,6 +360,7 @@ export function ExploradorColores({ catalogo }: { catalogo: Catalogo }) {
       <FichaColor
         color={ficha}
         familia={catalogo.families.find((f) => f.id === ficha?.family)}
+        textos={catalogo.ficha}
         onCerrar={() => setFicha(null)}
       />
     </>

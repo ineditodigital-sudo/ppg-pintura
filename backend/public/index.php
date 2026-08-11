@@ -114,7 +114,9 @@ $siteUrl = ($esHttps ? 'https://' : 'http://')
 $db = Database::conectar($baseDir . '/config/database.json');
 
 if ($db !== null) {
-    $repository = new MySqlContentRepository($db);
+    // Con `data/` como respaldo de lectura: un documento que aún no esté en la
+    // base se sirve del archivo hasta que alguien lo guarde desde el panel.
+    $repository = new MySqlContentRepository($db, $baseDir . '/data');
     $almacen = 'mysql';
 } else {
     $repository = new ContentRepository($baseDir . '/data');
@@ -168,6 +170,7 @@ $router->get('/api/business-lines', static fn () => $content->businessLines());
 $router->get('/api/markets', static fn () => $content->markets());
 $router->get('/api/colors', static fn () => $content->colors());
 $router->get('/api/featured-products', static fn () => $content->featuredProducts());
+$router->get('/api/templates', static fn () => $content->templates());
 $router->get('/api/business-lines/{slug}', static fn (array $p) => $content->businessLine($p));
 $router->post('/api/contact', static fn () => $contact->submit());
 
@@ -191,6 +194,7 @@ $router->put('/api/admin/business-lines', $guard(static fn () => $admin->saveBus
 $router->put('/api/admin/markets', $guard(static fn () => $admin->saveMarkets()));
 $router->put('/api/admin/colors', $guard(static fn () => $admin->saveColors()));
 $router->put('/api/admin/featured-products', $guard(static fn () => $admin->saveFeaturedProducts()));
+$router->put('/api/admin/templates', $guard(static fn () => $admin->saveTemplates()));
 
 $router->get('/api/admin/messages', $guard(static fn () => $admin->messages()));
 $router->delete('/api/admin/messages/{id}', $guard(static fn (array $p) => $admin->deleteMessage($p)));

@@ -127,6 +127,18 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
     description: 'Carrusel de apertura con avance automático.',
     fields: [
       {
+        key: 'video',
+        label: 'Vídeo de fondo',
+        type: 'text',
+        help: 'Ruta del archivo, por ejemplo /assets/video/hero-2026-08.mp4. Es el mismo fondo para todas las diapositivas.',
+      },
+      {
+        key: 'poster',
+        label: 'Imagen de fondo mientras carga el vídeo',
+        type: 'image',
+        help: 'Es también lo único que ve quien navega con ahorro de datos o con el movimiento reducido.',
+      },
+      {
         key: 'autoplaySeconds',
         label: 'Segundos por diapositiva',
         type: 'number',
@@ -138,11 +150,13 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         type: 'list',
         required: true,
         itemLabelKey: 'title',
+        // Sin imagen: el fondo de esta cabecera es el vídeo, que es común a
+        // todas. La imagen por diapositiva se pedía como obligatoria y no se
+        // pintaba en ningún sitio.
         itemFields: [
           { key: 'eyebrow', label: 'Antetítulo', type: 'text' },
           { key: 'title', label: 'Título', type: 'text', required: true },
           { key: 'subtitle', label: 'Subtítulo', type: 'textarea' },
-          { key: 'image', label: 'Imagen', type: 'image', required: true },
           linkField('cta', 'Botón principal'),
           linkField('secondaryCta', 'Botón secundario'),
         ],
@@ -152,7 +166,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       type: 'heroSlider',
       autoplaySeconds: 7,
       slides: [
-        { title: 'Nueva diapositiva', image: { src: '', alt: '' } },
+        { title: 'Nueva diapositiva' },
       ],
     },
   },
@@ -449,6 +463,18 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         label: 'Temas del desplegable',
         type: 'stringList',
         required: true,
+      },
+      {
+        key: 'messagePlaceholder',
+        label: 'Texto de ejemplo del campo «Mensaje»',
+        type: 'textarea',
+        help: 'El gris que se ve dentro del recuadro antes de escribir. Sirve para decirle al visitante qué datos te son útiles.',
+      },
+      {
+        key: 'submitLabel',
+        label: 'Texto del botón de envío',
+        type: 'text',
+        help: 'Por defecto, «Enviar mensaje».',
       },
       {
         key: 'aside',

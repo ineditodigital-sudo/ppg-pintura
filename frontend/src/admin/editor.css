@@ -12,7 +12,7 @@ body.admin-ancho-completo .admin-main {
 
 .adm-editor {
   display: grid;
-  grid-template-columns: minmax(0, 400px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 480px) minmax(0, 1fr);
   gap: var(--space-l);
   align-items: start;
 }
@@ -20,7 +20,7 @@ body.admin-ancho-completo .admin-main {
 .adm-editor__columna {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
 }
 
@@ -55,8 +55,28 @@ body.admin-ancho-completo .admin-main {
 .adm-bloque__barra {
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 8px 6px 4px;
+  gap: 6px;
+  padding: 10px 12px 10px 6px;
+}
+
+/* Posición del bloque en la página. */
+.adm-bloque__orden {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-tertiary);
+  background: var(--bg-secondary, #f2f6fa);
+  border-radius: 999px;
+}
+
+.adm-bloque.is-open .adm-bloque__orden {
+  color: #fff;
+  background: #0078a9;
 }
 
 .adm-bloque__asa {
@@ -79,8 +99,8 @@ body.admin-ancho-completo .admin-main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1px;
-  padding: 4px 6px;
+  gap: 2px;
+  padding: 6px 8px;
   background: none;
   border: 0;
   border-radius: 6px;
@@ -102,16 +122,27 @@ body.admin-ancho-completo .admin-main {
 
 .adm-bloque__texto {
   font-size: 13.5px;
+  line-height: 1.4;
   color: var(--fg-primary);
-  white-space: nowrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   overflow: hidden;
-  text-overflow: ellipsis;
   max-width: 100%;
 }
 
 .adm-bloque__cuerpo {
-  padding: 4px 14px 16px;
+  padding: 18px 18px 6px;
   border-top: 1px solid var(--border-tertiary);
+  /* Un tinte muy claro, no el gris de fondo: el cuerpo abierto debe
+     leerse como parte de la tarjeta, no como un bloque aparte. */
+  background: #fafcfe;
+}
+
+/* Dentro del editor los campos respiran más que en el resto del panel: aquí
+   se escriben titulares y párrafos enteros, no un par de datos sueltos. */
+.adm-bloque__cuerpo .adm-field textarea {
+  min-height: 120px;
 }
 
 .adm-btn--peligro:hover {

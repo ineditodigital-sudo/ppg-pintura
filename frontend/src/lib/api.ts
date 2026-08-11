@@ -13,6 +13,7 @@ import type {
   Navigation,
   Page,
   Site,
+  Templates,
 } from '@/types/content'
 
 import siteLocal from '@/content/site.json'
@@ -21,6 +22,7 @@ import businessLinesLocal from '@/content/business-lines.json'
 import marketsLocal from '@/content/markets.json'
 import colorsLocal from '@/content/colors.json'
 import featuredLocal from '@/content/featured-products.json'
+import templatesLocal from '@/content/templates.json'
 import homeLocal from '@/content/pages/home.json'
 import mercadosLocal from '@/content/pages/mercados.json'
 import quienesSomosLocal from '@/content/pages/quienes-somos.json'
@@ -105,6 +107,16 @@ export function getFeaturedProducts(): Promise<FeaturedProduct[]> {
     '/featured-products',
     (featuredLocal as { products: FeaturedProduct[] }).products,
   )
+}
+
+/**
+ * Textos compartidos de las páginas de producto y sector.
+ *
+ * Se sirve un objeto vacío si algo falla: cada campo tiene su valor por
+ * defecto en la propia plantilla, así que la página se pinta igual.
+ */
+export function getTemplates(): Promise<Templates> {
+  return request('/templates', templatesLocal as Templates)
 }
 
 export async function getPage(slug: string): Promise<Page | null> {

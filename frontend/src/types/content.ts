@@ -47,7 +47,6 @@ export interface HeroSlide {
   eyebrow?: string
   title: string
   subtitle?: string
-  image: Media
   cta?: Link
   secondaryCta?: Link
 }
@@ -58,6 +57,13 @@ export interface HeroSliderBlock {
   slides: HeroSlide[]
   /** Segundos entre diapositivas. 0 desactiva el avance automático. */
   autoplaySeconds?: number
+  /**
+   * Vídeo de fondo y su póster. El fondo es común a todas las diapositivas
+   * —cada una aporta su texto, no su imagen—, y estaba escrito dentro del
+   * componente, así que cambiar el vídeo obligaba a tocar código.
+   */
+  video?: string
+  poster?: Media
 }
 
 export interface RichTextBlock {
@@ -220,6 +226,10 @@ export interface ContactFormBlock {
   title: string
   description?: string
   topics: string[]
+  /** Texto de ejemplo dentro del campo de mensaje. */
+  messagePlaceholder?: string
+  /** Etiqueta del botón de envío. */
+  submitLabel?: string
   /** Datos que se muestran junto al formulario, en la columna lateral. */
   aside?: {
     /** Logotipo del distribuidor, arriba del todo. */
@@ -355,6 +365,16 @@ export interface ColorFamily {
 export interface ColorCatalog {
   families: ColorFamily[]
   colors: CatalogColor[]
+  /**
+   * Textos del recuadro que se abre al pulsar un color. Viven con el catálogo
+   * y no con un bloque porque la ficha sale igual desde la carta completa y
+   * desde la página de producto.
+   */
+  ficha?: {
+    aviso?: string
+    ctaFicha?: string
+    ctaWhatsApp?: string
+  }
 }
 
 export interface FeaturedProduct {
@@ -492,4 +512,55 @@ export interface BusinessLine {
    * sencillamente falso.
    */
   showColors?: boolean
+}
+
+/**
+ * Textos que comparten las páginas generadas por una plantilla.
+ *
+ * Las nueve páginas de producto y sector no son documentos: las compone
+ * `BusinessLinePage` y `MarketPage` a partir de los datos de cada línea o
+ * sector. Todo lo que las rodea —antetítulos, títulos de sección, las tres
+ * tarjetas de servicio, el cierre— estaba escrito en el componente, así que
+ * existía en el sitio publicado pero no en el panel.
+ *
+ * Cada campo es opcional: si falta, la página usa su valor por defecto. Así un
+ * documento a medio llenar no deja nueve páginas rotas.
+ */
+export interface PlantillaLineas {
+  heroCta?: Link
+  comoTrabajamos?: {
+    eyebrow?: string
+    title?: string
+    items?: { title: string; description: string; href?: string }[]
+  }
+  otras?: { eyebrow?: string; title?: string }
+  cierre?: { title?: string; description?: string; cta?: Link }
+}
+
+export interface PlantillaMercados {
+  heroCta?: Link
+  exige?: {
+    eyebrow?: string
+    /** Lleva `{sector}`, que se sustituye por el nombre del sector. */
+    title?: string
+    /** Lleva `{exigencias}`, que se sustituye por las del propio sector. */
+    body?: string
+    image?: Media
+  }
+  sustratos?: { eyebrow?: string; title?: string; description?: string }
+  suministro?: {
+    eyebrow?: string
+    title?: string
+    body?: string
+    image?: Media
+    cta?: Link
+  }
+  recomendado?: { eyebrow?: string; cierre?: string }
+  otros?: { eyebrow?: string; title?: string }
+  cierre?: { title?: string; description?: string; image?: Media; cta?: Link }
+}
+
+export interface Templates {
+  lineas?: PlantillaLineas
+  mercados?: PlantillaMercados
 }

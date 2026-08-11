@@ -99,3 +99,18 @@ export const SOCIAL_OPTIONS = SOCIAL_NETWORKS.map((n) => ({
   value: n.id,
   label: n.label,
 }))
+
+/**
+ * El enlace de WhatsApp configurado en Ajustes.
+ *
+ * Estaba escrito a mano en tres archivos —las dos plantillas de página y la
+ * ficha de color—, así que cambiar el número desde el CMS lo cambiaba en el
+ * pie y en el botón flotante pero no en los botones de las nueve páginas
+ * generadas. Devuelve `undefined` si no hay número: es preferible no pintar el
+ * botón a que lleve a una conversación vacía.
+ */
+export function enlaceWhatsApp(
+  site: { social?: { network: string; href: string }[] } | null | undefined,
+): string | undefined {
+  return site?.social?.find((s) => s.network === 'whatsapp')?.href
+}

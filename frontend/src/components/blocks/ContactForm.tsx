@@ -106,7 +106,10 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
               required
               minLength={10}
               maxLength={4000}
-              placeholder="Cuéntanos qué necesitas: industria, sustrato, volumen estimado o el problema que buscas resolver."
+              placeholder={
+                block.messagePlaceholder ??
+                'Cuéntanos qué necesitas: industria, sustrato, volumen estimado o el problema que buscas resolver.'
+              }
             />
           </div>
 
@@ -126,7 +129,7 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
               className="btn btn--primary"
               disabled={sending}
             >
-              {sending ? 'Enviando…' : 'Enviar mensaje'}
+              {sending ? 'Enviando…' : (block.submitLabel ?? 'Enviar mensaje')}
             </button>
           </div>
         </form>

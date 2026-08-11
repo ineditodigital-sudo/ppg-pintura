@@ -230,6 +230,29 @@ final class AdminController
         Response::json(['ok' => true, 'message' => 'Carta de color guardada.']);
     }
 
+    public function saveTemplates(): void
+    {
+        $payload = $this->readBody();
+
+        if ($payload === null) {
+            return;
+        }
+
+        $errors = $this->validator->validateTemplates($payload);
+
+        if ($errors !== []) {
+            $this->unprocessable($errors);
+            return;
+        }
+
+        if (!$this->repository->saveTemplates($payload)) {
+            Response::error('No se pudieron guardar los textos de las plantillas.', 500);
+            return;
+        }
+
+        Response::json(['ok' => true, 'message' => 'Textos de las plantillas guardados.']);
+    }
+
     public function saveFeaturedProducts(): void
     {
         $payload = $this->readBody(true);

@@ -32,6 +32,17 @@ interface ContentStore
     /** @return array<string, mixed>|null */
     public function colors(): ?array;
 
+    /**
+     * Textos compartidos por las páginas que genera una plantilla.
+     *
+     * Los antetítulos, títulos y cierres de las nueve páginas de producto y
+     * sector estaban escritos en el componente de React: existían en el sitio
+     * pero no en el panel, así que el cliente no podía tocarlos.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function templates(): ?array;
+
     /** @return list<array<string, mixed>>|null */
     public function featuredProducts(): ?array;
 
@@ -66,6 +77,9 @@ interface ContentStore
 
     /** @param array<string, mixed> $catalog */
     public function saveColors(array $catalog): bool;
+
+    /** @param array<string, mixed> $templates */
+    public function saveTemplates(array $templates): bool;
 
     /** @param list<array<string, mixed>> $products */
     public function saveFeaturedProducts(array $products): bool;

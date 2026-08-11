@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import type { Block, BusinessLine } from '@/types/content'
-import { getBusinessLines } from '@/lib/api'
+import type { Block, BusinessLine, Templates } from '@/types/content'
+import { getBusinessLines, getTemplates } from '@/lib/api'
+import { enlaceWhatsApp } from '@/lib/social'
+import { useSitio } from '@/lib/useSitio'
 import { useSeo } from '@/lib/useSeo'
 import { resumirSeo } from '@/lib/resumirSeo'
 import { BlockRenderer } from '@/components/blocks/BlockRenderer'
@@ -9,13 +11,42 @@ import { PageSkeleton } from './PageSkeleton'
 import { NotFound } from './NotFound'
 
 /**
- * Plantilla única para las once líneas de negocio.
+ * Plantilla única para las líneas de negocio.
  *
  * Compone los bloques a partir de los datos de la línea, de modo que añadir
  * una línea nueva es añadir una entrada en `business-lines.json` — no un
  * archivo de página ni un componente.
+ *
+ * Todo lo que no sale de la línea sale de `templates.lineas`, que se edita en
+ * el panel. Antes estaba escrito aquí: existía en el sitio publicado pero no
+ * en el CMS, así que el cliente no podía tocar ni un antetítulo de sus tres
+ * páginas de producto. Los valores por defecto se conservan para que una
+ * clave que falte no deje un hueco.
  */
-function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
+const POR_DEFECTO = {
+  cta: { label: 'Solicitar cotización', href: '/contacto' },
+  comoTrabajamos: {
+    eyebrow: 'Cómo trabajamos',
+    title: 'Del sustrato al acabado final',
+  },
+  otras: { eyebrow: 'Otras líneas', title: 'El resto de nuestro catálogo' },
+  cierre: {
+    title: '¿Tienes algún proyecto?',
+    description:
+      'Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.',
+  },
+} as const
+
+function buildBlocks(
+  line: BusinessLine,
+  others: BusinessLine[],
+  plantilla: Templates['lineas'],
+  whatsapp: string | undefined,
+): Block[] {
+  const heroCta = plantilla?.heroCta ?? POR_DEFECTO.cta
+  const cierre = plantilla?.cierre ?? {}
+  const servicios = plantilla?.comoTrabajamos?.items ?? []
+
   return [
     {
       type: 'hero',
@@ -24,40 +55,26 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
       title: line.headline,
       subtitle: line.description,
       image: line.image,
-      cta: { label: 'Solicitar cotización', href: '/contacto' },
-      secondaryCta: {
-        label: 'WhatsApp',
-        href: 'https://api.whatsapp.com/send?phone=523333892775',
-      },
+      cta: heroCta,
+      // El número sale de Ajustes. Sin número no se pinta el botón.
+      ...(whatsapp
+        ? { secondaryCta: { label: 'WhatsApp', href: whatsapp } }
+        : {}),
     },
-    {
-      type: 'cardGrid',
-      eyebrow: 'Cómo trabajamos',
-      title: 'Del sustrato al acabado final',
-      columns: 3,
-      variant: 'text',
-      items: [
-        {
-          title: 'Asesoría técnica',
-          description:
-            'Te ayudamos a elegir la resina, el brillo y el espesor según el sustrato y las condiciones a las que estará expuesta la pieza.',
-        },
-        {
-          title: 'Existencia y entrega',
-          description:
-            'Producto de catálogo disponible en Aguascalientes, con programas de suministro continuo para volumen recurrente.',
-        },
-        {
-          title: 'Color a la carta',
-          description:
-            'Color de catálogo PPG con equivalencia RAL, e igualación bajo pedido en la planta de San Juan del Río.',
-          // Cada página de producto tiene desde aquí una vía a la carta, aunque
-          // no monte el carrusel completo. Sin `label`: ese campo pinta una
-          // píldora sobre el título, y el enlace ya añade su «Más información».
-          href: '/colores',
-        },
-      ],
-    },
+    // Sin tarjetas configuradas no se monta la sección: antes un hueco que un
+    // título de sección sobre nada.
+    ...(servicios.length
+      ? [
+          {
+            type: 'cardGrid' as const,
+            eyebrow: plantilla?.comoTrabajamos?.eyebrow ?? POR_DEFECTO.comoTrabajamos.eyebrow,
+            title: plantilla?.comoTrabajamos?.title ?? POR_DEFECTO.comoTrabajamos.title,
+            columns: 3 as const,
+            variant: 'text' as const,
+            items: servicios,
+          },
+        ]
+      : []),
     // La carta completa —con pestañas y buscador—, no el carrusel: quien entra
     // en la página del producto viene a buscar un color concreto, y quince
     // muestras sueltas sin filtro no responden a eso.
@@ -70,8 +87,8 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
       : []),
     {
       type: 'cardGrid',
-      eyebrow: 'Otras líneas',
-      title: 'El resto de nuestro catálogo',
+      eyebrow: plantilla?.otras?.eyebrow ?? POR_DEFECTO.otras.eyebrow,
+      title: plantilla?.otras?.title ?? POR_DEFECTO.otras.title,
       columns: 3,
       variant: 'text',
       items: others.map((other) => ({
@@ -83,13 +100,12 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
     {
       type: 'ctaBanner',
       theme: 'dark',
-      title: '¿Tienes algún proyecto?',
-      description:
-        'Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.',
+      title: cierre.title ?? POR_DEFECTO.cierre.title,
+      description: cierre.description ?? POR_DEFECTO.cierre.description,
       // Sin imagen el bloque cae en la variante `plain` y queda como un
       // rectángulo azul liso, que era justo lo que se veía aquí.
       image: line.image,
-      cta: { label: 'Solicitar cotización', href: '/contacto' },
+      cta: cierre.cta ?? POR_DEFECTO.cta,
     },
   ]
 }
@@ -97,12 +113,20 @@ function buildBlocks(line: BusinessLine, others: BusinessLine[]): Block[] {
 export function BusinessLinePage() {
   const { slug = '' } = useParams()
   const [lines, setLines] = useState<BusinessLine[] | null>(null)
+  const [plantillas, setPlantillas] = useState<Templates>({})
+  const site = useSitio()
 
   useEffect(() => {
     let active = true
-    getBusinessLines().then((data) => {
-      if (active) setLines(data)
+
+    // En paralelo: las tres son independientes y en serie serían tres esperas
+    // antes del primer píxel.
+    void Promise.all([getBusinessLines(), getTemplates()]).then(([data, tpl]) => {
+      if (!active) return
+      setPlantillas(tpl)
+      setLines(data)
     })
+
     return () => {
       active = false
     }
@@ -126,7 +150,7 @@ export function BusinessLinePage() {
 
   return (
     <BlockRenderer
-      blocks={buildBlocks(line, others)}
+      blocks={buildBlocks(line, others, plantillas.lineas, enlaceWhatsApp(site))}
       breadcrumbs={[
         { label: 'Inicio', href: '/' },
         { label: 'Productos', href: '/productos/pintura-en-polvo' },

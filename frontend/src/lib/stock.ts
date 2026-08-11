@@ -22,3 +22,17 @@ export const FAMILIA_STOCK = 'en-stock'
 
 /** Etiqueta visible. Lleva las siglas para que el cliente reconozca las suyas. */
 export const NOMBRE_STOCK = 'En stock (MTS)'
+
+/**
+ * Textos de la ficha que se abre al pulsar un color.
+ *
+ * Viven aquí y no dentro del componente para que el panel pueda enseñar el
+ * texto que hoy se publica en lugar de un campo vacío. Un recuadro en blanco
+ * con un «si lo dejas vacío se usa otra cosa» no es editar: es adivinar.
+ */
+export const FICHA_POR_DEFECTO = {
+  aviso:
+    'El color de pantalla es orientativo. Los datos de resistencia, espesor de película y curva de curado vienen en la ficha técnica del producto: pídenosla y te la enviamos.',
+  ctaFicha: 'Solicitar la ficha técnica',
+  ctaWhatsApp: 'Preguntar por WhatsApp',
+} as const

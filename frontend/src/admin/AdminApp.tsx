@@ -4,6 +4,7 @@ import * as api from './api'
 import { Alert, Loading } from './components/Common'
 import { Field, PasswordInput } from './components/Fields'
 import { PageEditorScreen, PagesScreen } from './screens/Pages'
+import { PlantillasScreen } from './screens/Plantillas'
 import { BusinessLinesScreen, NavigationScreen, SiteScreen } from './screens/Settings'
 import { MediaScreen, MessagesScreen, PasswordScreen } from './screens/Misc'
 import { ColorsScreen, FeaturedProductsScreen, MarketsScreen } from './screens/Catalogo'
@@ -119,6 +120,7 @@ const GRUPOS = [
     title: 'Contenido',
     links: [
       { to: '/admin/paginas', label: 'Páginas', icon: IconPages },
+      { to: '/admin/plantillas', label: 'Textos de producto y sector', icon: IconPages },
       { to: '/admin/navegacion', label: 'Navegación', icon: IconNav },
       { to: '/admin/lineas', label: 'Líneas de producto', icon: IconProducts },
       { to: '/admin/ajustes', label: 'Ajustes del sitio', icon: IconSettings },
@@ -218,6 +220,7 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
           <Route path="inicio" element={<DashboardScreen user={user} />} />
           <Route path="paginas" element={<PagesScreen />} />
           <Route path="paginas/:slug" element={<PageEditorScreen />} />
+          <Route path="plantillas" element={<PlantillasScreen />} />
           <Route path="navegacion" element={<NavigationScreen />} />
           <Route path="lineas" element={<BusinessLinesScreen />} />
           <Route path="mercados" element={<MarketsScreen />} />

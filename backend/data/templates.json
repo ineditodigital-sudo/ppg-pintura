@@ -1,0 +1,92 @@
+{
+    "lineas": {
+        "heroCta": {
+            "label": "Solicitar cotización",
+            "href": "/contacto"
+        },
+        "comoTrabajamos": {
+            "eyebrow": "Cómo trabajamos",
+            "title": "Del sustrato al acabado final",
+            "items": [
+                {
+                    "title": "Asesoría técnica",
+                    "description": "Te ayudamos a elegir la resina, el brillo y el espesor según el sustrato y las condiciones a las que estará expuesta la pieza."
+                },
+                {
+                    "title": "Existencia y entrega",
+                    "description": "Producto de catálogo disponible en Aguascalientes, con programas de suministro continuo para volumen recurrente."
+                },
+                {
+                    "title": "Color a la carta",
+                    "description": "Color de catálogo PPG con equivalencia RAL, e igualación bajo pedido en la planta de San Juan del Río.",
+                    "href": "/colores"
+                }
+            ]
+        },
+        "otras": {
+            "eyebrow": "Otras líneas",
+            "title": "El resto de nuestro catálogo"
+        },
+        "cierre": {
+            "title": "¿Tienes algún proyecto?",
+            "description": "Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.",
+            "cta": {
+                "label": "Solicitar cotización",
+                "href": "/contacto"
+            }
+        }
+    },
+    "mercados": {
+        "heroCta": {
+            "label": "Solicitar cotización",
+            "href": "/contacto"
+        },
+        "exige": {
+            "eyebrow": "Qué exige este sector",
+            "title": "Lo que decide el resultado en {sector}",
+            "body": "Aquí pesan sobre todo {exigencias}. Cada una condiciona la química del recubrimiento y la forma de aplicarlo, así que el sistema se elige a partir de ellas y no al revés.",
+            "image": {
+                "src": "/assets/csmx/aplicacion-polvo.webp",
+                "alt": "Aplicación electrostática de pintura en polvo"
+            }
+        },
+        "sustratos": {
+            "eyebrow": "Sustratos habituales",
+            "title": "Sobre qué aplicamos",
+            "description": "Cada material impone su propio pretratamiento. Esto es lo que tenemos en cuenta antes de recubrir."
+        },
+        "suministro": {
+            "eyebrow": "Cómo trabajamos",
+            "title": "Suministro con respaldo técnico",
+            "body": "Te suministramos el material y el acompañamiento del fabricante: elección de la química, el brillo y el espesor según el sustrato, y validación del sistema antes de llevarlo a línea.",
+            "image": {
+                "src": "/assets/csmx/pintura-polvo-azul.webp",
+                "alt": "Pintura en polvo PPG"
+            },
+            "cta": {
+                "label": "Cotizar un proyecto",
+                "href": "/contacto"
+            }
+        },
+        "recomendado": {
+            "eyebrow": "Sistema recomendado",
+            "cierre": "La recomendación final depende de tu pieza, tu proceso y las condiciones a las que estará expuesta. Cuéntanoslas y la ajustamos contigo."
+        },
+        "otros": {
+            "eyebrow": "Otros sectores",
+            "title": "Dónde más trabajamos"
+        },
+        "cierre": {
+            "title": "¿Tienes algún proyecto?",
+            "description": "Respaldamos cada especificación con producto PPG y el criterio técnico para elegirlo. Cuéntanos el reto y trabajamos la solución contigo.",
+            "image": {
+                "src": "/assets/csmx/industria.webp",
+                "alt": "Planta industrial"
+            },
+            "cta": {
+                "label": "Solicitar cotización",
+                "href": "/contacto"
+            }
+        }
+    }
+}

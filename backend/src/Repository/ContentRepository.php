@@ -67,6 +67,19 @@ final class ContentRepository implements ContentStore
         return $colors;
     }
 
+    /**
+     * Textos compartidos por las páginas que genera una plantilla.
+     *
+     * @return array<string, mixed>|null
+     */
+    public function templates(): ?array
+    {
+        /** @var array<string, mixed>|null $templates */
+        $templates = $this->readJson('templates.json');
+
+        return $templates;
+    }
+
     /** @return list<array<string, mixed>>|null */
     public function featuredProducts(): ?array
     {
@@ -199,6 +212,12 @@ final class ContentRepository implements ContentStore
     public function saveColors(array $catalog): bool
     {
         return $this->writeJson('colors.json', $catalog);
+    }
+
+    /** @param array<string, mixed> $templates */
+    public function saveTemplates(array $templates): bool
+    {
+        return $this->writeJson('templates.json', $templates);
     }
 
     /**

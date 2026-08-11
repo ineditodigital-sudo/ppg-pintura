@@ -17,6 +17,10 @@ import './blocks.css'
  */
 export function HeroSlider({ block }: { block: HeroSliderBlock }) {
   const slides = block.slides ?? []
+  // Con valores de reserva: si alguien vacía el campo en el panel, el hero
+  // sigue teniendo fondo en vez de quedarse en negro.
+  const video = block.video || '/assets/video/hero-2026-08.mp4'
+  const poster = block.poster?.src || '/assets/video/hero-poster-2026-08.jpg'
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
   const regionRef = useRef<HTMLDivElement>(null)
@@ -105,7 +109,7 @@ export function HeroSlider({ block }: { block: HeroSliderBlock }) {
         <video
           className="hero-video"
           ref={videoRef}
-          poster="/assets/video/hero-poster-2026-08.jpg"
+          poster={poster}
           autoPlay
           muted
           loop
@@ -114,7 +118,7 @@ export function HeroSlider({ block }: { block: HeroSliderBlock }) {
           aria-hidden="true"
           tabIndex={-1}
         >
-          <source src="/assets/video/hero-2026-08.mp4" type="video/mp4" />
+          <source src={video} type="video/mp4" />
         </video>
 
         {slides.map((slide, i) => (

@@ -95,7 +95,7 @@ export function construirMapa(
       ruta: `/productos/${l.slug}`,
       origen: 'plantilla',
       destino: '/admin/lineas',
-      nota: 'Su texto e imagen salen de Líneas de producto',
+      nota: 'Sus datos salen de Líneas; el resto del texto, de Textos de producto y sector',
       imagen: l.image?.src,
       icono: 'capas',
     })
@@ -107,7 +107,7 @@ export function construirMapa(
       ruta: `/mercados/${m.slug}`,
       origen: 'plantilla',
       destino: '/admin/mercados',
-      nota: 'Su texto e imagen salen de Mercados',
+      nota: 'Sus datos salen de Mercados; el resto del texto, de Textos de producto y sector',
       imagen: m.image?.src,
       icono: m.icon ?? 'engrane',
     })

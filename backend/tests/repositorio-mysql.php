@@ -23,6 +23,19 @@ $db->exec('CREATE TABLE mensajes (id INTEGER PRIMARY KEY AUTOINCREMENT, nombre T
 // SQLite no trae NOW(); se registra para que el mismo SQL funcione aquí.
 $db->sqliteCreateFunction('NOW', fn () => date('Y-m-d H:i:s'), 0);
 
+/** Otra base vacía con el mismo esquema, para probar el caso «aún no hay nada». */
+$nuevaBase = function (): PDO {
+    $db = new PDO('sqlite::memory:', null, null, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ]);
+    $db->exec('CREATE TABLE contenido (clave TEXT PRIMARY KEY, documento TEXT NOT NULL, actualizado TEXT NOT NULL)');
+    $db->exec('CREATE TABLE contenido_historial (id INTEGER PRIMARY KEY AUTOINCREMENT, clave TEXT NOT NULL, documento TEXT NOT NULL, guardado TEXT NOT NULL)');
+    $db->sqliteCreateFunction('NOW', fn () => date('Y-m-d H:i:s'), 0);
+
+    return $db;
+};
+
 $repo = new MySqlContentRepository($db);
 $fallos = 0;
 $ok = function (string $t, bool $c) use (&$fallos) {
@@ -76,6 +89,41 @@ $msgs = $repo->listContactMessages();
 $ok('mensaje guardado y leído', count($msgs) === 1 && $msgs[0]['name'] === 'Ana');
 $ok('mensaje borrado', $repo->deleteContactMessage($msgs[0]['id']) === true);
 $ok('bandeja vacía', $repo->listContactMessages() === []);
+
+// 9. Plantillas: el documento que lleva al CMS los textos de las páginas
+//    generadas. Es nuevo, así que se ejercita igual que el resto.
+$plantillas = json_decode(file_get_contents($base . '/data/templates.json'), true);
+$repo->saveTemplates($plantillas);
+$ok('plantillas: ida y vuelta idéntica', json_encode($repo->templates()) === json_encode($plantillas));
+$ok('sin plantillas guardadas devuelve null', (new MySqlContentRepository($nuevaBase()))->templates() === null);
+
+$plantillas['lineas']['cierre']['title'] = 'Otro cierre';
+$repo->saveTemplates($plantillas);
+$ok('plantillas: se puede reescribir', $repo->templates()['lineas']['cierre']['title'] === 'Otro cierre');
+$hp = (int) $db->query("SELECT COUNT(*) FROM contenido_historial WHERE clave='templates'")->fetchColumn();
+$ok('plantillas: la versión anterior queda en el historial', $hp === 1);
+
+// 10. Respaldo en archivos: un documento que la base aún no tiene se sirve de
+//     `data/` hasta que alguien lo guarde. Sin esto, cada tipo de documento
+//     nuevo salía vacío en producción hasta sembrarlo a mano.
+$vacia = new MySqlContentRepository($nuevaBase(), $base . '/data');
+$ok('respaldo: sirve plantillas desde el archivo', $vacia->templates()['lineas']['cierre']['title'] === '¿Tienes algún proyecto?');
+$ok('respaldo: sirve la carta desde el archivo', count($vacia->colors()['colors']) === 83);
+$ok('respaldo: sirve los mercados desde el archivo', count($vacia->markets()) === 6);
+$ok('sin dataDir no hay respaldo', (new MySqlContentRepository($nuevaBase()))->templates() === null);
+
+// Las páginas quedan fuera del respaldo a propósito: se pueden borrar desde el
+// panel, y caer al archivo resucitaría la que el cliente acaba de eliminar.
+$conRespaldo = new MySqlContentRepository($nuevaBase(), $base . '/data');
+$ok('respaldo: las páginas NO se sirven del archivo', $conRespaldo->page('home') === null);
+
+$conRespaldo->savePage('home', ['title' => 'Guardada', 'blocks' => []]);
+$conRespaldo->deletePage('home');
+$ok('una página borrada no resucita del archivo', $conRespaldo->page('home') === null);
+
+// Y en cuanto se guarda, manda la base y no el archivo.
+$vacia->saveTemplates(['lineas' => ['cierre' => ['title' => 'Desde la base']]]);
+$ok('lo guardado pisa al respaldo', $vacia->templates()['lineas']['cierre']['title'] === 'Desde la base');
 
 echo "\n" . ($fallos === 0 ? "TODO CORRECTO\n" : "{$fallos} FALLO(S)\n");
 exit($fallos === 0 ? 0 : 1);

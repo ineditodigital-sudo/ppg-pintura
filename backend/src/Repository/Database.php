@@ -145,7 +145,7 @@ final class Database
         $sembradas = [];
         $omitidas = [];
 
-        $archivos = ['site', 'navigation', 'business-lines', 'markets', 'colors', 'featured-products'];
+        $archivos = ['site', 'navigation', 'business-lines', 'markets', 'colors', 'featured-products', 'templates'];
 
         $rutas = [];
         foreach ($archivos as $nombre) {

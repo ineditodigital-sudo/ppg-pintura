@@ -22,6 +22,9 @@ if (PHP_SAPI !== 'cli') {
 $baseDir = __DIR__;
 
 require $baseDir . '/src/Repository/Database.php';
+// La interfaz antes que la clase: sin autocarga, requerir sólo el repositorio
+// falla con «Interface ContentStore not found».
+require $baseDir . '/src/Repository/ContentStore.php';
 require $baseDir . '/src/Repository/MySqlContentRepository.php';
 
 use App\Repository\Database;

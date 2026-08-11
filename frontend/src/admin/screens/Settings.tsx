@@ -250,6 +250,23 @@ export function BusinessLinesScreen() {
             { key: 'description', label: 'Descripción', type: 'textarea', required: true },
             { key: 'image', label: 'Imagen', type: 'image' },
             { key: 'href', label: 'Ruta', type: 'text', help: 'Normalmente /productos/<slug>.' },
+            {
+              key: 'stats',
+              label: 'Cifras de la línea',
+              type: 'list',
+              itemLabelKey: 'value',
+              help: 'La banda azul de números. Si la dejas vacía, esa línea no la muestra en vez de enseñar las de otra.',
+              itemFields: [
+                { key: 'value', label: 'Cifra', type: 'text', required: true, help: 'Por ejemplo 83, +25 años o 25 kg.' },
+                { key: 'label', label: 'Qué es', type: 'text', required: true },
+              ],
+            },
+            {
+              key: 'showColors',
+              label: 'Mostrar la carta de color en esta página',
+              type: 'boolean',
+              help: 'Actívalo sólo donde el catálogo corresponda: las 83 referencias son de pintura en polvo.',
+            },
           ]}
           value={s.value as unknown as Record<string, unknown>[]}
           onChange={(v) => s.setValue(v as unknown as BusinessLine[])}

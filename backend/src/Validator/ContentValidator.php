@@ -519,6 +519,55 @@ final class ContentValidator
      * @param mixed $products
      * @return list<string>
      */
+    /**
+     * Textos compartidos de las páginas de plantilla.
+     *
+     * La validación es deliberadamente laxa: aquí no hay nada estructural que
+     * romper —ni slugs, ni referencias entre documentos—, sólo texto. Lo único
+     * que se exige es que las dos secciones sean objetos y que un texto que se
+     * escriba sea texto; si una clave falta, la página cae en su valor por
+     * defecto. Rechazar el guardado entero porque falta un antetítulo dejaría
+     * al cliente sin poder arreglar el que sí quiere cambiar.
+     *
+     * @param mixed $templates
+     * @return list<string>
+     */
+    public function validateTemplates(mixed $templates): array
+    {
+        if (!is_array($templates)) {
+            return ['Los textos de las plantillas deben ser un objeto.'];
+        }
+
+        $errors = [];
+
+        foreach (['lineas', 'mercados'] as $seccion) {
+            if (!array_key_exists($seccion, $templates)) {
+                continue;
+            }
+
+            if (!is_array($templates[$seccion])) {
+                $errors[] = "«{$seccion}» debe ser un objeto.";
+            }
+        }
+
+        // El marcador {sector} es el que sustituye el nombre del mercado. Sin
+        // él la frase queda coja en las seis páginas a la vez, así que se
+        // avisa antes de guardar y no después de publicarlo.
+        $titulo = $templates['mercados']['exige']['title'] ?? null;
+
+        if (is_string($titulo) && $titulo !== '' && !str_contains($titulo, '{sector}')) {
+            $errors[] = 'El título de «Qué exige este sector» debe incluir {sector}, que es donde se escribe el nombre del sector.';
+        }
+
+        $cuerpo = $templates['mercados']['exige']['body'] ?? null;
+
+        if (is_string($cuerpo) && $cuerpo !== '' && !str_contains($cuerpo, '{exigencias}')) {
+            $errors[] = 'El texto de «Qué exige este sector» debe incluir {exigencias}, que es donde se enumeran las de cada sector.';
+        }
+
+        return $errors;
+    }
+
     public function validateFeaturedProducts(mixed $products): array
     {
         if (!is_array($products) || !array_is_list($products)) {

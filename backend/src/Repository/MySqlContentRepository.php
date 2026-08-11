@@ -23,8 +23,35 @@ final class MySqlContentRepository implements ContentStore
     /** Versiones que se conservan por documento, como en los archivos. */
     private const HISTORIAL = 10;
 
-    public function __construct(private readonly PDO $db)
-    {
+    /**
+     * Documentos únicos: los que no se pueden borrar desde el panel.
+     *
+     * Sólo estos admiten respaldo en archivo. Las páginas quedan fuera a
+     * propósito: sí se pueden borrar, y caer al archivo resucitaría una que
+     * el cliente acaba de eliminar.
+     */
+    private const UNICOS = [
+        'site' => 'site.json',
+        'navigation' => 'navigation.json',
+        'business-lines' => 'business-lines.json',
+        'markets' => 'markets.json',
+        'colors' => 'colors.json',
+        'featured-products' => 'featured-products.json',
+        'templates' => 'templates.json',
+    ];
+
+    /**
+     * @param PDO         $db
+     * @param string|null $dataDir Copia en archivos de la que sembrar cuando
+     *                             la base aún no tiene un documento. Sin esto,
+     *                             añadir un tipo de documento nuevo obligaba a
+     *                             entrar al servidor a sembrarlo a mano, y
+     *                             mientras tanto el panel lo enseñaba vacío.
+     */
+    public function __construct(
+        private readonly PDO $db,
+        private readonly ?string $dataDir = null,
+    ) {
     }
 
     /* --- Lectura ---------------------------------------------------------- */
@@ -63,6 +90,12 @@ final class MySqlContentRepository implements ContentStore
     public function colors(): ?array
     {
         return $this->leer('colors');
+    }
+
+    /** @return array<string, mixed>|null */
+    public function templates(): ?array
+    {
+        return $this->leer('templates');
     }
 
     /** @return list<array<string, mixed>>|null */
@@ -135,7 +168,7 @@ final class MySqlContentRepository implements ContentStore
             return false;
         }
 
-        $actual = $this->leer("pages/{$slug}");
+        $actual = $this->enLaBase("pages/{$slug}");
 
         if ($actual === null) {
             return false;
@@ -178,6 +211,12 @@ final class MySqlContentRepository implements ContentStore
     public function saveColors(array $catalog): bool
     {
         return $this->guardar('colors', $catalog);
+    }
+
+    /** @param array<string, mixed> $templates */
+    public function saveTemplates(array $templates): bool
+    {
+        return $this->guardar('templates', $templates);
     }
 
     /** @param list<array<string, mixed>> $products */
@@ -243,8 +282,18 @@ final class MySqlContentRepository implements ContentStore
         return preg_match('/^[a-z0-9][a-z0-9-]{0,80}$/', $slug) === 1;
     }
 
-    /** @return array<string, mixed>|list<mixed>|null */
-    private function leer(string $clave): ?array
+    /**
+     * Lo que hay en la base, sin mirar el respaldo.
+     *
+     * La distinción importa: `guardar()` comprueba si ya existía la fila para
+     * decidir entre UPDATE e INSERT. Si esa comprobación cayera al archivo,
+     * creería que la fila existe, el UPDATE no afectaría a ninguna y el INSERT
+     * no llegaría a hacerse: el guardado se perdería en silencio. Lo detectó
+     * la prueba «lo guardado pisa al respaldo».
+     *
+     * @return array<string, mixed>|list<mixed>|null
+     */
+    private function enLaBase(string $clave): ?array
     {
         $stmt = $this->db->prepare('SELECT documento FROM contenido WHERE clave = ?');
         $stmt->execute([$clave]);
@@ -255,6 +304,43 @@ final class MySqlContentRepository implements ContentStore
         }
 
         $datos = json_decode($doc, true);
+
+        return is_array($datos) ? $datos : null;
+    }
+
+    /**
+     * Lo que hay en la base y, si no hay nada, la copia de `data/`.
+     *
+     * @return array<string, mixed>|list<mixed>|null
+     */
+    private function leer(string $clave): ?array
+    {
+        return $this->enLaBase($clave) ?? $this->respaldo($clave);
+    }
+
+    /**
+     * El documento tal como viene en `data/`, cuando la base no lo tiene.
+     *
+     * Es de sólo lectura: no se escribe nada en la base. En cuanto el cliente
+     * guarde desde el panel, la fila existirá y este respaldo deja de usarse.
+     *
+     * @return array<string, mixed>|list<mixed>|null
+     */
+    private function respaldo(string $clave): ?array
+    {
+        $archivo = self::UNICOS[$clave] ?? null;
+
+        if ($archivo === null || $this->dataDir === null) {
+            return null;
+        }
+
+        $ruta = $this->dataDir . '/' . $archivo;
+
+        if (!is_file($ruta)) {
+            return null;
+        }
+
+        $datos = json_decode((string) file_get_contents($ruta), true);
 
         return is_array($datos) ? $datos : null;
     }
@@ -273,7 +359,7 @@ final class MySqlContentRepository implements ContentStore
         $this->db->beginTransaction();
 
         try {
-            $previo = $this->leer($clave);
+            $previo = $this->enLaBase($clave);
 
             if ($previo !== null) {
                 $this->historiar($clave, $previo);

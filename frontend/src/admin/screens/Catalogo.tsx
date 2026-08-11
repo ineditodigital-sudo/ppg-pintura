@@ -1,9 +1,10 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import type { CatalogColor, ColorCatalog, FeaturedProduct, Market } from '@/types/content'
 import { ICON_NAMES } from '@/lib/icons'
+import { FICHA_POR_DEFECTO } from '@/lib/stock'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
-import { ListField } from '../components/Fields'
+import { FieldRenderer, ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
 import {
   analizar,
@@ -653,6 +654,49 @@ export function ColorsScreen() {
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
       <Alert kind="ok" message={s.notice} />
+
+      {/* Los textos del recuadro que se abre al pulsar un color. Viven con el
+          catálogo porque la ficha sale igual desde /colores y desde la página
+          de pintura en polvo: editarlos en dos sitios los separaría. */}
+      <div className="admin-card">
+        <h2 className="adm-grupo__titulo">Ficha que se abre al pulsar un color</h2>
+        {(
+          [
+            {
+              key: 'aviso',
+              label: 'Aviso al pie de la ficha',
+              type: 'textarea',
+              help: 'La advertencia sobre el color de pantalla y los datos técnicos.',
+            },
+            {
+              key: 'ctaFicha',
+              label: 'Texto del botón principal',
+              type: 'text',
+              help: 'Lleva al formulario de contacto con la referencia ya escrita.',
+            },
+            {
+              key: 'ctaWhatsApp',
+              label: 'Texto del botón de WhatsApp',
+              type: 'text',
+              help: 'El número sale de Ajustes del sitio.',
+            },
+          ] as const
+        ).map((field) => (
+          <FieldRenderer
+            key={field.key}
+            field={field}
+            // Si aún no se ha guardado nada, se enseña el texto que hoy se
+            // publica: el campo vacío no decía qué se está cambiando.
+            value={catalogo.ficha?.[field.key] ?? FICHA_POR_DEFECTO[field.key]}
+            onChange={(v) =>
+              s.setValue({
+                ...catalogo,
+                ficha: { ...catalogo.ficha, [field.key]: v as string },
+              })
+            }
+          />
+        ))}
+      </div>
 
       <div className="admin-card">
         <ListField

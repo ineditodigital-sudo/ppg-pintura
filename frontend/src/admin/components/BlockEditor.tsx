@@ -282,11 +282,19 @@ export function BlockEditor({
                   <IconDrag size={16} />
                 </span>
 
+                {/* El número dice en qué posición cae en la página. Sin él,
+                    doce bloques con nombres parecidos son doce filas iguales y
+                    hay que contarlas con el dedo para ubicarse. */}
+                <span className="adm-bloque__orden" aria-hidden="true">
+                  {index + 1}
+                </span>
+
                 <button
                   type="button"
                   className="adm-bloque__resumen"
                   onClick={() => setAbierto(estaAbierto ? null : index)}
                   aria-expanded={estaAbierto}
+                  aria-label={`${estaAbierto ? 'Cerrar' : 'Editar'} el bloque ${index + 1} de ${blocks.length}: ${blockLabel(String(block.type))}`}
                 >
                   <span className="adm-bloque__tipo">{blockLabel(String(block.type))}</span>
                   <span className="adm-bloque__texto">{blockSummary(block)}</span>

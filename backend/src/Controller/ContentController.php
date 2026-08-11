@@ -76,6 +76,18 @@ final class ContentController
         Response::json($colors);
     }
 
+    /**
+     * Textos compartidos de las páginas de plantilla.
+     *
+     * Devuelve un objeto vacío en vez de un 500 si aún no hay documento: las
+     * páginas saben caer en sus valores por defecto, y tumbar nueve páginas
+     * por un texto que falta sería desproporcionado.
+     */
+    public function templates(): void
+    {
+        Response::json($this->repository->templates() ?? []);
+    }
+
     public function featuredProducts(): void
     {
         $products = $this->repository->featuredProducts();

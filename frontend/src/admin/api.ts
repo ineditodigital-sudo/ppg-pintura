@@ -15,6 +15,7 @@ import type {
   Navigation,
   Page,
   Site,
+  Templates,
 } from '@/types/content'
 
 let csrfToken = ''
@@ -200,6 +201,16 @@ export const saveFeaturedProducts = (products: FeaturedProduct[]) =>
   request<{ ok: boolean; message: string }>('/admin/featured-products', {
     method: 'PUT',
     body: JSON.stringify(products),
+  })
+
+/* --- Plantillas de página ------------------------------------------------------ */
+
+export const getTemplates = () => request<Templates>('/templates')
+
+export const saveTemplates = (templates: Templates) =>
+  request<{ ok: boolean; message: string }>('/admin/templates', {
+    method: 'PUT',
+    body: JSON.stringify(templates),
   })
 
 /* --- Mensajes ---------------------------------------------------------------- */
