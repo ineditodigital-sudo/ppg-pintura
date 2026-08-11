@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/</loc>
     <lastmod>2026-08-11</lastmod>
@@ -24,50 +25,86 @@
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/ace/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/ace.webp</image:loc>
+      <image:title>ACE · Agrícola, construcción y movimiento de tierra</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/arquitectura/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/arquitectura.webp</image:loc>
+      <image:title>Arquitectura · Acabados que aguantan a la intemperie</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/automotriz/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/automotriz.webp</image:loc>
+      <image:title>Automotriz · Piezas que responden a especificación de fabricante</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/iluminacion/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/iluminacion.webp</image:loc>
+      <image:title>Iluminación · Luminarias que trabajan en caliente</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/industria-general/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/industria-general.webp</image:loc>
+      <image:title>Industria General · Protección para el equipo que produce</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/mueblero/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/mueblero.webp</image:loc>
+      <image:title>Mueblero · Mobiliario metálico de contacto diario</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pintura-en-polvo/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/video/hero-poster-2026-08.jpg</image:loc>
+      <image:title>Pintura en Polvo · Poliéster, híbridos, epóxicos y poliuretanos</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pintura-liquida/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/aerosol-retoque.webp</image:loc>
+      <image:title>Pintura Líquida · Recubrimientos de alto desempeño</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pretratamientos-metalicos/</loc>
     <lastmod>2026-08-11</lastmod>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/industria.webp</image:loc>
+      <image:title>Pre Tratamientos Metálicos · Desengrasantes, desoxidantes y fosfatizantes</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/quienes-somos/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-08-10</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

@@ -94,6 +94,14 @@ Options -Indexes
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 
+  # El `X-Robots-Tag` de la API NO se pone aquí: se probó con `SetEnvIf` y este
+  # servidor no aplica la cabecera, igual que pasa con `mod_deflate`. Lo hace
+  # el propio PHP en `api/index.php`, que sí controlamos.
+  #
+  # Para `/admin` basta el `Disallow` de `robots.txt`: es una ruta del
+  # enrutador del cliente, no un archivo, así que desde aquí no hay forma de
+  # distinguirla del resto del sitio.
+
   # --- Cabeceras de seguridad ---
   # HSTS: el navegador recuerda que este dominio es sólo HTTPS y ni siquiera
   # llega a hacer la primera petición en claro. Seis meses, sin `preload` ni

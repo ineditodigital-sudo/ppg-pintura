@@ -64,6 +64,20 @@ spl_autoload_register(static function (string $class) use ($baseDir): void {
     }
 });
 
+/**
+ * Nada de la API entra en el índice de un buscador.
+ *
+ * `robots.txt` ya la bloquea, pero bloquear no es excluir: una URL prohibida a
+ * la que alguien enlace desde fuera puede acabar saliendo en los resultados
+ * como enlace pelado —sin título ni descripción— porque el buscador sabe que
+ * existe y tiene prohibido entrar a ver qué es. Esta cabecera lo dice sin
+ * ambigüedad.
+ *
+ * Va aquí y no en el `.htaccess` porque se probó allí con `SetEnvIf` y este
+ * servidor no llega a aplicarla.
+ */
+header('X-Robots-Tag: noindex, nofollow');
+
 // CORS para el servidor de desarrollo de Vite.
 $allowedOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
