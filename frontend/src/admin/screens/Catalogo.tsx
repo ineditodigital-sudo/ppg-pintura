@@ -350,12 +350,6 @@ export function MarketsScreen() {
     <>
       <PageHead
         title="Mercados"
-        ayuda={[
-          'Los sectores que alimentan /mercados y cada página /mercados/…',
-          'El slug forma la URL: cambiarlo rompe los enlaces que ya circulan.',
-          'El orden de la lista es el que se ve en la portada y en el mega-menú.',
-          'Cada sector necesita su imagen: es el fondo de su tarjeta.',
-        ]}
         description="Alimentan /mercados y cada página /mercados/…. El slug forma la URL: cambiarlo rompe los enlaces que ya circulan."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
@@ -430,11 +424,6 @@ export function FeaturedProductsScreen() {
     <>
       <PageHead
         title="Productos destacados"
-        ayuda={[
-          'Los productos que abren la portada, en el bloque «Lo que suministramos».',
-          'El orden de la lista es el orden en que se muestran.',
-          'Menos texto funciona mejor: la tarjeta enseña foto, nombre y una línea. Lo largo se lee en la página de producto.',
-        ]}
         description="Lo que muestra el bloque «Productos» de la portada. Se ven todos los de la lista, así que tres o cuatro es lo que cuadra en la composición."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
@@ -631,13 +620,6 @@ export function ColorsScreen() {
     <>
       <PageHead
         title="Carta de color"
-        ayuda={[
-          'La tabla es el catálogo completo. Se edita celda a celda y el buscador de arriba lleva a una referencia concreta.',
-          'Para cambios masivos usa la hoja de cálculo: descarga, edita en Excel, guarda como «CSV UTF-8» y vuelve a subirla.',
-          'Al subir no se aplica nada de inmediato: primero verás qué cambiaría, campo por campo, y decides.',
-          'La casilla «Existencia» es la que alimenta la pestaña «En stock (MTS)» de la carta pública y el carrusel de la portada.',
-          'Cambiar el identificador de una familia sin reasignar sus referencias deja colores huérfanos, y el guardado se rechaza.',
-        ]}
         description={`${catalogo.colors.length} referencias · ${enExistencia} marcadas con existencia. Alimentan la página /colores y el carrusel de la portada.`}
         actions={
           <button type="button" className="adm-btn adm-btn--primary" onClick={anadir}>

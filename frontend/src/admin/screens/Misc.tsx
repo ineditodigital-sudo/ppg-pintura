@@ -34,11 +34,6 @@ export function MessagesScreen() {
     <>
       <PageHead
         title="Mensajes"
-        ayuda={[
-          'Bandeja de lo que llega por el formulario de contacto.',
-          'Eliminar un mensaje es definitivo: no hay papelera.',
-          'Si esperas mensajes y no llega ninguno, revisa la pantalla de Correo: puede que el aviso no esté configurado.',
-        ]}
         description="Lo que llega desde el formulario de la página de contacto."
         actions={
           <button type="button" className="adm-btn adm-btn--ghost" onClick={load}>
@@ -140,11 +135,6 @@ export function MediaScreen() {
     <>
       <PageHead
         title="Medios"
-        ayuda={[
-          'Biblioteca de imágenes del sitio. Lo que subas aquí queda disponible en cualquier campo de imagen.',
-          'Se validan por contenido real, no por extensión: un archivo renombrado se rechaza. No se admiten SVG.',
-          'Copia la ruta con el botón de copiar y pégala en el campo de imagen que necesites.',
-        ]}
         description="JPG, PNG, WEBP y GIF hasta 5 MB. Sólo se pueden eliminar las imágenes subidas desde aquí."
         actions={
           <label className="adm-btn adm-btn--primary" style={{ cursor: 'pointer' }}>
@@ -238,11 +228,6 @@ export function PasswordScreen() {
     <>
       <PageHead
         title="Contraseña"
-        ayuda={[
-          'Cambia la contraseña de acceso al panel.',
-          'Mínimo diez caracteres. Al cambiarla tu sesión sigue abierta.',
-          'No se guarda en ningún sitio en claro: sólo su huella cifrada, que no se puede revertir. Si la pierdes, hay que restablecerla desde el servidor.',
-        ]}
         description="Mínimo 10 caracteres. Al cambiarla, tu sesión actual sigue activa."
       />
       <Alert kind="error" message={error} />

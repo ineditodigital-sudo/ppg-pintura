@@ -118,12 +118,6 @@ export function PlantillasScreen() {
     <>
       <PageHead
         title="Textos de las páginas de producto y sector"
-        ayuda={[
-          'Estas nueve páginas —tres de producto y seis de sector— se arman solas con los datos de Líneas y de Mercados. Aquí se edita todo lo demás: antetítulos, títulos de sección, botones y el cierre.',
-          'Lo que cambies aquí se aplica de golpe a todas las páginas de ese grupo, porque es la misma plantilla repetida.',
-          'En «Qué exige este sector» hay dos marcadores: {sector} escribe el nombre del sector y {exigencias} enumera las suyas. Consérvalos o la frase quedará coja en las seis páginas.',
-          'Un campo vacío no deja un hueco: la página vuelve al texto de fábrica.',
-        ]}
         description="Nueve páginas del sitio se arman con una plantilla. Este es su texto, y el cambio se aplica a todas a la vez."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />

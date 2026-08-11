@@ -1,22 +1,25 @@
 import { useId, useState, type ReactNode } from 'react'
+import { useLocation } from 'react-router-dom'
+import { guiaDeLaRuta } from '../guia'
+import { abrirGuia } from './Guia'
 
 export function PageHead({
   title,
   description,
   actions,
-  ayuda,
 }: {
   title: string
   description?: string
   actions?: ReactNode
-  /**
-   * Cómo se usa esta pantalla, paso a paso. Va plegado: quien ya lo sabe no
-   * lo ve, y quien entra por primera vez lo tiene sin salir a buscar manual.
-   */
-  ayuda?: string[]
 }) {
   const [abierta, setAbierta] = useState(false)
   const id = useId()
+  const { pathname } = useLocation()
+
+  // Los pasos salen de la misma guía que se abre sola la primera vez. Tener
+  // dos textos para lo mismo acabaría con uno de los dos desactualizado.
+  const encontrada = guiaDeLaRuta(pathname)
+  const ayuda = encontrada?.guia.pasos
 
   return (
     <header className="admin-head">
@@ -41,9 +44,18 @@ export function PageHead({
               <div className="admin-head__ayuda" id={id}>
                 <ol>
                   {ayuda.map((paso, i) => (
-                    <li key={i}>{paso}</li>
+                    <li key={i}>
+                      <strong>{paso.titulo}.</strong> {paso.texto}
+                    </li>
                   ))}
                 </ol>
+                <button
+                  type="button"
+                  className="adm-btn adm-btn--primary adm-btn--sm"
+                  onClick={abrirGuia}
+                >
+                  Verlo sobre la pantalla
+                </button>
               </div>
             )}
           </>

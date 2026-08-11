@@ -65,12 +65,6 @@ export function PagesScreen() {
     <>
       <PageHead
         title="Páginas"
-        ayuda={[
-          'Cada página del sitio es una lista de bloques ordenados: un hero, una rejilla de tarjetas, un banner…',
-          'Pulsa una página para abrir su editor. Dentro puedes añadir bloques, moverlos con el asa de arrastre, duplicarlos o eliminarlos.',
-          'El slug forma la URL. Cambiarlo rompe los enlaces que ya circulan y el posicionamiento de esa página.',
-          'Nada se publica hasta que pulsas Guardar. Si un campo obligatorio falta, el guardado se rechaza y te dice cuál.',
-        ]}
         description="Cada página es una lista de bloques. Ábrela para editar, reordenar o añadir contenido."
       />
       <Alert kind="error" message={error} />

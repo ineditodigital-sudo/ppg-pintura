@@ -5,6 +5,7 @@ import { Alert, Loading } from './components/Common'
 import { Field, PasswordInput } from './components/Fields'
 import { PageEditorScreen, PagesScreen } from './screens/Pages'
 import { PlantillasScreen } from './screens/Plantillas'
+import { Guia } from './components/Guia'
 import { BusinessLinesScreen, NavigationScreen, SiteScreen } from './screens/Settings'
 import { MediaScreen, MessagesScreen, PasswordScreen } from './screens/Misc'
 import { ColorsScreen, FeaturedProductsScreen, MarketsScreen } from './screens/Catalogo'
@@ -194,7 +195,12 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
         </nav>
 
         <div className="admin-side__foot">
-          <a className="admin-side__link" href="/" target="_blank" rel="noreferrer">
+          <a
+            className="admin-side__link admin-side__ver"
+            href="/"
+            target="_blank"
+            rel="noreferrer"
+          >
             <IconExternal size={18} />
             Ver el sitio
           </a>
@@ -234,6 +240,10 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
           <Route path="*" element={<Navigate to="/admin/inicio" replace />} />
         </Routes>
       </main>
+
+      {/* Fuera del `main` para que el foco pueda iluminar también el menú
+          lateral. Se coloca por coordenadas, así que da igual dónde viva. */}
+      <Guia />
     </div>
   )
 }
