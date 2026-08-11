@@ -4,7 +4,7 @@ import type { Block, Market, Templates } from '@/types/content'
 import { getMarkets, getTemplates } from '@/lib/api'
 import { enlaceWhatsApp } from '@/lib/social'
 import { useSitio } from '@/lib/useSitio'
-import { fichaSustrato } from '@/lib/sustratos'
+import { fichaDeSustrato } from '@/lib/sustratos'
 import { resumirSeo } from '@/lib/resumirSeo'
 import { useSeo } from '@/lib/useSeo'
 import { BlockRenderer } from '@/components/blocks/BlockRenderer'
@@ -132,7 +132,7 @@ function buildBlocks(
       theme: 'light',
       columns: 2,
       items: market.sustratos.map((s) => {
-        const ficha = fichaSustrato(s)
+        const ficha = fichaDeSustrato(s, sustratos.fichas)
         return { term: s, note: ficha.note, icon: ficha.icon }
       }),
     },

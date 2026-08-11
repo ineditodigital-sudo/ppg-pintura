@@ -2,7 +2,9 @@ import type { FieldDef } from '../schema'
 import type { Templates } from '@/types/content'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
-import { FieldRenderer } from '../components/Fields'
+import { ICON_NAMES } from '@/lib/icons'
+import { FICHAS_POR_DEFECTO } from '@/lib/sustratos'
+import { FieldRenderer, ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
 
 /**
@@ -60,6 +62,8 @@ function accesor<T extends Record<string, unknown>>(
     }
   }
 }
+
+const ICONOS = ICON_NAMES.map((name) => ({ value: name, label: name }))
 
 type ServicioDeLinea = { title: string; description: string; href?: string }
 
@@ -226,6 +230,46 @@ export function PlantillasScreen() {
         {campo(ramaM('sustratos'), antetitulo('Sustratos'))}
         {campo(ramaM('sustratos'), { key: 'title', label: 'Título de «Sustratos»', type: 'text' })}
         {campo(ramaM('sustratos'), { key: 'description', label: 'Texto de «Sustratos»', type: 'textarea' })}
+
+        {/* La nota que acompaña a cada material. El sector elige qué
+            materiales lista; esto dice qué implica recubrir cada uno, y se
+            reutiliza en todos los sectores que lo mencionen. */}
+        <ListField
+          label="Qué implica recubrir cada material"
+          help="Se empareja por el nombre del material, sin distinguir mayúsculas. Un material sin ficha aquí usa una nota genérica."
+          itemLabelKey="material"
+          itemSubtitleKey="note"
+          itemIconKey="icon"
+          variante="tarjetas"
+          itemFields={[
+            {
+              key: 'material',
+              label: 'Material',
+              type: 'text',
+              required: true,
+              help: 'Tal como lo escribes en la lista de sustratos del sector. Por ejemplo: aluminio extruido.',
+            },
+            { key: 'note', label: 'Qué implica', type: 'textarea', required: true },
+            { key: 'icon', label: 'Icono', type: 'select', options: ICONOS },
+          ]}
+          value={
+            (mercados.sustratos?.fichas ?? FICHAS_POR_DEFECTO) as unknown as Record<
+              string,
+              unknown
+            >[]
+          }
+          onChange={(v) =>
+            setMercados({
+              ...mercados,
+              sustratos: {
+                ...mercados.sustratos,
+                fichas: v as unknown as NonNullable<
+                  NonNullable<Templates['mercados']>['sustratos']
+                >['fichas'],
+              },
+            })
+          }
+        />
 
         {campo(ramaM('suministro'), antetitulo('Suministro'))}
         {campo(ramaM('suministro'), { key: 'title', label: 'Título de la banda de suministro', type: 'text' })}

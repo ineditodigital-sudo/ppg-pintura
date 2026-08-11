@@ -80,3 +80,39 @@ export function fichaSustrato(nombre: string): Sustrato {
     }
   )
 }
+
+/**
+ * La ficha, dando prioridad a lo configurado en el panel.
+ *
+ * Las catorce notas de este archivo pasan a ser el valor de fábrica: la tabla
+ * editable vive en «Textos de producto y sector». Se busca sin distinguir
+ * mayúsculas ni espacios sobrantes porque el nombre del material lo escribe
+ * quien edita el sector, y «Acero Galvanizado» tiene que encontrar su ficha
+ * igual que «acero galvanizado».
+ */
+export function fichaDeSustrato(
+  nombre: string,
+  configuradas: { material?: string; icon?: string; note?: string }[] | undefined,
+): Sustrato {
+  const clave = nombre.trim().toLowerCase()
+  const propia = configuradas?.find((f) => (f.material ?? '').trim().toLowerCase() === clave)
+
+  if (propia?.note) {
+    return { icon: propia.icon || 'capas', note: propia.note }
+  }
+
+  return fichaSustrato(nombre)
+}
+
+/**
+ * La tabla de arriba como lista, para el panel.
+ *
+ * El editor la usa como punto de partida cuando el documento aún no trae
+ * fichas: si mostrara una lista vacía, quien la abre creería que no hay nada
+ * configurado mientras las notas siguen saliendo publicadas.
+ */
+export const FICHAS_POR_DEFECTO = Object.entries(FICHAS).map(([material, f]) => ({
+  material,
+  icon: f.icon,
+  note: f.note,
+}))

@@ -586,7 +586,16 @@ export interface PlantillaMercados {
     body?: string
     image?: Media
   }
-  sustratos?: { eyebrow?: string; title?: string; description?: string }
+  sustratos?: {
+    eyebrow?: string
+    title?: string
+    description?: string
+    /**
+     * Qué implica recubrir cada material. Se busca por `material` sin
+     * distinguir mayúsculas: el nombre lo escribe quien edita el sector.
+     */
+    fichas?: { material: string; icon?: string; note: string }[]
+  }
   suministro?: {
     eyebrow?: string
     title?: string
