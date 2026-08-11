@@ -1,22 +1,26 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import type { Page } from '@/types/content'
+import type { BusinessLine, Market, Page } from '@/types/content'
 import * as api from '../api'
+import { construirMapa, ETIQUETA_ORIGEN, type PaginaDelSitio } from '../mapaDelSitio'
 import { BlockEditor } from '../components/BlockEditor'
-import { Alert, Empty, Loading, PageHead, SaveBar } from '../components/Common'
+import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { FieldRenderer } from '../components/Fields'
 
 /* --- Listado ---------------------------------------------------------------- */
 
 export function PagesScreen() {
-  const [pages, setPages] = useState<api.PageSummary[] | null>(null)
+  const [mapa, setMapa] = useState<PaginaDelSitio[] | null>(null)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
 
+  // Las tres fuentes en paralelo: las páginas propias y los dos catálogos que
+  // alimentan las páginas de plantilla. En serie serían tres esperas.
   const load = useCallback(() => {
-    api
-      .listPages()
-      .then(setPages)
+    Promise.all([api.listPages(), api.getBusinessLines(), api.getMarkets()])
+      .then(([paginas, lineas, mercados]) =>
+        setMapa(construirMapa(paginas, lineas as BusinessLine[], mercados as Market[])),
+      )
       .catch((e) => setError(e.message))
   }, [])
 
@@ -49,47 +53,77 @@ export function PagesScreen() {
       <Alert kind="error" message={error} />
       <Alert kind="ok" message={notice} />
 
-      {pages === null ? (
+      {mapa === null ? (
         <Loading />
-      ) : pages.length === 0 ? (
-        <Empty>No hay páginas.</Empty>
       ) : (
-        <div className="admin-list">
-          {pages.map((page) => (
-            <div className="admin-row" key={page.slug}>
-              <div className="admin-row__main">
-                <div className="admin-row__title">{page.title}</div>
-                <div className="admin-row__meta">
-                  /{page.slug === 'home' ? '' : page.slug} · {page.blockCount} bloque
-                  {page.blockCount === 1 ? '' : 's'}
-                </div>
-              </div>
-              <div className="admin-row__actions">
-                <a
-                  className="adm-btn adm-btn--ghost adm-btn--sm"
-                  href={page.slug === 'home' ? '/' : `/${page.slug}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Ver
-                </a>
-                <Link className="adm-btn adm-btn--primary adm-btn--sm" to={`/admin/paginas/${page.slug}`}>
-                  Editar
-                </Link>
-                {page.slug !== 'home' && (
-                  <button
-                    type="button"
-                    className="adm-btn adm-btn--danger adm-btn--sm"
-                    onClick={() => void remove(page.slug)}
-                  >
-                    Eliminar
-                  </button>
+        <>
+          {(['documento', 'plantilla', 'catalogo'] as const).map((origen) => {
+            const grupo = mapa.filter((p) => p.origen === origen)
+            if (grupo.length === 0) return null
+
+            return (
+              <section className="adm-grupo" key={origen}>
+                <h2 className="adm-grupo__titulo">
+                  {ETIQUETA_ORIGEN[origen]}
+                  <span>{grupo.length}</span>
+                </h2>
+                {origen === 'plantilla' && (
+                  <p className="adm-grupo__nota">
+                    Estas páginas existen en el sitio pero no son documentos
+                    sueltos: una plantilla las construye con los datos de otra
+                    pantalla. Se editan ahí, y el cambio se aplica a todas a la
+                    vez.
+                  </p>
                 )}
-              </div>
-            </div>
-          ))}
-        </div>
+                {origen === 'catalogo' && (
+                  <p className="adm-grupo__nota">
+                    Se dibuja sola con las referencias del catálogo.
+                  </p>
+                )}
+
+                <div className="admin-list">
+                  {grupo.map((page) => (
+                    <div className="admin-row" key={page.ruta}>
+                      <div className="admin-row__main">
+                        <div className="admin-row__title">{page.titulo}</div>
+                        <div className="admin-row__meta">
+                          {page.ruta} · {page.nota}
+                        </div>
+                      </div>
+                      <div className="admin-row__actions">
+                        <a
+                          className="adm-btn adm-btn--ghost adm-btn--sm"
+                          href={page.ruta}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Ver
+                        </a>
+                        <Link
+                          className="adm-btn adm-btn--primary adm-btn--sm"
+                          to={page.destino}
+                        >
+                          Editar
+                        </Link>
+                        {page.origen === 'documento' && page.slug !== 'home' && (
+                          <button
+                            type="button"
+                            className="adm-btn adm-btn--danger adm-btn--sm"
+                            onClick={() => void remove(page.slug as string)}
+                          >
+                            Eliminar
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )
+          })}
+        </>
       )}
+
     </>
   )
 }

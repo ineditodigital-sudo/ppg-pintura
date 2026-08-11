@@ -1344,3 +1344,140 @@
   line-height: 1.55;
   color: var(--fg-secondary);
 }
+
+/* ============================================================================
+   Tono del panel
+   ----------------------------------------------------------------------------
+   El sitio público es de esquinas casi rectas porque así es el sistema de PPG.
+   El panel NO es el sitio: es una herramienta que usa a diario alguien que no
+   administra webs, y ahí ese filo se lee como severidad. Se ablanda sólo aquí
+   —radios mayores, sombras suaves, transiciones cortas— sin tocar la paleta ni
+   la tipografía, que siguen siendo las de la marca. Amable, no infantil.
+   ========================================================================== */
+
+.admin,
+.admin-login {
+  --adm-radio: 12px;
+  --adm-radio-s: 9px;
+  --adm-sombra: 0 1px 2px rgba(16, 34, 46, 0.05), 0 4px 14px rgba(16, 34, 46, 0.05);
+  --adm-sombra-alta: 0 2px 6px rgba(16, 34, 46, 0.07), 0 12px 30px rgba(16, 34, 46, 0.09);
+}
+
+.admin-card,
+.adm-tile,
+.adm-hoja,
+.admin-head__ayuda,
+.admin-login__card {
+  border-radius: var(--adm-radio);
+  box-shadow: var(--adm-sombra);
+}
+
+.admin-login__card {
+  box-shadow: var(--adm-sombra-alta);
+}
+
+/* Los campos también: un input de 2px de radio junto a una tarjeta de 12
+   delata que se ablandó por encima y no de raíz. */
+.adm-field input[type='text'],
+.adm-field input[type='password'],
+.adm-field input[type='number'],
+.adm-field input[type='email'],
+.adm-field input[type='search'],
+.adm-field select,
+.adm-field textarea,
+.adm-input,
+.adm-carta__filtros input[type='search'],
+.adm-carta__filtros select {
+  border-radius: var(--adm-radio-s);
+}
+
+.adm-btn {
+  border-radius: var(--adm-radio-s);
+  transition:
+    background-color 160ms var(--ease-out),
+    border-color 160ms var(--ease-out),
+    transform 160ms var(--ease-out),
+    box-shadow 160ms var(--ease-out);
+}
+
+/* Un empujón de 1px al pulsar: confirma que el clic entró sin animar nada
+   llamativo. Es la diferencia entre «responde» y «rebota». */
+.adm-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.adm-btn--primary:hover:not(:disabled) {
+  box-shadow: 0 4px 12px rgba(0, 120, 169, 0.28);
+}
+
+/* Las filas de listado dejan de ser cajas apiladas: se levantan al apuntarlas
+   para que se vea cuál se va a abrir. */
+.admin-row {
+  border-radius: var(--adm-radio-s);
+  transition:
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.admin-row:hover {
+  border-color: var(--border-brand-secondary);
+  box-shadow: var(--adm-sombra);
+  transform: translateY(-1px);
+}
+
+.admin-side__link {
+  border-radius: var(--adm-radio-s);
+}
+
+/* --- Agrupación de páginas por origen ---------------------------------------- */
+
+.adm-grupo {
+  margin-bottom: var(--space-2xl);
+}
+
+.adm-grupo__titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-2xs);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-quaternary);
+}
+
+.adm-grupo__titulo span {
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0;
+  color: var(--fg-brand-secondary);
+  background: var(--tint-brand);
+  border-radius: var(--radius-full);
+}
+
+.adm-grupo__nota {
+  max-width: 74ch;
+  margin-bottom: var(--space-s);
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--fg-tertiary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-btn,
+  .admin-row {
+    transition: none;
+  }
+
+  .adm-btn:active:not(:disabled),
+  .admin-row:hover {
+    transform: none;
+  }
+}
