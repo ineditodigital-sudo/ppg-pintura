@@ -137,7 +137,11 @@ export function BusinessLinePage() {
   useSeo(
     line
       ? {
-          title: `${line.name} | PPG`,
+          // El patrón se edita en Textos de producto y sector; «{nombre}»
+          // es donde entra el de esta página.
+          title: (plantillas.lineas?.seoTitle ?? '{nombre} | PPG')
+            .split('{nombre}')
+            .join(line.name),
           description: resumirSeo(line.description),
         }
       : undefined,

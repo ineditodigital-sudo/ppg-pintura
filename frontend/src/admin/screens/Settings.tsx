@@ -1,5 +1,6 @@
 import type { BusinessLine, Navigation, Site } from '@/types/content'
 import { DEFAULT_VIEWBOX, SOCIAL_OPTIONS, socialNetwork } from '@/lib/social'
+import { NOT_FOUND_POR_DEFECTO } from '@/lib/textos'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { FieldRenderer, ListField } from '../components/Fields'
@@ -190,6 +191,44 @@ export function SiteScreen() {
             })
           }
         />
+      </div>
+
+      {/* La página que ve quien llega a una dirección que ya no existe. Era el
+          último texto del sitio escrito dentro del código. */}
+      <div className="admin-card">
+        <h2 className="adm-grupo__titulo">Página de error (404)</h2>
+        <p className="adm-grupo__nota">
+          Lo que ve quien llega a una dirección que ya no existe, normalmente
+          desde un enlace antiguo.
+        </p>
+        {(
+          [
+            { key: 'eyebrow', label: 'Antetítulo', type: 'text' },
+            { key: 'title', label: 'Título', type: 'text' },
+            { key: 'body', label: 'Texto', type: 'textarea' },
+            { key: 'cta', label: 'Botón principal', type: 'link' },
+            { key: 'ctaSecundario', label: 'Botón secundario', type: 'link' },
+            {
+              key: 'seoTitle',
+              label: 'Título en Google',
+              type: 'text',
+              help: 'Esta página se marca como no indexable, pero el título sale en la pestaña del navegador.',
+            },
+            { key: 'seoDescription', label: 'Descripción en Google', type: 'textarea' },
+          ] as const
+        ).map((field) => (
+          <FieldRenderer
+            key={field.key}
+            field={field}
+            value={site.notFound?.[field.key] ?? NOT_FOUND_POR_DEFECTO[field.key]}
+            onChange={(v) =>
+              s.setValue({
+                ...site,
+                notFound: { ...site.notFound, [field.key]: v },
+              })
+            }
+          />
+        ))}
         <FieldRenderer
           field={{ key: 'copyright', label: 'Aviso de copyright', type: 'text', required: true }}
           value={site.copyright}

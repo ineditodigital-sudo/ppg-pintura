@@ -205,7 +205,11 @@ export function MarketPage() {
   useSeo(
     market
       ? {
-          title: `${market.name} | Recubrimientos PPG`,
+          // El patrón se edita en Textos de producto y sector; «{nombre}»
+          // es donde entra el de esta página.
+          title: (plantillas.mercados?.seoTitle ?? '{nombre} | Recubrimientos PPG')
+            .split('{nombre}')
+            .join(market.name),
           description: resumirSeo(market.description),
         }
       : undefined,

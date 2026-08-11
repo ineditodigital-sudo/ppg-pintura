@@ -129,6 +129,16 @@ export function PlantillasScreen() {
         titulo="Páginas de producto"
         nota="Afecta a /productos/pintura-en-polvo, /productos/pintura-liquida y /productos/pretratamientos-metalicos."
       >
+        <FieldRenderer
+          field={{
+            key: 'seoTitle',
+            label: 'Título en Google',
+            type: 'text',
+            help: 'Escribe {nombre} donde vaya el nombre de la línea. Por ejemplo: {nombre} | PPG.',
+          }}
+          value={lineas.seoTitle ?? '{nombre} | PPG'}
+          onChange={(v) => setLineas({ ...lineas, seoTitle: String(v ?? '') })}
+        />
         {campo(ramaL('heroCta'), {
           key: 'heroCta',
           label: 'Botón de la portada',
@@ -180,6 +190,16 @@ export function PlantillasScreen() {
         titulo="Páginas de sector"
         nota="Afecta a las seis páginas de /mercados/…: arquitectura, automotriz, industria general, ACE, mueblero y metalmecánica."
       >
+        <FieldRenderer
+          field={{
+            key: 'seoTitle',
+            label: 'Título en Google',
+            type: 'text',
+            help: 'Escribe {nombre} donde vaya el nombre del sector.',
+          }}
+          value={mercados.seoTitle ?? '{nombre} | Recubrimientos PPG'}
+          onChange={(v) => setMercados({ ...mercados, seoTitle: String(v ?? '') })}
+        />
         {campo(ramaM('heroCta'), {
           key: 'heroCta',
           label: 'Botón de la portada',

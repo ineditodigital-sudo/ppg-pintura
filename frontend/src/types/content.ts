@@ -476,6 +476,16 @@ export interface Site {
     /** Fondo de las bandas oscuras. */
     dark?: string
   }
+  /** Texto de la página de error. */
+  notFound?: {
+    eyebrow?: string
+    title?: string
+    body?: string
+    seoTitle?: string
+    seoDescription?: string
+    cta?: Link
+    ctaSecundario?: Link
+  }
   logo: Media
   /** Versión calada en blanco, para cabecera y bloques oscuros. */
   logoLight?: Media
@@ -552,6 +562,8 @@ export interface BusinessLine {
  * documento a medio llenar no deja nueve páginas rotas.
  */
 export interface PlantillaLineas {
+  /** Título en Google. Lleva `{nombre}`, el de la línea. */
+  seoTitle?: string
   heroCta?: Link
   comoTrabajamos?: {
     eyebrow?: string
@@ -563,6 +575,8 @@ export interface PlantillaLineas {
 }
 
 export interface PlantillaMercados {
+  /** Título en Google. Lleva `{nombre}`, el del sector. */
+  seoTitle?: string
   heroCta?: Link
   exige?: {
     eyebrow?: string

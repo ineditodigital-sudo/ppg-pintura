@@ -34,7 +34,8 @@
                 "label": "Solicitar cotización",
                 "href": "/contacto"
             }
-        }
+        },
+        "seoTitle": "{nombre} | PPG"
     },
     "mercados": {
         "heroCta": {
@@ -87,6 +88,7 @@
                 "label": "Solicitar cotización",
                 "href": "/contacto"
             }
-        }
+        },
+        "seoTitle": "{nombre} | Recubrimientos PPG"
     }
 }
