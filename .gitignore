@@ -17,6 +17,9 @@ backend/storage/
 # Credenciales del panel (se siembran con deploy.ps1 -SeedAuth)
 backend/config/users.json
 
+# Credenciales de MySQL. La plantilla (database.example.json) sí se versiona.
+backend/config/database.json
+
 # Credenciales del FTP en claro: nunca deben viajar en un commit
 ftp.txt
 NUEVAS CREDENCIALES FTP NUEVO DOMINIO.txt

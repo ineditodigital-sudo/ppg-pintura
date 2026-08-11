@@ -291,6 +291,20 @@ if ($SeedAuth) {
   $seedFiles += Get-Item (Join-Path $api 'config\users.json')
 }
 
+# Credenciales de MySQL. Van con -SeedAuth porque son del mismo tipo: secretos
+# que no viajan en el repositorio y que sólo se suben si existen en local. Sin
+# este archivo el servidor cae a los JSON, así que su ausencia no rompe nada.
+if ($SeedAuth) {
+  $dbFile = Join-Path $repo 'backend\config\database.json'
+  if (Test-Path $dbFile) {
+    Copy-Item $dbFile (Join-Path $api 'config') -Force
+    $seedFiles += Get-Item (Join-Path $api 'config\database.json')
+    Write-Host "    config/database.json incluido: el sitio usará MySQL." -ForegroundColor DarkGray
+  } else {
+    Write-Host "    Sin config/database.json: el sitio seguirá con los archivos JSON." -ForegroundColor DarkGray
+  }
+}
+
 $seedPaths = @($seedFiles | ForEach-Object { $_.FullName })
 $all = Get-ChildItem $stage -Recurse -File
 $code = $all | Where-Object { $seedPaths -notcontains $_.FullName }

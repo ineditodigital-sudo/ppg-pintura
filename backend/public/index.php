@@ -33,6 +33,8 @@ use App\Controller\ContentController;
 use App\Controller\MediaController;
 use App\Controller\NotificationController;
 use App\Repository\ContentRepository;
+use App\Repository\Database;
+use App\Repository\MySqlContentRepository;
 use App\Response;
 use App\Router;
 use App\Validator\ContentValidator;
@@ -98,7 +100,26 @@ $esHttps = ($_SERVER['HTTPS'] ?? '') === 'on'
 $siteUrl = ($esHttps ? 'https://' : 'http://')
     . ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
-$repository = new ContentRepository($baseDir . '/data');
+/**
+ * Almacenamiento: MySQL si está configurado, archivos si no.
+ *
+ * `MySqlContentRepository` tiene la misma firma pública que
+ * `ContentRepository`, así que a partir de aquí nada más en la aplicación
+ * distingue cuál está en uso.
+ *
+ * La caída a archivos es deliberada y no un descuido: si la base de datos no
+ * responde, el sitio sigue sirviendo contenido en vez de devolver un error.
+ * Para saber cuál está activo, `/api/health` lo dice.
+ */
+$db = Database::conectar($baseDir . '/config/database.json');
+
+if ($db !== null) {
+    $repository = new MySqlContentRepository($db);
+    $almacen = 'mysql';
+} else {
+    $repository = new ContentRepository($baseDir . '/data');
+    $almacen = 'archivos';
+}
 $auth = new Auth($baseDir . '/config', $baseDir . '/storage');
 $validator = new ContentValidator();
 $notificationSettings = new NotificationSettings($baseDir . '/config');
@@ -134,6 +155,9 @@ $router->get('/api/health', static fn () => Response::json([
     'ok' => true,
     'service' => 'ppg-content-api',
     'php' => PHP_VERSION,
+    // Qué almacenamiento está sirviendo. Sin detalle del porqué: el motivo
+    // puede nombrar host o base de datos y esta ruta es pública.
+    'almacen' => $almacen,
 ]));
 
 $router->get('/api/site', static fn () => $content->site());

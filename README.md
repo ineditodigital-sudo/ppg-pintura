@@ -456,6 +456,67 @@ lo rechaza con un 422.
 
 ---
 
+## Almacenamiento: MySQL o archivos
+
+El front controller elige solo. Si existe `backend/config/database.json` y la
+conexión responde, usa **MySQL**; si no, cae a los JSON de `backend/data`. Esa
+caída es deliberada: un fallo de base de datos deja el sitio sirviendo
+contenido en vez de una página de error. `/api/health` dice cuál está activo:
+
+```bash
+curl -s https://ppg.pinturaenpolvo-mx.com/api/health
+```
+
+`MySqlContentRepository` tiene la **misma firma pública** que
+`ContentRepository`, así que controladores, router y frontend no distinguen
+cuál corre. Era el motivo de que `ContentRepository` fuera la única clase que
+tocaba el almacenamiento.
+
+### Puesta en marcha
+
+1. En **cPanel → Bases de datos MySQL**: crea la base, crea un usuario y
+   asígnalo con todos los privilegios.
+2. Copia la plantilla y rellena esas credenciales:
+   ```bash
+   cp backend/config/database.example.json backend/config/database.json
+   ```
+3. Crea las tablas y carga el contenido actual:
+   ```bash
+   php backend/instalar-bd.php
+   ```
+4. Despliega con `-SeedAuth`, que es lo que sube `config/database.json`.
+
+El instalador es idempotente: las tablas van con `IF NOT EXISTS` y el contenido
+sólo se inserta donde no había nada, así que relanzarlo no puede pisar
+ediciones hechas desde el panel.
+
+### El modelo es documental
+
+`contenido` guarda cada documento entero como JSON bajo una clave —`site`,
+`pages/home`—, no repartido en columnas tipadas. Cada página es una lista de
+bloques de forma distinta —un hero no tiene los campos de una cronología—, y
+normalizar eso serían veinte tablas que migrar cada vez que se añade un tipo de
+bloque. Es el modelo que usan los CMS de bloques, y la validación fuerte ya la
+hace `ContentValidator` antes de escribir.
+
+`contenido_historial` es el equivalente a `data/.backups`: diez versiones por
+documento, podadas en cada guardado, y una copia antes de cada borrado. La
+escritura y su historial van en la misma transacción.
+
+### Pruebas
+
+```bash
+php backend/tests/repositorio-mysql.php
+```
+
+Quince casos contra SQLite en memoria: ida y vuelta del catálogo real, UTF-8,
+slugs con `../` rechazados, podado del historial a diez, borrado reversible y
+la bandeja de mensajes. Por eso el `UPSERT` es un `UPDATE` seguido de `INSERT`
+y no `ON DUPLICATE KEY UPDATE`: la sintaxis exclusiva de MySQL no se podría
+ejercitar aquí.
+
+---
+
 ## Camino al CMS
 
 `ContentRepository` es la única clase que toca el almacenamiento. Para pasar a
