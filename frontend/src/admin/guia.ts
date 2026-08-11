@@ -243,6 +243,18 @@ export const GUIAS: Record<string, Guia> = {
           'Al subir el archivo no se guarda nada: primero verás una tabla con cada valor antes y después. Tú confirmas.',
       },
       {
+        objetivo: '.adm-indice',
+        titulo: 'Esta pantalla es larga: aquí está el índice',
+        texto:
+          'Seis secciones. Pulsa una para saltar directamente, sin bajar buscando.',
+      },
+      {
+        objetivo: '#carta-ficha',
+        titulo: 'La ficha técnica que ve el visitante',
+        texto:
+          'El recuadro que se abre al pulsar un color. Aquí se editan los textos comunes a las 83 referencias; los datos de cada una —RAL, acabado, brillo— salen de la tabla de más abajo.',
+      },
+      {
         objetivo: '.adm-carta__filtros',
         titulo: 'Buscar una referencia concreta',
         texto:

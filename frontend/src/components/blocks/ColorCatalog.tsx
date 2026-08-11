@@ -113,14 +113,15 @@ function FichaColor({
 
   return (
     <dialog className="ficha" ref={ref} onClose={onCerrar} aria-labelledby="ficha-titulo">
+      {/* Dos columnas en escritorio: la muestra a un lado, ocupando todo el
+          alto, y los datos al otro. Antes era una banda de 16/7 encima del
+          texto —un color que se vende no se enseña en una tira— y sin límite
+          de alto, así que en una pantalla corta la ficha se cortaba por abajo
+          sin manera de bajar. En móvil se apila y sube como hoja inferior. */}
       <div
-        className="ficha__color placa"
+        className="ficha__muestra"
         style={{ '--muestra': color.hex } as CSSProperties}
       >
-        {color.stock && <span className="carta__sello">En existencia</span>}
-      </div>
-
-      <div className="ficha__cuerpo">
         <button
           type="button"
           className="ficha__cerrar"
@@ -130,6 +131,16 @@ function FichaColor({
           ✕
         </button>
 
+        {/* Las placas garantizan el contraste sobre cualquiera de los 83
+            colores; elegir tinta clara u oscura por luminancia se quedaba
+            corto en los tonos medios. */}
+        <span className="ficha__placa ficha__codigo">{color.code}</span>
+        {color.stock && <span className="ficha__placa ficha__sello">En existencia</span>}
+        <span className="ficha__placa ficha__hex-muestra">{color.hex.toUpperCase()}</span>
+      </div>
+
+      <div className="ficha__cuerpo">
+        <div className="ficha__scroll">
         <span className="eyebrow">Referencia {color.code}</span>
         <h2 id="ficha-titulo">
           {color.name}
@@ -172,10 +183,8 @@ function FichaColor({
             <dt>Disponibilidad</dt>
             <dd>{color.stock ? 'En existencia (MTS)' : 'Bajo pedido'}</dd>
           </div>
-          <div>
-            <dt>Color de referencia</dt>
-            <dd className="ficha__hex">{color.hex.toUpperCase()}</dd>
-          </div>
+          {/* El hexadecimal ya va sobre la muestra, que es donde significa
+              algo. Repetirlo aquí era una fila más que leer. */}
         </dl>
 
         {familia && <p className="ficha__nota">{familia.description}</p>}
@@ -183,7 +192,10 @@ function FichaColor({
         <p className="ficha__aviso">
           {textos?.aviso ?? FICHA_POR_DEFECTO.aviso}
         </p>
+        </div>
 
+        {/* Fuera del área que se desplaza: en una ficha larga, los botones
+            quedaban por debajo del corte y no se llegaba a ellos. */}
         <div className="ficha__acciones">
           <a
             className="btn btn--primary"

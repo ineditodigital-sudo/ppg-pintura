@@ -357,8 +357,21 @@
   opacity: 1;
 }
 
+/* --- Ficha técnica de una referencia -----------------------------------------
+   Dos columnas en escritorio: la muestra ocupando todo el alto a un lado y los
+   datos al otro. Antes el color iba en una banda de 16/7 encima del texto —un
+   color que se vende no se enseña en una tira— y el diálogo no tenía tope de
+   alto: en una pantalla corta la ficha se cortaba por abajo, sin manera de
+   bajar y con los botones fuera del alcance.
+   -------------------------------------------------------------------------- */
+
 .ficha {
-  width: min(560px, calc(100vw - 2rem));
+  display: grid;
+  grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+  width: min(760px, calc(100vw - 2rem));
+  /* `dvh` para que en móvil cuente la barra del navegador, que en `vh` no se
+     descuenta y deja los botones justo debajo del borde. */
+  max-height: min(88dvh, 720px);
   padding: 0;
   border: 0;
   border-radius: var(--radius-2xl);
@@ -366,51 +379,110 @@
   color: var(--fg-primary);
   box-shadow: var(--shadow-l);
   overflow: hidden;
+  animation: ficha-entra 200ms var(--ease-out) both;
+}
+
+@keyframes ficha-entra {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
 }
 
 .ficha::backdrop {
-  background: rgba(8, 21, 32, 0.62);
-  backdrop-filter: blur(2px);
+  background: rgba(8, 21, 32, 0.66);
+  backdrop-filter: blur(3px);
 }
 
-.ficha__color {
+/* --- La muestra ------------------------------------------------------------ */
+
+.ficha__muestra {
   position: relative;
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: flex-end;
-  aspect-ratio: 16 / 7;
-  padding: 12px;
+  gap: 6px;
+  padding: var(--space-m);
+  background: var(--muestra);
 }
 
-.ficha__cuerpo {
-  position: relative;
-  padding: var(--space-xl);
+/* Placas claras sobre el color, no tinta sobre el color: con 83 referencias
+   repartidas por todo el espectro, elegir blanco o negro por luminancia dejaba
+   varios tonos medios en 3,3:1. La placa lo garantiza en todos. */
+.ficha__placa {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  color: var(--fg-primary);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: var(--radius-full);
+  box-shadow: 0 1px 3px rgba(8, 21, 32, 0.14);
+}
+
+.ficha__codigo {
+  margin-top: auto;
+  font-size: var(--fs-sm);
+}
+
+.ficha__sello {
+  color: #0b5f2a;
+  background: rgba(220, 252, 231, 0.96);
+}
+
+.ficha__hex-muestra {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  letter-spacing: 0.02em;
 }
 
 .ficha__cerrar {
   position: absolute;
-  top: var(--space-m);
-  right: var(--space-m);
+  top: var(--space-s);
+  right: var(--space-s);
   display: grid;
   place-items: center;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   font-size: 15px;
-  color: var(--fg-secondary);
-  background: var(--bg-secondary);
+  color: var(--fg-primary);
+  background: rgba(255, 255, 255, 0.94);
   border: 0;
   border-radius: var(--radius-full);
+  box-shadow: 0 1px 4px rgba(8, 21, 32, 0.2);
   cursor: pointer;
+  transition: background 160ms var(--ease-out), transform 160ms var(--ease-out);
 }
 
 .ficha__cerrar:hover {
-  color: var(--fg-primary);
-  background: var(--bg-brand-secondary);
+  background: #fff;
+  transform: scale(1.06);
+}
+
+/* --- Los datos -------------------------------------------------------------- */
+
+.ficha__cuerpo {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Sólo esta parte se desplaza: las acciones se quedan abajo, siempre visibles. */
+.ficha__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-l) var(--space-l) var(--space-s);
+  overscroll-behavior: contain;
 }
 
 .ficha__cuerpo h2 {
   margin: 2px 0 var(--space-m);
   font-size: var(--fs-h4);
+  line-height: 1.25;
 }
 
 .ficha__datos {
@@ -456,7 +528,85 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xs);
-  margin-top: var(--space-m);
+  padding: var(--space-s) var(--space-l) var(--space-l);
+  border-top: 1px solid var(--border-tertiary);
+  background: var(--bg-primary);
+}
+
+.ficha__acciones .btn {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+/* --- Móvil: hoja que sube desde abajo -------------------------------------- */
+
+@media (max-width: 46rem) {
+  .ficha {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    max-height: 92dvh;
+    /* Anclada al borde inferior, no centrada con `margin: auto`: el margen
+       automático dejaba la hoja 28 px por debajo de la pantalla y los botones
+       quedaban cortados justo donde hay que pulsar. */
+    inset: auto 0 0 0;
+    margin: 0;
+    border-radius: var(--radius-2xl) var(--radius-2xl) 0 0;
+    animation-name: ficha-sube;
+  }
+
+  @keyframes ficha-sube {
+    from {
+      transform: translateY(28px);
+      opacity: 0;
+    }
+  }
+
+  /* La muestra deja de ser una columna y pasa a ser una banda, pero con alto
+     suficiente para que el color siga siendo lo primero que se ve. */
+  .ficha__muestra {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    min-height: 132px;
+  }
+
+  .ficha__codigo {
+    margin-top: 0;
+  }
+
+  .ficha__scroll {
+    padding: var(--space-m) var(--space-m) var(--space-xs);
+  }
+
+  .ficha__acciones {
+    padding: var(--space-s) var(--space-m) var(--space-m);
+  }
+
+  .ficha__acciones .btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 40rem) {
+  .ficha__datos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ficha {
+    animation: none;
+  }
+
+  .ficha__cerrar {
+    transition: none;
+  }
+
+  .ficha__cerrar:hover {
+    transform: none;
+  }
 }
 
 /* Entradilla del bloque cuando la carta va dentro de otra página. */

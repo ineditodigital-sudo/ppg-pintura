@@ -1905,3 +1905,55 @@
 .admin-head__ayuda .adm-btn {
   margin-top: 12px;
 }
+
+/* --- Índice de una pantalla larga ---------------------------------------------
+   La carta de color son seis secciones y 6.500 px de alto. La ficha técnica
+   quedaba en el píxel 1.463: estaba, pero no se encontraba.
+   -------------------------------------------------------------------------- */
+
+.adm-indice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: var(--space-m);
+  padding: 10px 12px;
+  background: var(--tint-brand);
+  border-radius: var(--adm-radio-s, 9px);
+}
+
+.adm-indice__titulo {
+  margin-right: 4px;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-brand-secondary);
+}
+
+.adm-indice__enlace {
+  padding: 5px 11px;
+  font-size: 12.5px;
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-primary);
+  background: var(--bg-primary);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 150ms var(--ease-out), color 150ms var(--ease-out);
+}
+
+.adm-indice__enlace:hover {
+  color: var(--fg-white);
+  background: var(--bg-brand-solid);
+}
+
+/* Que el salto no deje el título pegado al borde de arriba. */
+.admin-main [id^='carta-'] {
+  scroll-margin-top: var(--space-l);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-indice__enlace {
+    transition: none;
+  }
+}

@@ -52,7 +52,7 @@ function HojaDeCalculo({
   const refs = useMemo(() => new Set(analisis?.cambios.map((c) => c.code)), [analisis])
 
   return (
-    <section className="adm-hoja">
+    <section className="adm-hoja" id="carta-masiva">
       <div className="adm-hoja__cabecera">
         <div>
           <h2>Actualización masiva</h2>
@@ -628,6 +628,25 @@ export function ColorsScreen() {
         }
       />
 
+      {/* Índice de la pantalla. Es la más larga del panel —seis secciones y
+          6.500 px— y la ficha técnica quedaba en el 1.463: estaba, pero no se
+          encontraba, y el cliente acabó preguntando dónde se editaba. */}
+      <nav className="adm-indice" aria-label="Secciones de esta pantalla">
+        <span className="adm-indice__titulo">En esta pantalla</span>
+        {[
+          ['#carta-masiva', 'Actualización masiva'],
+          ['#carta-portada', 'Portada de /colores'],
+          ['#carta-seo', 'Buscadores'],
+          ['#carta-ficha', 'Ficha técnica del color'],
+          ['#carta-familias', 'Familias'],
+          ['#carta-referencias', 'Las referencias'],
+        ].map(([destino, texto]) => (
+          <a className="adm-indice__enlace" href={destino} key={destino}>
+            {texto}
+          </a>
+        ))}
+      </nav>
+
       <HojaDeCalculo
         catalogo={catalogo}
         analisis={analisis}
@@ -644,7 +663,7 @@ export function ColorsScreen() {
       {/* La banda oscura que abre /colores. Estaba escrita dentro de la
           página: se publicaba y no había forma de tocarla. */}
       <div className="admin-card">
-        <h2 className="adm-grupo__titulo">Portada de la página de colores</h2>
+        <h2 className="adm-grupo__titulo" id="carta-portada">Portada de la página de colores</h2>
         <FieldRenderer
           field={{ key: 'eyebrow', label: 'Antetítulo', type: 'text' }}
           value={catalogo.portada?.eyebrow ?? PORTADA_POR_DEFECTO.eyebrow}
@@ -683,7 +702,7 @@ export function ColorsScreen() {
       </div>
 
       <div className="admin-card">
-        <h2 className="adm-grupo__titulo">La página de colores en los buscadores</h2>
+        <h2 className="adm-grupo__titulo" id="carta-seo">La página de colores en los buscadores</h2>
         <FieldRenderer
           field={{
             key: 'title',
@@ -720,7 +739,13 @@ export function ColorsScreen() {
           catálogo porque la ficha sale igual desde /colores y desde la página
           de pintura en polvo: editarlos en dos sitios los separaría. */}
       <div className="admin-card">
-        <h2 className="adm-grupo__titulo">Ficha que se abre al pulsar un color</h2>
+        <h2 className="adm-grupo__titulo" id="carta-ficha">Ficha técnica del color</h2>
+        <p className="adm-grupo__nota">
+          El recuadro que se abre al pulsar un color en la web. Los datos
+          técnicos de cada referencia —RAL, acabado, brillo, existencia— salen
+          de <a href="#carta-referencias">la tabla de referencias</a>, más
+          abajo. Aquí se editan los textos que son iguales para las 83.
+        </p>
         {(
           [
             {
@@ -759,7 +784,7 @@ export function ColorsScreen() {
         ))}
       </div>
 
-      <div className="admin-card">
+      <div className="admin-card" id="carta-familias">
         <ListField
           label="Familias"
           help="Son las pestañas de la carta. Borrar una familia deja huérfanas sus referencias y el guardado se rechaza."
@@ -795,7 +820,7 @@ export function ColorsScreen() {
         />
       </div>
 
-      <div className="admin-card">
+      <div className="admin-card" id="carta-referencias">
         <div className="adm-carta__filtros">
           <input
             type="search"
