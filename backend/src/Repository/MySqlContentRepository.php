@@ -18,7 +18,7 @@ use PDO;
  * `pages/home`—, con su historial en otra tabla. Ver `Database::migrar()` para
  * por qué el modelo es documental y no una tabla por tipo de bloque.
  */
-final class MySqlContentRepository
+final class MySqlContentRepository implements ContentStore
 {
     /** Versiones que se conservan por documento, como en los archivos. */
     private const HISTORIAL = 10;

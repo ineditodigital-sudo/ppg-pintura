@@ -12,7 +12,7 @@ namespace App\Repository;
  * `MySqlContentRepository` con la misma firma) sin tocar controladores,
  * router ni frontend.
  */
-final class ContentRepository
+final class ContentRepository implements ContentStore
 {
     /** Copias de seguridad que se conservan por archivo. */
     private const BACKUPS_KEPT = 10;

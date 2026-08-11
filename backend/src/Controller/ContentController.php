@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\ContentRepository;
+use App\Repository\ContentStore;
 use App\Response;
 
 /**
@@ -12,7 +12,7 @@ use App\Response;
  */
 final class ContentController
 {
-    public function __construct(private readonly ContentRepository $repository)
+    public function __construct(private readonly ContentStore $repository)
     {
     }
 

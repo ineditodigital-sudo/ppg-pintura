@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Repository\ContentRepository;
+use App\Repository\ContentStore;
 use App\Response;
 use App\Validator\ContentValidator;
 
@@ -18,7 +18,7 @@ final class AdminController
     private const MAX_BODY_BYTES = 1048576; // 1 MB
 
     public function __construct(
-        private readonly ContentRepository $repository,
+        private readonly ContentStore $repository,
         private readonly ContentValidator $validator,
     ) {
     }

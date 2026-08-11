@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Config\NotificationSettings;
 use App\Mailer\ContactMailer;
-use App\Repository\ContentRepository;
+use App\Repository\ContentStore;
 use App\Response;
 
 /**
@@ -17,7 +17,7 @@ final class ContactController
     private const MAX_BODY_BYTES = 16384;
 
     public function __construct(
-        private readonly ContentRepository $repository,
+        private readonly ContentStore $repository,
         private readonly NotificationSettings $settings,
         private readonly string $siteUrl,
     ) {
