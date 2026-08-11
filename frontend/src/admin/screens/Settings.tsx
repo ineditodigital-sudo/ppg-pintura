@@ -19,6 +19,12 @@ export function NavigationScreen() {
     <>
       <PageHead
         title="Navegación"
+        ayuda={[
+          'Aquí se define el menú de arriba, las columnas del pie y la línea legal.',
+          'Una entrada del menú con «hijos» se convierte en mega-menú; sin hijos, es un enlace directo y necesita su URL.',
+          'El orden de la lista es el orden que se ve en pantalla: arrástralas para reordenar.',
+          'Los enlaces internos empiezan por «/» —por ejemplo /colores—. Los externos, por «https://».',
+        ]}
         description="Menú principal, columnas del pie de página y enlaces legales."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
@@ -115,7 +121,12 @@ export function SiteScreen() {
 
   return (
     <>
-      <PageHead title="Ajustes del sitio" description="Marca, logotipos, redes sociales y aviso de copyright." />
+      <PageHead title="Ajustes del sitio"
+        ayuda={[
+          'Marca, logotipos, redes sociales y aviso de copyright: lo que aparece en la cabecera y el pie de todas las páginas.',
+          'El logotipo claro se usa sobre fondo oscuro —la portada— y el azul sobre fondo blanco.',
+          'El número de WhatsApp sale de aquí: el botón flotante y todos los botones verdes del sitio lo toman de esta pantalla.',
+        ]} description="Marca, logotipos, redes sociales y aviso de copyright." />
       <Alert kind="error" message={s.error} errors={s.errors} />
       <Alert kind="ok" message={s.notice} />
 
@@ -190,6 +201,12 @@ export function BusinessLinesScreen() {
     <>
       <PageHead
         title="Líneas de negocio"
+        ayuda={[
+          'Las tres líneas que alimentan las páginas /productos/…',
+          'El slug forma la URL; el titular y la descripción abren esa página.',
+          'Las cifras son opcionales: la línea que no las tenga no muestra ese bloque, en vez de enseñar las de otra.',
+          'La carta de color sólo se activa donde corresponde al catálogo, hoy en pintura en polvo.',
+        ]}
         description="Alimentan las páginas /productos/… y el mega-menú. El slug forma la URL."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />

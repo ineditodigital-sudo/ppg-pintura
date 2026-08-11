@@ -293,3 +293,182 @@
     transform: none;
   }
 }
+
+/* ============================================================================
+   Ficha técnica de una referencia
+   ========================================================================== */
+
+/* La muestra entera es el disparador. Botón y no `div` con onClick: así entra
+   en el recorrido de tabulación y se anuncia como control.
+   Asume la disposición que antes tenía `.carta__muestra`, porque ahora es él
+   quien envuelve la placa y el pie. */
+.carta__abrir {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+/* Dentro del botón todo son `span` —un `div` o un `p` ahí dentro es HTML
+   inválido—, así que hay que devolverles el `display` que traían. */
+.carta__abrir .carta__pie {
+  display: block;
+}
+
+.carta__abrir .carta__nombre {
+  display: block;
+}
+
+/* El realce al apuntar lo dispara ahora el botón, no el `li`. */
+.carta__abrir:hover .carta__color {
+  transform: translateY(-3px);
+  box-shadow:
+    inset 0 0 0 1px rgba(16, 34, 46, 0.08),
+    var(--shadow-l);
+}
+
+.carta__abrir:focus-visible {
+  outline: 2px solid var(--ppg-blue);
+  outline-offset: 3px;
+  border-radius: var(--radius-xl);
+}
+
+/* «Ver ficha técnica» sólo aparece al apuntar la muestra: en reposo compite
+   con el nombre y el RAL, que es lo que se viene a leer. */
+.carta__ver {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-secondary);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+.carta__abrir:hover .carta__ver,
+.carta__abrir:focus-visible .carta__ver {
+  opacity: 1;
+}
+
+.ficha {
+  width: min(560px, calc(100vw - 2rem));
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-2xl);
+  background: var(--bg-primary);
+  color: var(--fg-primary);
+  box-shadow: var(--shadow-l);
+  overflow: hidden;
+}
+
+.ficha::backdrop {
+  background: rgba(8, 21, 32, 0.62);
+  backdrop-filter: blur(2px);
+}
+
+.ficha__color {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  aspect-ratio: 16 / 7;
+  padding: 12px;
+}
+
+.ficha__cuerpo {
+  position: relative;
+  padding: var(--space-xl);
+}
+
+.ficha__cerrar {
+  position: absolute;
+  top: var(--space-m);
+  right: var(--space-m);
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+  color: var(--fg-secondary);
+  background: var(--bg-secondary);
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.ficha__cerrar:hover {
+  color: var(--fg-primary);
+  background: var(--bg-brand-secondary);
+}
+
+.ficha__cuerpo h2 {
+  margin: 2px 0 var(--space-m);
+  font-size: var(--fs-h4);
+}
+
+.ficha__datos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s) var(--space-m);
+  margin: 0 0 var(--space-m);
+}
+
+.ficha__datos dt {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+.ficha__datos dd {
+  margin: 2px 0 0;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+}
+
+.ficha__hex {
+  font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+
+.ficha__nota,
+.ficha__aviso {
+  font-size: var(--fs-sm);
+  color: var(--fg-secondary);
+  margin-bottom: var(--space-s);
+}
+
+.ficha__aviso {
+  padding: var(--space-s);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-s);
+  color: var(--fg-tertiary);
+}
+
+.ficha__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-m);
+}
+
+/* Entradilla del bloque cuando la carta va dentro de otra página. */
+.carta__entradilla-bloque {
+  max-width: 62ch;
+  margin: var(--space-2xs) 0 var(--space-l);
+  font-size: var(--fs-body);
+  color: var(--fg-secondary);
+}
+
+@media (max-width: 40rem) {
+  .ficha__datos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

@@ -93,6 +93,11 @@ export function NotificationsScreen() {
     <>
       <PageHead
         title="Correo"
+        ayuda={[
+          'Aquí se configura a quién avisa el sitio cuando alguien rellena el formulario.',
+          'El remitente debe ser una dirección del propio dominio; si no, muchos servidores marcan el aviso como spam.',
+          'Usa el botón de prueba para comprobar que llega antes de darlo por bueno.',
+        ]}
         description="Cuando alguien rellena el formulario de contacto, aquí decides a qué buzón llega el aviso."
       />
 

@@ -51,11 +51,15 @@ export function ColorsPage() {
       <Section theme="dark" className="carta__portada">
         <Container>
           <span className="eyebrow">Catálogo PPG</span>
-          <h1>{catalogo.colors.length} referencias de pintura en polvo</h1>
+          {/* Un recuento no es un titular: «83 referencias» dice cuántas hay,
+              no qué es esto. El nombre del documento va delante y la cifra
+              pasa a la entradilla, donde sí aporta. */}
+          <h1>Carta de color · Pintura en polvo PPG</h1>
           <p className="carta__entradilla">
-            Poliéster para exterior, híbridos para interior y sus versiones
-            texturizadas y gofradas. Cada referencia con su equivalencia RAL y
-            su rango de brillo, tal como los publica PPG.
+            {catalogo.colors.length} referencias de catálogo en poliéster e
+            híbridos, lisas, texturizadas y gofradas. Cada una con su
+            equivalencia RAL y su rango de brillo, tal como los publica PPG.
+            Suministro en Aguascalientes.
           </p>
           <p className="carta__aviso">
             El color de pantalla es orientativo: el acabado final depende de la

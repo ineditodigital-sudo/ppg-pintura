@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import type { CatalogColor, ColorCatalog as Catalogo } from '@/types/content'
 import { getColors } from '@/lib/api'
 import { esEnStock, FAMILIA_STOCK, NOMBRE_STOCK } from '@/lib/stock'
@@ -22,32 +22,180 @@ function normalizar(s: string): string {
     .toLowerCase()
 }
 
-export function Muestra({ color }: { color: CatalogColor }) {
+export function Muestra({
+  color,
+  onAbrir,
+}: {
+  color: CatalogColor
+  onAbrir: (color: CatalogColor) => void
+}) {
   return (
     <li className="carta__muestra">
-      {/* El código y el sello van sobre placa clara, no directamente sobre el
-          color. Elegir tinta blanca o negra según la luminancia parecía más
-          elegante, pero en los tonos medios el contraste caía a 3,3:1: con 83
-          colores repartidos por todo el espectro siempre hay unos cuantos que
-          se quedan cortos. La placa lo garantiza en todos. */}
-      <div className="carta__color placa" style={{ '--muestra': color.hex } as CSSProperties}>
-        <span className="carta__codigo">{color.code}</span>
+      {/* La ficha se abre desde un botón y no desde el `li`: así llega por
+          teclado y el lector de pantalla la anuncia como lo que es. */}
+      <button type="button" className="carta__abrir" onClick={() => onAbrir(color)}>
+        {/* El código y el sello van sobre placa clara, no directamente sobre el
+            color. Elegir tinta blanca o negra según la luminancia parecía más
+            elegante, pero en los tonos medios el contraste caía a 3,3:1: con 83
+            colores repartidos por todo el espectro siempre hay unos cuantos que
+            se quedan cortos. La placa lo garantiza en todos. */}
+        <span
+          className="carta__color placa"
+          style={{ '--muestra': color.hex } as CSSProperties}
+        >
+          <span className="carta__codigo">{color.code}</span>
+          {color.stock && <span className="carta__sello">En existencia</span>}
+        </span>
+        <span className="carta__pie">
+          <span className="carta__nombre">{color.name}</span>
+          <span className="carta__datos">
+            {color.ral && (
+              <span>
+                RAL {color.ral}
+                {color.ralName && ` · ${color.ralName}`}
+              </span>
+            )}
+            {color.finish && <span>{color.finish}</span>}
+            {color.gloss && <span>Brillo {color.gloss}</span>}
+          </span>
+        </span>
+        <span className="carta__ver">Ver ficha técnica</span>
+      </button>
+    </li>
+  )
+}
+
+/**
+ * Ficha técnica de una referencia.
+ *
+ * Usa `<dialog>` nativo: da el foco atrapado, el cierre con `Esc` y el fondo
+ * inerte sin escribir nada de eso a mano.
+ *
+ * **Sólo enseña lo que consta.** El catálogo de PPG publica por referencia el
+ * código, el color, la equivalencia RAL, el acabado y el rango de brillo; las
+ * horas de niebla salina, el espesor de película y la curva de curado son de
+ * la ficha técnica del producto, que no tenemos para estos códigos. Inventar
+ * un dato de resistencia en una ficha técnica sería lo peor que podría hacer
+ * esta ventana, así que en su lugar ofrece pedirla.
+ */
+function FichaColor({
+  color,
+  familia,
+  onCerrar,
+}: {
+  color: CatalogColor | null
+  familia?: { name: string; description: string }
+  onCerrar: () => void
+}) {
+  const ref = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const d = ref.current
+    if (!d) return
+    if (color && !d.open) d.showModal()
+    if (!color && d.open) d.close()
+  }, [color])
+
+  if (!color) return null
+
+  const asunto = `Ficha técnica ${color.code}`
+  const cuerpo = `Hola, ¿me pueden enviar la ficha técnica de la referencia ${color.code}${
+    color.ral ? ` (RAL ${color.ral})` : ''
+  }?`
+
+  return (
+    <dialog className="ficha" ref={ref} onClose={onCerrar} aria-labelledby="ficha-titulo">
+      <div
+        className="ficha__color placa"
+        style={{ '--muestra': color.hex } as CSSProperties}
+      >
         {color.stock && <span className="carta__sello">En existencia</span>}
       </div>
-      <div className="carta__pie">
-        <p className="carta__nombre">{color.name}</p>
-        <p className="carta__datos">
+
+      <div className="ficha__cuerpo">
+        <button
+          type="button"
+          className="ficha__cerrar"
+          onClick={onCerrar}
+          aria-label="Cerrar la ficha"
+        >
+          ✕
+        </button>
+
+        <span className="eyebrow">Referencia {color.code}</span>
+        <h2 id="ficha-titulo">
+          {color.name}
+          {color.ralName && ` · ${color.ralName}`}
+        </h2>
+
+        <dl className="ficha__datos">
+          <div>
+            <dt>Código PPG</dt>
+            <dd>{color.code}</dd>
+          </div>
           {color.ral && (
-            <span>
-              RAL {color.ral}
-              {color.ralName && ` · ${color.ralName}`}
-            </span>
+            <div>
+              <dt>Equivalencia RAL</dt>
+              <dd>
+                RAL {color.ral}
+                {color.ralName && ` · ${color.ralName}`}
+              </dd>
+            </div>
           )}
-          {color.finish && <span>{color.finish}</span>}
-          {color.gloss && <span>Brillo {color.gloss}</span>}
+          {familia && (
+            <div>
+              <dt>Química</dt>
+              <dd>{familia.name}</dd>
+            </div>
+          )}
+          <div>
+            <dt>Acabado</dt>
+            <dd>
+              {color.finish ?? (color.textured ? 'Texturizado' : 'Liso')}
+            </dd>
+          </div>
+          {color.gloss && (
+            <div>
+              <dt>Brillo (60°)</dt>
+              <dd>{color.gloss}</dd>
+            </div>
+          )}
+          <div>
+            <dt>Disponibilidad</dt>
+            <dd>{color.stock ? 'En existencia (MTS)' : 'Bajo pedido'}</dd>
+          </div>
+          <div>
+            <dt>Color de referencia</dt>
+            <dd className="ficha__hex">{color.hex.toUpperCase()}</dd>
+          </div>
+        </dl>
+
+        {familia && <p className="ficha__nota">{familia.description}</p>}
+
+        <p className="ficha__aviso">
+          El color de pantalla es orientativo. Los datos de resistencia,
+          espesor de película y curva de curado vienen en la ficha técnica del
+          producto: pídenosla y te la enviamos.
         </p>
+
+        <div className="ficha__acciones">
+          <a
+            className="btn btn--primary"
+            href={`/contacto?asunto=${encodeURIComponent(asunto)}`}
+          >
+            Solicitar la ficha técnica
+          </a>
+          <a
+            className="btn btn--secondary"
+            href={`https://api.whatsapp.com/send?phone=523333892775&text=${encodeURIComponent(cuerpo)}`}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            Preguntar por WhatsApp
+          </a>
+        </div>
       </div>
-    </li>
+    </dialog>
   )
 }
 
@@ -56,6 +204,7 @@ export function ExploradorColores({ catalogo }: { catalogo: Catalogo }) {
   const [familia, setFamilia] = useState<string>(FAMILIA_STOCK)
   const [busqueda, setBusqueda] = useState('')
   const [soloExistencia, setSoloExistencia] = useState(false)
+  const [ficha, setFicha] = useState<CatalogColor | null>(null)
 
   const enStock = useMemo(() => catalogo.colors.filter(esEnStock), [catalogo])
 
@@ -195,10 +344,16 @@ export function ExploradorColores({ catalogo }: { catalogo: Catalogo }) {
       ) : (
         <ul className="carta__rejilla">
           {visibles.map((c) => (
-            <Muestra key={c.code} color={c} />
+            <Muestra key={c.code} color={c} onAbrir={setFicha} />
           ))}
         </ul>
       )}
+
+      <FichaColor
+        color={ficha}
+        familia={catalogo.families.find((f) => f.id === ficha?.family)}
+        onCerrar={() => setFicha(null)}
+      />
     </>
   )
 }
@@ -227,8 +382,12 @@ export function ColorCatalogBlock() {
   return (
     <Section className="carta-bloque">
       <Container>
-        <span className="eyebrow">Carta de colores</span>
-        <h2>{catalogo.colors.length} referencias de catálogo</h2>
+        <span className="eyebrow">Catálogo PPG</span>
+        <h2>Carta de color</h2>
+        <p className="carta__entradilla-bloque">
+          {catalogo.colors.length} referencias con equivalencia RAL y rango de
+          brillo. Busca por código, nombre o número RAL.
+        </p>
         <ExploradorColores catalogo={catalogo} />
       </Container>
     </Section>

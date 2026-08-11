@@ -1277,3 +1277,70 @@
 .adm-hoja__diff .adm-hoja__acciones {
   margin-top: var(--space-m);
 }
+
+/* --- Ayuda por pantalla ------------------------------------------------------ */
+
+.admin-head__texto {
+  min-width: 0;
+}
+
+/* Plegada por defecto: quien ya sabe usar la pantalla no la ve, y quien entra
+   por primera vez la tiene sin salir a buscar un manual. */
+.admin-head__ayuda-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: var(--space-xs);
+  padding: 5px 12px 5px 6px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-secondary);
+  background: var(--tint-brand);
+  border: 1px solid var(--border-brand-secondary);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.admin-head__ayuda-btn span {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  color: #fff;
+  background: var(--bg-brand-solid);
+  border-radius: var(--radius-full);
+}
+
+.admin-head__ayuda-btn:hover {
+  background: var(--bg-brand-secondary);
+  color: var(--fg-brand-primary);
+}
+
+.admin-head__ayuda {
+  margin-top: var(--space-s);
+  padding: var(--space-m) var(--space-m) var(--space-m) var(--space-xl);
+  max-width: 76ch;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-brand-secondary);
+  border-left: 3px solid var(--bg-brand-solid);
+  border-radius: var(--radius-s);
+}
+
+.admin-head__ayuda ol {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-head__ayuda li {
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  color: var(--fg-secondary);
+}

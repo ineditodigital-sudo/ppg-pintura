@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import type { CatalogColor, ColorCatalog, FeaturedProduct, Market } from '@/types/content'
 import { ICON_NAMES } from '@/lib/icons'
 import * as api from '../api'
@@ -189,6 +189,150 @@ function HojaDeCalculo({
   )
 }
 
+/* --- Carta de color: una fila ---------------------------------------------------- */
+
+/**
+ * Fila de la tabla de color, memoizada.
+ *
+ * Son 83 referencias por once controles: cerca de 900 inputs controlados. Sin
+ * `memo`, escribir una letra en una celda repintaba la tabla entera y el
+ * editor se sentía pegajoso. Para que esto sirva, `onCambiar` y `onEliminar`
+ * tienen que ser estables —van con `useCallback` y actualización funcional en
+ * la pantalla—; si cambiaran de identidad en cada render, `memo` compararía
+ * props siempre distintas y no evitaría nada.
+ */
+const FilaColor = memo(function FilaColor({
+  color,
+  index,
+  familias,
+  onCambiar,
+  onEliminar,
+}: {
+  color: CatalogColor
+  index: number
+  familias: ColorCatalog['families']
+  onCambiar: (index: number, cambios: Partial<CatalogColor>) => void
+  onEliminar: (index: number) => void
+}) {
+  return (
+    <tr>
+      <td>
+        <div className="adm-carta__muestra">
+          <input
+            type="color"
+            value={hexSeguro(color.hex)}
+            onChange={(e) => onCambiar(index, { hex: e.target.value })}
+            aria-label={`Color de ${color.code || 'la referencia'}`}
+          />
+          <input
+            type="text"
+            className="adm-input adm-carta__hex"
+            value={color.hex}
+            onChange={(e) => onCambiar(index, { hex: e.target.value })}
+            aria-label={`Hexadecimal de ${color.code || 'la referencia'}`}
+          />
+        </div>
+      </td>
+      <td>
+        <input
+          type="text"
+          className="adm-input"
+          value={color.code}
+          onChange={(e) => onCambiar(index, { code: e.target.value })}
+          aria-label="Código"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          className="adm-input"
+          value={color.name}
+          onChange={(e) => onCambiar(index, { name: e.target.value })}
+          aria-label="Nombre"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          className="adm-input adm-carta__corto"
+          value={color.ral ?? ''}
+          onChange={(e) => onCambiar(index, { ral: oNulo(e.target.value) })}
+          aria-label="RAL"
+        />
+      </td>
+      <td>
+        {/* Nombre con el que PPG publica ese RAL en su catálogo (Traffic
+            White, Jet Black…). Se deja vacío cuando PPG no lo nombra: en la
+            carta simplemente no aparece. */}
+        <input
+          type="text"
+          className="adm-input"
+          value={color.ralName ?? ''}
+          onChange={(e) => onCambiar(index, { ralName: oNulo(e.target.value) })}
+          aria-label="Nombre PPG del RAL"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          className="adm-input adm-carta__corto"
+          value={color.finish ?? ''}
+          onChange={(e) => onCambiar(index, { finish: oNulo(e.target.value) })}
+          aria-label="Acabado"
+        />
+      </td>
+      <td>
+        <input
+          type="text"
+          className="adm-input adm-carta__corto"
+          value={color.gloss ?? ''}
+          onChange={(e) => onCambiar(index, { gloss: oNulo(e.target.value) })}
+          aria-label="Brillo"
+        />
+      </td>
+      <td>
+        <select
+          value={color.family}
+          onChange={(e) => onCambiar(index, { family: e.target.value })}
+          aria-label="Familia"
+        >
+          {familias.map((f) => (
+            <option key={f.id} value={f.id}>
+              {f.name}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="adm-carta__centro">
+        <input
+          type="checkbox"
+          checked={color.textured}
+          onChange={(e) => onCambiar(index, { textured: e.target.checked })}
+          aria-label="Texturizado"
+        />
+      </td>
+      <td className="adm-carta__centro">
+        <input
+          type="checkbox"
+          checked={color.stock}
+          onChange={(e) => onCambiar(index, { stock: e.target.checked })}
+          aria-label="En existencia"
+        />
+      </td>
+      <td>
+        <button
+          type="button"
+          className="adm-btn adm-btn--icon"
+          title="Eliminar referencia"
+          onClick={() => onEliminar(index)}
+        >
+          ✕
+        </button>
+      </td>
+    </tr>
+  )
+})
+
 /* --- Mercados ------------------------------------------------------------------ */
 
 export function MarketsScreen() {
@@ -201,6 +345,12 @@ export function MarketsScreen() {
     <>
       <PageHead
         title="Mercados"
+        ayuda={[
+          'Los sectores que alimentan /mercados y cada página /mercados/…',
+          'El slug forma la URL: cambiarlo rompe los enlaces que ya circulan.',
+          'El orden de la lista es el que se ve en la portada y en el mega-menú.',
+          'Cada sector necesita su imagen: es el fondo de su tarjeta.',
+        ]}
         description="Alimentan /mercados y cada página /mercados/…. El slug forma la URL: cambiarlo rompe los enlaces que ya circulan."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
@@ -271,6 +421,11 @@ export function FeaturedProductsScreen() {
     <>
       <PageHead
         title="Productos destacados"
+        ayuda={[
+          'Los productos que abren la portada, en el bloque «Lo que suministramos».',
+          'El orden de la lista es el orden en que se muestran.',
+          'Menos texto funciona mejor: la tarjeta enseña foto, nombre y una línea. Lo largo se lee en la página de producto.',
+        ]}
         description="Lo que muestra el bloque «Productos» de la portada. Se ven todos los de la lista, así que tres o cuatro es lo que cuadra en la composición."
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
@@ -357,23 +512,45 @@ export function ColorsScreen() {
       })
   }, [catalogo, busqueda, familia])
 
+  // `setValue` viene de `useState`, así que su identidad es estable. Se
+  // desestructura para poder declararlo como dependencia: con `s.setValue` el
+  // linter pedía `s` entero, que sí es un objeto nuevo en cada render.
+  const { setValue } = s
+
+  // Los hooks van ANTES de los `return` tempranos de abajo: llamarlos después
+  // de un `return` condicional los ejecuta en distinto orden según el render y
+  // React rompe. `useCallback` con actualización funcional, además, evita
+  // depender de `catalogo`, así que su identidad no cambia entre renders y
+  // `memo` puede hacer su trabajo en las 83 filas.
+  const actualizar = useCallback(
+    (index: number, cambios: Partial<CatalogColor>) =>
+      setValue((prev) =>
+        prev
+          ? {
+              ...prev,
+              colors: prev.colors.map((c, i) => (i === index ? { ...c, ...cambios } : c)),
+            }
+          : prev,
+      ),
+    [setValue],
+  )
+
+  const eliminar = useCallback(
+    (index: number) =>
+      setValue((prev) => {
+        if (!prev) return prev
+        const color = prev.colors[index]
+        if (!confirm(`¿Eliminar «${color.code || 'la referencia'}» de la carta?`)) return prev
+        return { ...prev, colors: prev.colors.filter((_, i) => i !== index) }
+      }),
+    [setValue],
+  )
+
   if (s.error && !catalogo) return <Alert kind="error" message={s.error} />
   if (!catalogo) return <Loading />
 
   const familias = catalogo.families
   const enExistencia = catalogo.colors.filter((c) => c.stock).length
-
-  const actualizar = (index: number, cambios: Partial<CatalogColor>) =>
-    s.setValue({
-      ...catalogo,
-      colors: catalogo.colors.map((c, i) => (i === index ? { ...c, ...cambios } : c)),
-    })
-
-  const eliminar = (index: number) => {
-    const color = catalogo.colors[index]
-    if (!confirm(`¿Eliminar «${color.code || 'la referencia'}» de la carta?`)) return
-    s.setValue({ ...catalogo, colors: catalogo.colors.filter((_, i) => i !== index) })
-  }
 
   const anadir = () =>
     s.setValue({
@@ -410,6 +587,13 @@ export function ColorsScreen() {
     <>
       <PageHead
         title="Carta de color"
+        ayuda={[
+          'La tabla es el catálogo completo. Se edita celda a celda y el buscador de arriba lleva a una referencia concreta.',
+          'Para cambios masivos usa la hoja de cálculo: descarga, edita en Excel, guarda como «CSV UTF-8» y vuelve a subirla.',
+          'Al subir no se aplica nada de inmediato: primero verás qué cambiaría, campo por campo, y decides.',
+          'La casilla «Existencia» es la que alimenta la pestaña «En stock (MTS)» de la carta pública y el carrusel de la portada.',
+          'Cambiar el identificador de una familia sin reasignar sus referencias deja colores huérfanos, y el guardado se rechaza.',
+        ]}
         description={`${catalogo.colors.length} referencias · ${enExistencia} marcadas con existencia. Alimentan la página /colores y el carrusel de la portada.`}
         actions={
           <button type="button" className="adm-btn adm-btn--primary" onClick={anadir}>
@@ -495,123 +679,14 @@ export function ColorsScreen() {
               </thead>
               <tbody>
                 {visibles.map(({ color, index }) => (
-                  <tr key={index}>
-                    <td>
-                      <div className="adm-carta__muestra">
-                        <input
-                          type="color"
-                          value={hexSeguro(color.hex)}
-                          onChange={(e) => actualizar(index, { hex: e.target.value })}
-                          aria-label={`Color de ${color.code || 'la referencia'}`}
-                        />
-                        <input
-                          type="text"
-                          className="adm-input adm-carta__hex"
-                          value={color.hex}
-                          onChange={(e) => actualizar(index, { hex: e.target.value })}
-                          aria-label={`Hexadecimal de ${color.code || 'la referencia'}`}
-                        />
-                      </div>
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        className="adm-input"
-                        value={color.code}
-                        onChange={(e) => actualizar(index, { code: e.target.value })}
-                        aria-label="Código"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        className="adm-input"
-                        value={color.name}
-                        onChange={(e) => actualizar(index, { name: e.target.value })}
-                        aria-label="Nombre"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        className="adm-input adm-carta__corto"
-                        value={color.ral ?? ''}
-                        onChange={(e) => actualizar(index, { ral: oNulo(e.target.value) })}
-                        aria-label="RAL"
-                      />
-                    </td>
-                    <td>
-                      {/* Nombre con el que PPG publica ese RAL en su catálogo
-                          (Traffic White, Jet Black…). Se deja vacío cuando PPG
-                          no lo nombra: en la carta simplemente no aparece. */}
-                      <input
-                        type="text"
-                        className="adm-input"
-                        value={color.ralName ?? ''}
-                        onChange={(e) =>
-                          actualizar(index, { ralName: oNulo(e.target.value) })
-                        }
-                        aria-label="Nombre PPG del RAL"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        className="adm-input adm-carta__corto"
-                        value={color.finish ?? ''}
-                        onChange={(e) => actualizar(index, { finish: oNulo(e.target.value) })}
-                        aria-label="Acabado"
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        className="adm-input adm-carta__corto"
-                        value={color.gloss ?? ''}
-                        onChange={(e) => actualizar(index, { gloss: oNulo(e.target.value) })}
-                        aria-label="Brillo"
-                      />
-                    </td>
-                    <td>
-                      <select
-                        value={color.family}
-                        onChange={(e) => actualizar(index, { family: e.target.value })}
-                        aria-label="Familia"
-                      >
-                        {familias.map((f) => (
-                          <option key={f.id} value={f.id}>
-                            {f.name}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="adm-carta__centro">
-                      <input
-                        type="checkbox"
-                        checked={color.textured}
-                        onChange={(e) => actualizar(index, { textured: e.target.checked })}
-                        aria-label="Texturizado"
-                      />
-                    </td>
-                    <td className="adm-carta__centro">
-                      <input
-                        type="checkbox"
-                        checked={color.stock}
-                        onChange={(e) => actualizar(index, { stock: e.target.checked })}
-                        aria-label="En existencia"
-                      />
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        className="adm-btn adm-btn--icon"
-                        title="Eliminar referencia"
-                        onClick={() => eliminar(index)}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
+                  <FilaColor
+                    key={color.code || index}
+                    color={color}
+                    index={index}
+                    familias={familias}
+                    onCambiar={actualizar}
+                    onEliminar={eliminar}
+                  />
                 ))}
               </tbody>
             </table>

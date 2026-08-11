@@ -1,19 +1,53 @@
-import type { ReactNode } from 'react'
+import { useId, useState, type ReactNode } from 'react'
 
 export function PageHead({
   title,
   description,
   actions,
+  ayuda,
 }: {
   title: string
   description?: string
   actions?: ReactNode
+  /**
+   * Cómo se usa esta pantalla, paso a paso. Va plegado: quien ya lo sabe no
+   * lo ve, y quien entra por primera vez lo tiene sin salir a buscar manual.
+   */
+  ayuda?: string[]
 }) {
+  const [abierta, setAbierta] = useState(false)
+  const id = useId()
+
   return (
     <header className="admin-head">
-      <div>
+      <div className="admin-head__texto">
         <h1>{title}</h1>
         {description && <p>{description}</p>}
+
+        {ayuda && ayuda.length > 0 && (
+          <>
+            <button
+              type="button"
+              className="admin-head__ayuda-btn"
+              aria-expanded={abierta}
+              aria-controls={id}
+              onClick={() => setAbierta((v) => !v)}
+            >
+              <span aria-hidden="true">?</span>
+              {abierta ? 'Ocultar la ayuda' : 'Cómo funciona esta pantalla'}
+            </button>
+
+            {abierta && (
+              <div className="admin-head__ayuda" id={id}>
+                <ol>
+                  {ayuda.map((paso, i) => (
+                    <li key={i}>{paso}</li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </>
+        )}
       </div>
       {actions && <div className="admin-head__actions">{actions}</div>}
     </header>
