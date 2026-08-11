@@ -4,6 +4,7 @@ import { ICON_NAMES } from '@/lib/icons'
 import { FICHA_POR_DEFECTO, PORTADA_POR_DEFECTO } from '@/lib/stock'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
+import { EditorDeFicha } from '../components/EditorDeFicha'
 import { FieldRenderer, ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
 import {
@@ -212,12 +213,14 @@ const FilaColor = memo(function FilaColor({
   familias,
   onCambiar,
   onEliminar,
+  onAbrirFicha,
 }: {
   color: CatalogColor
   index: number
   familias: ColorCatalog['families']
   onCambiar: (index: number, cambios: Partial<CatalogColor>) => void
   onEliminar: (index: number) => void
+  onAbrirFicha: (index: number) => void
 }) {
   return (
     <tr>
@@ -324,7 +327,17 @@ const FilaColor = memo(function FilaColor({
           aria-label="En existencia"
         />
       </td>
-      <td>
+      <td className="adm-carta__acciones">
+        {/* La tabla sirve para repasar y para cambios en bloque; para tocar
+            una referencia a fondo se abre su ficha, que tiene los nombres de
+            campo escritos y la muestra en grande. */}
+        <button
+          type="button"
+          className="adm-btn adm-btn--sm"
+          onClick={() => onAbrirFicha(index)}
+        >
+          Ficha
+        </button>
         <button
           type="button"
           className="adm-btn adm-btn--icon"
@@ -488,6 +501,8 @@ export function ColorsScreen() {
   const [familia, setFamilia] = useState('todas')
   const [analisis, setAnalisis] = useState<Analisis | null>(null)
   const [aplicado, setAplicado] = useState('')
+  /** Índice, dentro del catálogo completo, de la ficha que se está editando. */
+  const [ficha, setFicha] = useState<number | null>(null)
 
   const catalogo = s.value
 
@@ -552,6 +567,21 @@ export function ColorsScreen() {
 
   const familias = catalogo.families
   const enExistencia = catalogo.colors.filter((c) => c.stock).length
+
+  /**
+   * La ficha abierta, con su posición dentro de lo filtrado.
+   *
+   * Se comprueba que siga estando entre lo visible: si se cambia el filtro con
+   * la ficha abierta, el índice guardado podría apuntar a una referencia que ya
+   * no está en pantalla y «siguiente» saltaría a cualquier sitio.
+   */
+  const fichaVisible =
+    ficha !== null && catalogo.colors[ficha]
+      ? (() => {
+          const posicion = visibles.findIndex((v) => v.index === ficha)
+          return posicion === -1 ? null : { index: ficha, posicion }
+        })()
+      : null
 
   const anadir = () =>
     s.setValue({
@@ -874,6 +904,7 @@ export function ColorsScreen() {
                     familias={familias}
                     onCambiar={actualizar}
                     onEliminar={eliminar}
+                    onAbrirFicha={setFicha}
                   />
                 ))}
               </tbody>
@@ -881,6 +912,24 @@ export function ColorsScreen() {
           </div>
         )}
       </div>
+
+      {/* «Anterior» y «Siguiente» se mueven por lo que hay filtrado en
+          pantalla, no por el catálogo entero: si has buscado «gris», pasar a
+          la siguiente debe llevar al siguiente gris. */}
+      {fichaVisible && (
+        <EditorDeFicha
+          color={catalogo.colors[fichaVisible.index]}
+          indice={fichaVisible.posicion}
+          total={visibles.length}
+          familias={familias}
+          onCambiar={(cambios) => actualizar(fichaVisible.index, cambios)}
+          onIr={(delta) => {
+            const siguiente = visibles[fichaVisible.posicion + delta]
+            if (siguiente) setFicha(siguiente.index)
+          }}
+          onCerrar={() => setFicha(null)}
+        />
+      )}
 
       <SaveBar dirty={s.dirty} saving={s.saving} onSave={() => void s.save()} onReset={s.reset} />
     </>

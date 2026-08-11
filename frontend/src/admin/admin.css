@@ -1957,3 +1957,241 @@
     transition: none;
   }
 }
+
+/* --- Editor de la ficha de un color -------------------------------------------
+   Los datos de cada referencia sólo se podían tocar en la tabla: 83 filas por
+   once columnas, con los nombres de campo puestos como `aria-label` y por
+   tanto invisibles. Buena para repasar, mala para editar una a fondo.
+
+   Tiene la misma forma que la ficha que ve el visitante —muestra grande a un
+   lado, datos al otro— para que se edite sabiendo cómo va a quedar.
+   -------------------------------------------------------------------------- */
+
+.adm-ficha {
+  display: grid;
+  grid-template-columns: minmax(0, 230px) minmax(0, 1fr);
+  width: min(820px, calc(100vw - 2rem));
+  max-height: min(90dvh, 760px);
+  padding: 0;
+  border: 0;
+  border-radius: var(--adm-radio, 12px);
+  background: var(--bg-primary);
+  color: var(--fg-primary);
+  box-shadow: 0 24px 60px rgba(8, 21, 32, 0.3);
+  overflow: hidden;
+}
+
+.adm-ficha::backdrop {
+  background: rgba(8, 21, 32, 0.6);
+  backdrop-filter: blur(3px);
+}
+
+.adm-ficha__muestra {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: var(--space-s);
+  background: var(--muestra);
+}
+
+/* Placas claras, no tinta sobre el color: con 83 referencias por todo el
+   espectro, elegir blanco o negro por luminancia deja los tonos medios cortos. */
+.adm-ficha__placa {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  font-size: 11.5px;
+  font-weight: var(--fw-bold);
+  color: var(--fg-primary);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(8, 21, 32, 0.14);
+}
+
+.adm-ficha__placa--stock {
+  color: #0b5f2a;
+  background: rgba(220, 252, 231, 0.96);
+}
+
+.adm-ficha__placa--hex {
+  font-family: var(--font-mono, ui-monospace, monospace);
+}
+
+.adm-ficha__cerrar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  color: var(--fg-primary);
+  background: rgba(255, 255, 255, 0.94);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(8, 21, 32, 0.2);
+  cursor: pointer;
+}
+
+.adm-ficha__cuerpo {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+
+.adm-ficha__scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--space-m) var(--space-m) var(--space-s);
+  overscroll-behavior: contain;
+}
+
+.adm-ficha__contador {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: var(--fw-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-brand-secondary);
+}
+
+.adm-ficha__cuerpo h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.adm-ficha__nota {
+  margin: 0 0 var(--space-m);
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fg-tertiary);
+}
+
+.adm-ficha__rejilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-s) var(--space-m);
+}
+
+.adm-ficha__campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Los nombres de campo, escritos. En la tabla iban de `aria-label`: sólo
+   existían para quien usa lector de pantalla. */
+.adm-ficha__campo > span {
+  font-size: 12.5px;
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.adm-ficha__campo input[type='text'],
+.adm-ficha__campo select {
+  width: 100%;
+}
+
+.adm-ficha__hexfila {
+  display: flex;
+  gap: 6px;
+}
+
+.adm-ficha__hexfila input[type='color'] {
+  flex-shrink: 0;
+  width: 40px;
+  height: 38px;
+  padding: 2px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-s);
+  background: none;
+  cursor: pointer;
+}
+
+.adm-ficha__pista,
+.adm-ficha__aviso {
+  font-size: 11.5px;
+  font-style: normal;
+  line-height: 1.4;
+  color: var(--fg-tertiary);
+}
+
+.adm-ficha__aviso {
+  color: #c8102e;
+}
+
+.adm-ficha__interruptores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+  margin-top: var(--space-m);
+}
+
+.adm-ficha__interruptores label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: var(--fw-semibold);
+}
+
+.adm-ficha__interruptores .adm-ficha__pista {
+  flex: 1 1 100%;
+  margin-left: 24px;
+  font-weight: var(--fw-regular, 400);
+}
+
+.adm-ficha__pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  border-top: 1px solid var(--border-tertiary);
+  background: var(--bg-primary);
+}
+
+.adm-ficha__pasar {
+  display: flex;
+  gap: 6px;
+}
+
+@media (max-width: 46rem) {
+  .adm-ficha {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100%;
+    max-width: 100%;
+    max-height: 94dvh;
+    inset: auto 0 0 0;
+    margin: 0;
+    border-radius: var(--adm-radio, 12px) var(--adm-radio, 12px) 0 0;
+  }
+
+  .adm-ficha__muestra {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    min-height: 110px;
+  }
+
+  .adm-ficha__rejilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* La columna de acciones de la tabla: «Ficha» y el borrado. */
+.adm-carta__acciones {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}

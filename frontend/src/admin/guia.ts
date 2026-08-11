@@ -261,6 +261,12 @@ export const GUIAS: Record<string, Guia> = {
           'Filtra por código, nombre o RAL, o por familia, para no bajar por las 83.',
       },
       {
+        objetivo: '.adm-carta__acciones',
+        titulo: 'Editar una referencia a fondo',
+        texto:
+          'La tabla sirve para repasar y para cambios rápidos. Con «Ficha» se abre esa referencia sola, con los nombres de cada dato escritos y la muestra en grande, y se pasa de una a otra sin cerrar.',
+      },
+      {
         titulo: 'Las familias son las pestañas de la carta',
         texto:
           'Borrar una familia deja huérfanas sus referencias y el guardado se rechaza. Cambia antes las referencias de familia.',
