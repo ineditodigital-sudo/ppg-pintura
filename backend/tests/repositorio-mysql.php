@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 $base = dirname(__DIR__);
+require $base . '/src/Repository/ContentStore.php';
 require $base . '/src/Repository/MySqlContentRepository.php';
 
 use App\Repository\MySqlContentRepository;
