@@ -130,6 +130,12 @@ export interface ContactPayload {
   company?: string
   topic: string
   message: string
+  /**
+   * Campo trampa. Va oculto en el formulario: una persona no lo rellena nunca
+   * y casi cualquier robot sí. Si llega con algo, el servidor descarta el
+   * mensaje sin decirlo.
+   */
+  website?: string
 }
 
 export interface ContactResult {

@@ -7,7 +7,11 @@
         "predev": "npm run sync:content",
         "dev": "vite",
         "sync:content": "node scripts/sync-content.mjs",
-        "build": "npm run sync:content && npm run sitemap && tsc -b && vite build",
+        "build": "npm run sync:content && npm run sitemap && tsc -b && vite build && npm run csp && npm run prerender && npm run llms && npm run comprimir",
+        "csp": "node ../scripts/csp.mjs",
+        "prerender": "node ../scripts/prerender.mjs",
+        "llms": "node ../scripts/llms.mjs",
+        "comprimir": "node scripts/comprimir.mjs",
         "lint": "oxlint",
         "preview": "vite preview",
         "sitemap": "node scripts/generar-sitemap.mjs"

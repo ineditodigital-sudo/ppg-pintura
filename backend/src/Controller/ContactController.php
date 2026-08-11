@@ -16,10 +16,21 @@ final class ContactController
 {
     private const MAX_BODY_BYTES = 16384;
 
+    /**
+     * Cuántos mensajes acepta una misma IP y en cuánto tiempo.
+     *
+     * Cinco en una hora deja pasar de sobra a quien escribe de verdad —y aun
+     * a quien se equivoca y reenvía— y corta el bucle que llenaría la bandeja
+     * del cliente y quemaría la cuota de correo del hosting.
+     */
+    private const MAX_POR_IP = 5;
+    private const VENTANA_SEGUNDOS = 3600;
+
     public function __construct(
         private readonly ContentStore $repository,
         private readonly NotificationSettings $settings,
         private readonly string $siteUrl,
+        private readonly string $storageDir,
     ) {
     }
 
@@ -36,6 +47,32 @@ final class ContactController
 
         if (!is_array($payload)) {
             Response::error('El cuerpo debe ser un objeto JSON válido.', 400);
+            return;
+        }
+
+        // Campo trampa: va oculto en el formulario, así que una persona no lo
+        // rellena nunca y casi cualquier robot sí. Se responde 201 como si
+        // todo hubiera ido bien —decirle «te he pillado» sólo le enseña a
+        // esquivarlo— pero no se guarda ni se envía nada.
+        if (trim((string) ($payload['website'] ?? '')) !== '') {
+            Response::json([
+                'ok' => true,
+                'message' => 'Gracias. Hemos recibido tu mensaje y te responderemos en dos días hábiles.',
+            ], 201);
+            return;
+        }
+
+        $limite = new LimitePorIp(
+            $this->storageDir . '/contacto-envios.json',
+            self::MAX_POR_IP,
+            self::VENTANA_SEGUNDOS,
+        );
+
+        if ($limite->agotado()) {
+            Response::error(
+                'Has enviado varios mensajes seguidos. Espera un rato o escríbenos por WhatsApp.',
+                429
+            );
             return;
         }
 
@@ -83,6 +120,14 @@ final class ContactController
         // Guardar primero. El registro es la copia fiable: el correo puede
         // fallar por causas ajenas (cuota del servidor, filtros, DNS) y un
         // prospecto no se puede perder por eso.
+        // Se apunta antes de guardar: si el registro falla, el intento igual
+        // cuenta. Lo contrario dejaría un hueco por el que reintentar sin fin.
+        $limite->apuntar();
+
+        // Se apunta antes de guardar: si el registro falla, el intento cuenta
+        // igual. Lo contrario dejaría un hueco por el que reintentar sin fin.
+        $limite->apuntar();
+
         $stored = $this->repository->storeContactMessage($mensaje);
 
         if (!$stored) {

@@ -160,3 +160,17 @@
     padding-block: var(--space-4xl) var(--space-2xl);
   }
 }
+
+/* Los enlaces del pie medían 20 px de alto: por debajo del mínimo de 24 que
+   pide WCAG 2.2 para un objetivo táctil. En un teléfono se falla el toque y se
+   pulsa el de al lado. Se les da alto en vez de tamaño de letra, para no
+   cambiar el aspecto. */
+.footer a {
+  display: inline-block;
+  padding-block: 3px;
+}
+
+.footer__legal a,
+.footer__social a {
+  padding-block: 4px;
+}

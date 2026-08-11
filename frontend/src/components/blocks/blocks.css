@@ -2132,3 +2132,14 @@ a.contact-aside__value:hover {
     transform: scale(1.06);
   }
 }
+
+/* Campo trampa del formulario de contacto.
+   Fuera de la pantalla en vez de `display: none`: algunos robots ignoran lo
+   que está oculto del todo y sí rellenan lo que existe en el DOM. */
+.campo-trampa {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

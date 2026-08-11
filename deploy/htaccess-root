@@ -18,6 +18,11 @@
 
 Options -Indexes
 
+# NO poner `DirectorySlash Off`. Se probó para evitar el 301 de `/colores` a
+# `/colores/` y este servidor responde 403 a la página sin barra: peor el
+# remedio. El salto se resuelve por el otro lado, haciendo que el canonical y
+# el sitemap apunten ya a la forma con barra, que es la que el servidor sirve.
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
 
@@ -40,6 +45,23 @@ Options -Indexes
   RewriteCond %{REQUEST_URI} ^/api/
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteRule ^ /api/index.php [L]
+
+  # Servir la copia ya comprimida cuando el navegador la acepta.
+  #
+  # NO FUNCIONA EN ESTE HOSTING, y queda escrita a propósito. Se probaron las
+  # dos formulaciones —con y sin barra inicial en la sustitución— y ninguna
+  # dispara: delante hay un nginx que entrega los archivos de `/assets/` sin
+  # pasar por estas reglas. Los `.gz` sí están subidos y se sirven
+  # correctamente si se piden por su propia URL, con su tipo y su
+  # `Content-Encoding` (ver los `FilesMatch` de más abajo), así que en cuanto
+  # se encienda la compresión en cPanel —Optimizar sitio web— o se ponga el
+  # proxy de Cloudflare delante del subdominio, esto empieza a servir solo.
+  #
+  # No se apunta el `index.html` directamente a los `.gz`: sería declarar
+  # `Content-Encoding: gzip` a todo el mundo, incluido quien no lo pidió.
+  RewriteCond %{HTTP:Accept-Encoding} gzip
+  RewriteCond %{REQUEST_FILENAME}\.gz -f
+  RewriteRule ^(.*)$ $1.gz [QSA,L]
 
   # Cualquier otra ruta que no sea un archivo o directorio real la resuelve
   # el enrutador del cliente. Permite recargar /color o /productos/aerospace.
@@ -82,18 +104,66 @@ Options -Indexes
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # La política de contenido NO va aquí, va en un `<meta>` dentro de
+  # `index.html` que genera el propio build. El motivo: `index.html` lleva dos
+  # scripts en línea que tienen que ejecutarse mientras se analiza el HTML
+  # —uno adelanta las peticiones de contenido y otro quita el velo de entrada—,
+  # así que la política necesita su huella SHA-256. Escrita a mano aquí, se
+  # desincronizaría en cuanto alguien tocara ese HTML y el sitio dejaría de
+  # arrancar. Generada por el build, no puede desincronizarse.
+  #
+  # `frame-ancestors` no funciona en `<meta>`, pero para eso ya está el
+  # `X-Frame-Options` de aquí arriba.
 </IfModule>
 
 # --- Compresión -------------------------------------------------------------
-# El envoltorio `<IfModule>` es obligatorio aquí: sin él, este servidor
-# devuelve 500 en cada petición porque no reconoce la directiva. Y con él,
-# la condición da falsa y no se comprime nada. Es decir, la compresión NO
-# se puede activar desde .htaccess en este hosting: hay que encenderla en
-# cPanel (Optimizar sitio web) o en la configuración de LiteSpeed.
+# Este hosting no comprime al vuelo. El envoltorio `<IfModule>` es obligatorio
+# —sin él el servidor devuelve 500 en cada petición porque no reconoce la
+# directiva— y con él la condición da falsa y no comprime nada. Encenderlo de
+# verdad es entrar a cPanel (Optimizar sitio web), que no se puede hacer desde
+# un despliegue por FTP.
+#
+# La salida es comprimir al compilar: junto a cada bundle queda su `.gz`, la
+# regla de arriba lo sirve a quien lo acepte y aquí se le pone la cabecera y
+# el tipo correctos. Sale mejor que comprimir en caliente —nivel 9, sin coste
+# por petición— y no depende de ningún módulo del servidor.
+#
+# Medido antes: 359 KB de JS y 75 de CSS en crudo. Después: 168 KB en total.
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
   AddOutputFilterByType DEFLATE application/javascript application/x-javascript
   AddOutputFilterByType DEFLATE application/json image/svg+xml
+</IfModule>
+
+<IfModule mod_headers.c>
+  # El `.gz` se entrega bajo la URL del archivo original, así que hay que
+  # decirle al navegador que viene comprimido y de qué tipo es: si no, intenta
+  # interpretar el gzip como JavaScript y la página no arranca.
+  <FilesMatch "\.js\.gz$">
+    ForceType application/javascript
+    Header set Content-Encoding gzip
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.css\.gz$">
+    ForceType text/css
+    Header set Content-Encoding gzip
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.svg\.gz$">
+    ForceType image/svg+xml
+    Header set Content-Encoding gzip
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(json|xml|txt|webmanifest)\.gz$">
+    Header set Content-Encoding gzip
+  </FilesMatch>
+
+  # Sin esto, una caché intermedia podría guardar la versión comprimida y
+  # servírsela a un cliente que no la acepta.
+  <FilesMatch "\.gz$">
+    Header append Vary Accept-Encoding
+  </FilesMatch>
 </IfModule>
 
 # --- Tipos MIME -------------------------------------------------------------

@@ -59,7 +59,10 @@ const cuerpo = [...rutas]
   .map(
     (ruta) =>
       `  <url>\n` +
-      `    <loc>${SITIO}${ruta === '/' ? '/' : ruta}</loc>\n` +
+      // Con barra final: cada ruta es una carpeta prerenderizada y el servidor
+      // redirige la forma sin barra. Listarlas sin ella mandaba al buscador a
+      // un 301 en cada una de las catorce.
+      `    <loc>${SITIO}${ruta === '/' ? '/' : ruta + '/'}</loc>\n` +
       `    <lastmod>${hoy}</lastmod>\n` +
       `    <priority>${prioridad(ruta)}</priority>\n` +
       `  </url>`,

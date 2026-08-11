@@ -127,7 +127,7 @@ $validator = new ContentValidator();
 $notificationSettings = new NotificationSettings($baseDir . '/config');
 
 $content = new ContentController($repository);
-$contact = new ContactController($repository, $notificationSettings, $siteUrl);
+$contact = new ContactController($repository, $notificationSettings, $siteUrl, $baseDir . '/storage');
 $authController = new AuthController($auth);
 $admin = new AdminController($repository, $validator);
 $media = new MediaController($assetsDir);

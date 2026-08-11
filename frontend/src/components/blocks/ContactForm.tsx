@@ -27,6 +27,7 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
       company: String(data.get('company') ?? ''),
       topic: String(data.get('topic') ?? ''),
       message: String(data.get('message') ?? ''),
+      website: String(data.get('website') ?? ''),
     })
 
     setSending(false)
@@ -41,6 +42,21 @@ export function ContactForm({ block }: { block: ContactFormBlock }) {
         {/* Formulario y datos lado a lado: así se ven ambos sin desplazarse. */}
         <div className={`contact-layout${block.aside ? '' : ' contact-layout--solo'}`}>
         <form className="contact-form" onSubmit={handleSubmit} noValidate={false}>
+          {/* Campo trampa. Fuera de la pantalla y no `display: none`, porque
+              algunos robots se saltan lo que está oculto del todo. `tabIndex`
+              y `aria-hidden` lo dejan fuera del teclado y del lector, así que
+              nadie lo encuentra sin querer. */}
+          <div className="campo-trampa" aria-hidden="true">
+            <label htmlFor={`${id}-website`}>No rellenes este campo</label>
+            <input
+              id={`${id}-website`}
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           <div className="field">
             <label htmlFor={`${id}-name`}>
               Nombre <span className="field__required">*</span>
