@@ -183,6 +183,34 @@
         }
       }
     </style>
+
+    <!--
+      Google Analytics 4.
+
+      Va al final del `head` y no al principio: `async` no bloquea el análisis
+      del HTML, pero sí compite por red con la fuente y el póster del hero, que
+      son lo que decide cuándo el visitante ve algo. La medición puede esperar
+      unos milisegundos; la primera impresión no.
+
+      El script en línea de abajo lo firma la política de contenido sola: el
+      build calcula su huella al publicar. Si se toca esta etiqueta, la huella
+      se recalcula en la siguiente compilación.
+    -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5LKR1BZLP"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+
+      // El panel no se mide: son una o dos personas editando su propio sitio y
+      // sus visitas ensuciarían justo lo que se quiere leer, que es cuánta
+      // gente de fuera llega y por dónde.
+      if (!location.pathname.startsWith('/admin')) {
+        gtag('config', 'G-Y5LKR1BZLP')
+      }
+    </script>
   </head>
   <body>
     <!--

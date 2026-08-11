@@ -46,14 +46,32 @@ if (huellas.length === 0) {
  * aplican con una etiqueta `<style>` que genera la aplicación. En scripts no
  * se permite, que es donde de verdad importa.
  */
+/**
+ * Google Analytics necesita tres permisos, no uno: cargar su script desde
+ * `googletagmanager.com`, mandar los eventos a `google-analytics.com` y —en
+ * navegadores que bloquean `fetch` a terceros— caer a un píxel de imagen.
+ * Si falta cualquiera de los tres, la etiqueta no mide y no avisa: falla en
+ * silencio, que es la peor forma de tener analítica.
+ */
+const ANALITICA = {
+  script: ['https://www.googletagmanager.com'],
+  conectar: [
+    'https://www.google-analytics.com',
+    'https://*.google-analytics.com',
+    'https://*.analytics.google.com',
+    'https://*.googletagmanager.com',
+  ],
+  imagen: ['https://www.google-analytics.com', 'https://*.google-analytics.com'],
+}
+
 const politica = [
   "default-src 'self'",
-  `script-src 'self' ${huellas.join(' ')}`,
+  `script-src 'self' ${ANALITICA.script.join(' ')} ${huellas.join(' ')}`,
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: https://i.ytimg.com",
+  `img-src 'self' data: https://i.ytimg.com ${ANALITICA.imagen.join(' ')}`,
   "font-src 'self'",
   "media-src 'self'",
-  "connect-src 'self'",
+  `connect-src 'self' ${ANALITICA.conectar.join(' ')}`,
   // El bloque de vídeo abre YouTube en un diálogo.
   'frame-src https://www.youtube-nocookie.com https://www.youtube.com',
   "form-action 'self'",
