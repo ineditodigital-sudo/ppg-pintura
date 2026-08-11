@@ -1481,3 +1481,294 @@
     transform: none;
   }
 }
+
+/* ============================================================================
+   Listados en tarjetas
+   ----------------------------------------------------------------------------
+   Los contenidos se listaban como filas colapsadas que había que abrir desde
+   un triangulito. Se leían como una lista de sólo lectura: el cliente reportó
+   que mercados y líneas «no eran editables» cuando sí lo eran. La tarjeta con
+   miniatura resuelve las dos cosas —se ve qué es cada cosa y se ve que se
+   puede abrir— sin depender de que alguien descubra un icono.
+   ========================================================================== */
+
+.adm-tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-s);
+}
+
+.adm-tarjeta {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--adm-radio-s, 9px);
+  overflow: hidden;
+  transition:
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    transform 180ms var(--ease-out);
+}
+
+.adm-tarjeta:hover {
+  border-color: var(--border-brand-primary);
+  box-shadow: var(--adm-sombra);
+  transform: translateY(-2px);
+}
+
+.adm-tarjeta.is-open {
+  border-color: var(--bg-brand-solid);
+  box-shadow: 0 0 0 2px var(--tint-brand);
+}
+
+.adm-tarjeta__abrir {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.adm-tarjeta__mini {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  overflow: hidden;
+  background: var(--tint-brand);
+  border-radius: var(--radius-s);
+}
+
+.adm-tarjeta__mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adm-tarjeta__inicial {
+  font-size: 22px;
+  font-weight: var(--fw-bold);
+  color: var(--fg-brand-secondary);
+}
+
+.adm-tarjeta__texto {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.adm-tarjeta__titulo {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+/* Dos líneas y corta: los titulares de mercado son largos y sin esto la
+   tarjeta crecía hasta descuadrar la fila entera de la rejilla. */
+.adm-tarjeta__sub {
+  font-size: var(--fs-xs);
+  line-height: 1.4;
+  color: var(--fg-tertiary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.adm-tarjeta__icono {
+  margin-top: 2px;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-quaternary);
+}
+
+.adm-tarjeta__accion {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 4px 10px;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-brand-secondary);
+  background: var(--tint-brand);
+  border-radius: var(--radius-full);
+}
+
+.adm-tarjeta.is-open .adm-tarjeta__accion {
+  color: #fff;
+  background: var(--bg-brand-solid);
+}
+
+.adm-tarjeta__orden {
+  display: flex;
+  gap: 2px;
+  padding: 0 10px 8px;
+}
+
+/* Los controles de orden sólo al apuntar o con el foco dentro: en reposo
+   compiten con lo que importa, que es qué elemento es cada tarjeta. */
+.adm-tarjeta__orden {
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.adm-tarjeta:hover .adm-tarjeta__orden,
+.adm-tarjeta:focus-within .adm-tarjeta__orden {
+  opacity: 1;
+}
+
+/* El formulario, a todo el ancho bajo la rejilla. */
+.adm-editor {
+  margin-top: var(--space-m);
+  padding: var(--space-l);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-brand-secondary);
+  border-radius: var(--adm-radio, 12px);
+}
+
+.adm-editor__cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-m);
+  margin-bottom: var(--space-m);
+  padding-bottom: var(--space-s);
+  border-bottom: 1px solid var(--border-tertiary);
+}
+
+.adm-editor__cabecera h3 {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-tarjeta,
+  .adm-tarjeta__orden {
+    transition: none;
+  }
+
+  .adm-tarjeta:hover {
+    transform: none;
+  }
+
+  .adm-tarjeta__orden {
+    opacity: 1;
+  }
+}
+
+/* --- Tarjeta de página ------------------------------------------------------
+   Páginas era la pantalla más usada y seguía siendo una lista de filas: sin
+   miniatura, todas idénticas, y había que leer la ruta para saber cuál era
+   cuál. La tarjeta enseña la misma imagen que el visitante ve en el sitio, así
+   que se reconoce antes de leer nada.
+   -------------------------------------------------------------------------- */
+
+.adm-tarjeta--pagina {
+  gap: 10px;
+  padding: var(--space-s);
+}
+
+.adm-tarjeta--pagina .adm-tarjeta__cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+}
+
+.adm-tarjeta__mini--icono {
+  color: var(--fg-brand-secondary);
+}
+
+.adm-tarjeta__ruta {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 11px;
+  color: var(--fg-quaternary);
+  word-break: break-all;
+}
+
+.adm-tarjeta--pagina .adm-tarjeta__titulo {
+  font-size: 15px;
+}
+
+.adm-tarjeta--pagina .adm-tarjeta__sub {
+  margin: 0;
+  flex: 1;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--fg-tertiary);
+}
+
+.adm-tarjeta__pie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-tertiary);
+}
+
+/* El borrado no compite con Editar: sólo aparece al acercarse a la tarjeta.
+   Con el foco por teclado también, o dejaría de existir para quien no usa
+   ratón. */
+.adm-tarjeta__borrar {
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity 160ms var(--ease-out);
+}
+
+.adm-tarjeta:hover .adm-tarjeta__borrar,
+.adm-tarjeta:focus-within .adm-tarjeta__borrar {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .adm-tarjeta__borrar {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adm-tarjeta__borrar {
+    transition: none;
+  }
+}
+
+/* El icono que la tarjeta lleva en el sitio, sellado sobre su foto. Antes se
+   imprimía su clave interna en mayúsculas —«ENGRANE»—, que no es lo que el
+   usuario reconoce ni lo que va a ver publicado. */
+.adm-tarjeta__sello {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: var(--fg-white);
+  background: var(--bg-brand-solid);
+  border-radius: 999px;
+  box-shadow: 0 0 0 2px var(--bg-primary);
+}
+
+/* Cuatro muestras reales de la familia dentro de la miniatura. Una inicial no
+   dice nada de una pestaña que se llama «Poliéster especiales». */
+.adm-mini-muestras {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+}
+
+.adm-mini-muestras > span {
+  display: block;
+}

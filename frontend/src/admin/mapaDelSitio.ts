@@ -29,6 +29,14 @@ export interface PaginaDelSitio {
   bloques?: number
   /** Sólo para documentos: si se puede borrar. */
   slug?: string
+  /**
+   * Miniatura. Reconocer una página por su foto es inmediato; leer su nombre
+   * en una lista, no. Las páginas de plantilla ya tienen imagen propia, así
+   * que se reutiliza la misma que el visitante ve en el sitio.
+   */
+  imagen?: string
+  /** Icono para las que no tienen imagen. */
+  icono?: string
 }
 
 const TITULOS: Record<string, string> = {
@@ -38,6 +46,22 @@ const TITULOS: Record<string, string> = {
   contacto: 'Contacto',
 }
 
+/**
+ * El orden del menú de navegación: Inicio · Quiénes Somos · Productos ·
+ * Mercados · Contacto. Se ordena así y no alfabéticamente porque es el orden
+ * en el que el cliente recorre su propio sitio, y buscar una página en el
+ * panel debería sentirse como buscarla en el menú.
+ */
+const ORDEN_MENU = ['home', 'quienes-somos', 'mercados', 'contacto']
+
+/** Icono de las páginas propias, que no tienen imagen que enseñar. */
+const ICONOS: Record<string, string> = {
+  home: 'edificio',
+  'quienes-somos': 'escudo',
+  mercados: 'engrane',
+  contacto: 'perfil',
+}
+
 export function construirMapa(
   paginas: { slug: string; title: string; blockCount: number }[],
   lineas: BusinessLine[],
@@ -45,7 +69,14 @@ export function construirMapa(
 ): PaginaDelSitio[] {
   const mapa: PaginaDelSitio[] = []
 
-  for (const p of paginas) {
+  const ordenadas = [...paginas].sort((a, b) => {
+    const ia = ORDEN_MENU.indexOf(a.slug)
+    const ib = ORDEN_MENU.indexOf(b.slug)
+    // Lo que no esté en el menú va al final, en orden alfabético.
+    return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib) || a.slug.localeCompare(b.slug)
+  })
+
+  for (const p of ordenadas) {
     mapa.push({
       titulo: TITULOS[p.slug] ?? p.title,
       ruta: p.slug === 'home' ? '/' : `/${p.slug}`,
@@ -54,6 +85,7 @@ export function construirMapa(
       nota: `${p.blockCount} bloque${p.blockCount === 1 ? '' : 's'} · se editan uno a uno`,
       bloques: p.blockCount,
       slug: p.slug,
+      icono: ICONOS[p.slug] ?? 'capas',
     })
   }
 
@@ -64,6 +96,8 @@ export function construirMapa(
       origen: 'plantilla',
       destino: '/admin/lineas',
       nota: 'Su texto e imagen salen de Líneas de producto',
+      imagen: l.image?.src,
+      icono: 'capas',
     })
   }
 
@@ -74,6 +108,8 @@ export function construirMapa(
       origen: 'plantilla',
       destino: '/admin/mercados',
       nota: 'Su texto e imagen salen de Mercados',
+      imagen: m.image?.src,
+      icono: m.icon ?? 'engrane',
     })
   }
 
@@ -83,6 +119,7 @@ export function construirMapa(
     origen: 'catalogo',
     destino: '/admin/colores',
     nota: 'Se dibuja con las referencias de la Carta de color',
+    icono: 'paleta',
   })
 
   return mapa

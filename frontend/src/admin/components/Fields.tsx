@@ -1,4 +1,5 @@
 import { useEffect, useId, useState, type ReactNode } from 'react'
+import { Icon } from '@/lib/icons'
 import type { FieldDef } from '../schema'
 import { listMedia, uploadMedia, type MediaItem } from '../api'
 import { IconEye, IconEyeOff } from './Icons'
@@ -393,6 +394,11 @@ export function ListField({
   required,
   itemFields,
   itemLabelKey,
+  itemSubtitleKey,
+  itemImageKey,
+  itemIconKey,
+  itemThumb,
+  variante = 'filas',
   value,
   onChange,
 }: {
@@ -401,6 +407,24 @@ export function ListField({
   required?: boolean
   itemFields: FieldDef[]
   itemLabelKey?: string
+  /** Segunda línea de la tarjeta: el titular del mercado, la URL… */
+  itemSubtitleKey?: string
+  /** Campo con la imagen que sirve de miniatura. */
+  itemImageKey?: string
+  /** Icono de respaldo cuando no hay imagen. */
+  itemIconKey?: string
+  /**
+   * Miniatura a medida, cuando ni una foto ni un icono del catálogo sirven:
+   * el glifo de una red social, las muestras de una familia de color. Se
+   * pasa desde la pantalla para no meter aquí lo que sólo ella sabe.
+   */
+  itemThumb?: (item: Record<string, unknown>) => ReactNode
+  /**
+   * `tarjetas` para los listados de contenido; `filas` para las listas
+   * anidadas dentro de un formulario, donde una rejilla de tarjetas sería
+   * desproporcionada.
+   */
+  variante?: 'filas' | 'tarjetas'
   value: Record<string, unknown>[] | undefined
   onChange: (value: Record<string, unknown>[]) => void
 }) {
@@ -423,6 +447,164 @@ export function ListField({
     Object.fromEntries(
       itemFields.map((f) => [f.key, f.type === 'list' || f.type === 'stringList' ? [] : '']),
     )
+
+  /* --- Tarjetas: los listados de contenido ------------------------------- */
+
+  if (variante === 'tarjetas') {
+    const abierto = open !== null ? items[open] : null
+
+    return (
+      <Field label={label} help={help} required={required}>
+        <div className="adm-tarjetas">
+          {items.map((item, index) => {
+            const titulo =
+              (itemLabelKey && typeof item[itemLabelKey] === 'string'
+                ? (item[itemLabelKey] as string)
+                : '') || `Elemento ${index + 1}`
+            const subtitulo =
+              itemSubtitleKey && typeof item[itemSubtitleKey] === 'string'
+                ? (item[itemSubtitleKey] as string)
+                : ''
+            const imagen = itemImageKey
+              ? ((item[itemImageKey] as { src?: string } | undefined)?.src ?? '')
+              : ''
+            const icono =
+              itemIconKey && typeof item[itemIconKey] === 'string'
+                ? (item[itemIconKey] as string)
+                : ''
+
+            return (
+              <div
+                className={`adm-tarjeta${open === index ? ' is-open' : ''}`}
+                key={index}
+              >
+                <button
+                  type="button"
+                  className="adm-tarjeta__abrir"
+                  onClick={() => setOpen(open === index ? null : index)}
+                  aria-expanded={open === index}
+                  // Sin esto el nombre accesible sale de concatenar todo lo que
+                  // hay dentro: «ArquitecturaAcabados que aguantan a la
+                  // intemperieEditar». Se lee, pero no se entiende.
+                  aria-label={`${open === index ? 'Cerrar' : 'Editar'} ${titulo}`}
+                >
+                  <span className="adm-tarjeta__mini">
+                    {itemThumb ? (
+                      itemThumb(item)
+                    ) : imagen ? (
+                      <img src={imagen} alt="" loading="lazy" decoding="async" />
+                    ) : icono ? (
+                      <Icon name={icono} size={26} />
+                    ) : (
+                      // Sin foto ni icono, la inicial sobre el tinte de marca:
+                      // sigue siendo un ancla visual y no un hueco gris.
+                      <span className="adm-tarjeta__inicial" aria-hidden="true">
+                        {titulo.slice(0, 1).toUpperCase()}
+                      </span>
+                    )}
+                    {imagen && icono && (
+                      // El icono que sale en el sitio, encima de la foto: es el
+                      // dato que se está editando, y su nombre interno
+                      // —«engrane»— no le decía nada a nadie.
+                      <span className="adm-tarjeta__sello" aria-hidden="true">
+                        <Icon name={icono} size={13} />
+                      </span>
+                    )}
+                  </span>
+                  <span className="adm-tarjeta__texto">
+                    <span className="adm-tarjeta__titulo">{titulo}</span>
+                    {subtitulo && (
+                      <span className="adm-tarjeta__sub">{subtitulo}</span>
+                    )}
+                  </span>
+                  <span className="adm-tarjeta__accion" aria-hidden="true">
+                    {open === index ? 'Cerrar' : 'Editar'}
+                  </span>
+                </button>
+
+                <div className="adm-tarjeta__orden">
+                  <button
+                    type="button"
+                    className="adm-btn adm-btn--icon"
+                    title="Subir"
+                    disabled={index === 0}
+                    onClick={() => move(index, -1)}
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    className="adm-btn adm-btn--icon"
+                    title="Bajar"
+                    disabled={index === items.length - 1}
+                    onClick={() => move(index, 1)}
+                  >
+                    ↓
+                  </button>
+                  <button
+                    type="button"
+                    className="adm-btn adm-btn--icon"
+                    title="Eliminar"
+                    onClick={() => {
+                      onChange(items.filter((_, i) => i !== index))
+                      setOpen(null)
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* El formulario va debajo y a todo el ancho, no dentro de la tarjeta:
+            en una celda de rejilla los campos quedarían en una columna
+            estrecha y sería peor que la lista que sustituye. */}
+        {abierto !== null && open !== null && (
+          <div className="adm-editor">
+            <div className="adm-editor__cabecera">
+              <h3>
+                Editando:{' '}
+                {(itemLabelKey && typeof abierto[itemLabelKey] === 'string'
+                  ? (abierto[itemLabelKey] as string)
+                  : '') || `Elemento ${open + 1}`}
+              </h3>
+              <button
+                type="button"
+                className="adm-btn adm-btn--ghost adm-btn--sm"
+                onClick={() => setOpen(null)}
+              >
+                Cerrar
+              </button>
+            </div>
+            {itemFields.map((field) => (
+              <FieldRenderer
+                key={field.key}
+                field={field}
+                value={abierto[field.key]}
+                onChange={(next) => update(open, { ...abierto, [field.key]: next })}
+              />
+            ))}
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="adm-btn adm-btn--ghost adm-btn--sm"
+          style={{ marginTop: 12 }}
+          onClick={() => {
+            onChange([...items, blank()])
+            setOpen(items.length)
+          }}
+        >
+          + Añadir
+        </button>
+      </Field>
+    )
+  }
+
+  /* --- Filas: listas anidadas dentro de un formulario --------------------- */
 
   return (
     <Field label={label} help={help} required={required}>

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Icon } from '@/lib/icons'
 import type { BusinessLine, Market, Page } from '@/types/content'
 import * as api from '../api'
 import { construirMapa, ETIQUETA_ORIGEN, type PaginaDelSitio } from '../mapaDelSitio'
@@ -8,6 +9,28 @@ import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { FieldRenderer } from '../components/Fields'
 
 /* --- Listado ---------------------------------------------------------------- */
+
+/**
+ * La imagen real de la página, o su icono sobre un fondo de marca.
+ *
+ * Una rejilla de tarjetas iguales no ayuda más que una lista: lo que hace
+ * reconocible una página de un vistazo es verla, no leer su nombre.
+ */
+function Miniatura({ page }: { page: PaginaDelSitio }) {
+  if (page.imagen) {
+    return (
+      <span className="adm-tarjeta__mini">
+        <img src={page.imagen} alt="" loading="lazy" />
+      </span>
+    )
+  }
+
+  return (
+    <span className="adm-tarjeta__mini adm-tarjeta__mini--icono">
+      <Icon name={page.icono ?? 'capas'} size={26} />
+    </span>
+  )
+}
 
 export function PagesScreen() {
   const [mapa, setMapa] = useState<PaginaDelSitio[] | null>(null)
@@ -81,16 +104,21 @@ export function PagesScreen() {
                   </p>
                 )}
 
-                <div className="admin-list">
+                <div className="adm-tarjetas">
                   {grupo.map((page) => (
-                    <div className="admin-row" key={page.ruta}>
-                      <div className="admin-row__main">
-                        <div className="admin-row__title">{page.titulo}</div>
-                        <div className="admin-row__meta">
-                          {page.ruta} · {page.nota}
+                    <article className="adm-tarjeta adm-tarjeta--pagina" key={page.ruta}>
+                      <div className="adm-tarjeta__cabecera">
+                        <Miniatura page={page} />
+                        <div className="adm-tarjeta__texto">
+                          <h3 className="adm-tarjeta__titulo">{page.titulo}</h3>
+                          <code className="adm-tarjeta__ruta">{page.ruta}</code>
                         </div>
                       </div>
-                      <div className="admin-row__actions">
+                      <p className="adm-tarjeta__sub">{page.nota}</p>
+                      <div className="adm-tarjeta__pie">
+                        <Link className="adm-btn adm-btn--primary adm-btn--sm" to={page.destino}>
+                          Editar
+                        </Link>
                         <a
                           className="adm-btn adm-btn--ghost adm-btn--sm"
                           href={page.ruta}
@@ -99,23 +127,17 @@ export function PagesScreen() {
                         >
                           Ver
                         </a>
-                        <Link
-                          className="adm-btn adm-btn--primary adm-btn--sm"
-                          to={page.destino}
-                        >
-                          Editar
-                        </Link>
                         {page.origen === 'documento' && page.slug !== 'home' && (
                           <button
                             type="button"
-                            className="adm-btn adm-btn--danger adm-btn--sm"
+                            className="adm-btn adm-btn--danger adm-btn--sm adm-tarjeta__borrar"
                             onClick={() => void remove(page.slug as string)}
                           >
                             Eliminar
                           </button>
                         )}
                       </div>
-                    </div>
+                    </article>
                   ))}
                 </div>
               </section>

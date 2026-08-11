@@ -7,12 +7,15 @@ import { ListField } from '../components/Fields'
 import { useEditable } from '../useEditable'
 import {
   analizar,
+  CAMPOS,
   TITULOS,
   descargar,
-  generarCsv,
+  filasATexto,
+  filasDelCatalogo,
   generarPlantilla,
   type Analisis,
 } from '../hojaColores'
+import { descargarBlob, generarXlsx, leerXlsx } from '../hojaExcel'
 import '../editor.css'
 
 const iconOptions = ICON_NAMES.map((name) => ({ value: name, label: name }))
@@ -53,19 +56,20 @@ function HojaDeCalculo({
         <div>
           <h2>Actualización masiva</h2>
           <p>
-            Descarga la carta, edítala en Excel y vuelve a subirla. Se abre en
-            columnas sin asistente; al guardar, elige «CSV UTF-8».
+            Descarga la carta en Excel, edítala y vuelve a subir el mismo
+            archivo. También se admite CSV. Nada se guarda hasta que revises el
+            resumen de cambios y confirmes.
           </p>
         </div>
         <div className="adm-hoja__acciones">
           <button type="button" className="adm-btn" onClick={onExportar}>
-            Descargar la carta
+            Descargar en Excel
           </button>
           <label className="adm-btn adm-btn--primary adm-hoja__subir">
             Subir archivo
             <input
               type="file"
-              accept=".csv,text/csv"
+              accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv"
               onChange={(e) => {
                 const f = e.target.files?.[0]
                 if (f) onSubir(f)
@@ -361,6 +365,10 @@ export function MarketsScreen() {
           label="Sectores"
           help="El orden es el que se ve en la página de mercados y en el mega-menú."
           itemLabelKey="name"
+          itemSubtitleKey="headline"
+          itemImageKey="image"
+          itemIconKey="icon"
+          variante="tarjetas"
           itemFields={[
             { key: 'slug', label: 'Slug (URL)', type: 'text', required: true, help: 'Minúsculas y guiones.' },
             { key: 'name', label: 'Nombre', type: 'text', required: true },
@@ -435,6 +443,9 @@ export function FeaturedProductsScreen() {
         <ListField
           label="Productos"
           itemLabelKey="name"
+          itemSubtitleKey="tagline"
+          itemImageKey="image"
+          variante="tarjetas"
           itemFields={[
             { key: 'slug', label: 'Slug', type: 'text', required: true, help: 'Identificador interno; no forma URL.' },
             { key: 'name', label: 'Nombre', type: 'text', required: true },
@@ -561,12 +572,40 @@ export function ColorsScreen() {
       ],
     })
 
+  // `.xlsx` de verdad: cabecera destacada, columnas con ancho, filtros y la
+  // primera fila congelada. El CSV se abría como texto plano y editarlo era
+  // incómodo justo en lo que esta pantalla existe para facilitar.
   const exportar = () =>
-    descargar(`carta-de-color-${new Date().toISOString().slice(0, 10)}.csv`, generarCsv(catalogo))
+    descargarBlob(
+      `carta-de-color-${new Date().toISOString().slice(0, 10)}.xlsx`,
+      generarXlsx(
+        CAMPOS.map((c) => ({ titulo: c.titulo, ancho: c.ancho })),
+        filasDelCatalogo(catalogo),
+      ),
+    )
 
   const alSubir = async (archivo: File) => {
     setAnalisis(null)
-    const texto = await archivo.text()
+    // Se acepta el mismo Excel que se descarga y también el CSV, que es lo que
+    // sale si el usuario usa «Guardar como» o edita en Google Sheets.
+    let texto: string
+    try {
+      texto = archivo.name.toLowerCase().endsWith('.xlsx')
+        ? filasATexto(await leerXlsx(await archivo.arrayBuffer()))
+        : await archivo.text()
+    } catch (e) {
+      setAnalisis({
+        ok: false,
+        errores: [e instanceof Error ? e.message : 'No se pudo leer el archivo.'],
+        avisos: [],
+        cambios: [],
+        nuevas: [],
+        ausentes: [],
+        filasLeidas: 0,
+      })
+      return
+    }
+
     setAnalisis(analizar(texto, catalogo))
   }
 
@@ -620,6 +659,25 @@ export function ColorsScreen() {
           label="Familias"
           help="Son las pestañas de la carta. Borrar una familia deja huérfanas sus referencias y el guardado se rechaza."
           itemLabelKey="name"
+          itemSubtitleKey="description"
+          variante="tarjetas"
+          // Cuatro muestras reales de la familia: se ve de qué va la pestaña
+          // sin abrirla, que es justo lo que una inicial no dice.
+          itemThumb={(item) => {
+            const muestras = catalogo.colors
+              .filter((c) => c.family === item.id)
+              .slice(0, 4)
+
+            if (muestras.length === 0) return null
+
+            return (
+              <span className="adm-mini-muestras" aria-hidden="true">
+                {muestras.map((c) => (
+                  <span key={c.code} style={{ background: c.hex }} />
+                ))}
+              </span>
+            )
+          }}
           itemFields={[
             { key: 'id', label: 'Identificador', type: 'text', required: true, help: 'Minúsculas y guiones. Es el que enlaza cada referencia con su familia.' },
             { key: 'name', label: 'Nombre', type: 'text', required: true },

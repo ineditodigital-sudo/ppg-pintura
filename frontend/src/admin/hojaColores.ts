@@ -25,16 +25,16 @@ import type { CatalogColor, ColorCatalog } from '@/types/content'
  * con la casilla en `sí`/`no` sí.
  */
 export const CAMPOS = [
-  { clave: 'codigo', titulo: 'Código PPG' },
-  { clave: 'nombre', titulo: 'Nombre' },
-  { clave: 'ral', titulo: 'RAL' },
-  { clave: 'nombre_ral', titulo: 'Nombre del RAL' },
-  { clave: 'acabado', titulo: 'Acabado' },
-  { clave: 'brillo', titulo: 'Brillo' },
-  { clave: 'hex', titulo: 'Color (hex)' },
-  { clave: 'familia', titulo: 'Familia' },
-  { clave: 'texturizado', titulo: '¿Texturizado?' },
-  { clave: 'en_stock', titulo: '¿En stock (MTS)?' },
+  { clave: 'codigo', titulo: 'Código PPG', ancho: 15 },
+  { clave: 'nombre', titulo: 'Nombre', ancho: 14 },
+  { clave: 'ral', titulo: 'RAL', ancho: 8 },
+  { clave: 'nombre_ral', titulo: 'Nombre del RAL', ancho: 20 },
+  { clave: 'acabado', titulo: 'Acabado', ancho: 16 },
+  { clave: 'brillo', titulo: 'Brillo', ancho: 10 },
+  { clave: 'hex', titulo: 'Color (hex)', ancho: 12 },
+  { clave: 'familia', titulo: 'Familia', ancho: 22 },
+  { clave: 'texturizado', titulo: '¿Texturizado?', ancho: 15 },
+  { clave: 'en_stock', titulo: '¿En stock (MTS)?', ancho: 17 },
 ] as const
 
 /** Sólo las claves, para el resto del módulo. */
@@ -61,6 +61,8 @@ for (const c of CAMPOS) {
 }
 
 const SEPARADOR = ';'
+/** Excel en Windows espera CRLF; con sólo LF lee la hoja como un registro. */
+const FIN_DE_LINEA = '\r\n'
 const BOM = '﻿'
 
 const siNo = (v: boolean) => (v ? 'sí' : 'no')
@@ -81,6 +83,27 @@ function celda(valor: string | null | undefined): string {
 }
 
 /* --- Exportar -------------------------------------------------------------- */
+
+/** Una referencia como fila de textos, en el orden de `CAMPOS`. */
+function fila(c: CatalogColor): string[] {
+  return [
+    c.code,
+    c.name,
+    c.ral ?? '',
+    c.ralName ?? '',
+    c.finish ?? '',
+    c.gloss ?? '',
+    c.hex,
+    c.family,
+    siNo(c.textured),
+    siNo(c.stock),
+  ]
+}
+
+/** Todas las filas del catálogo, para la hoja de Excel. */
+export function filasDelCatalogo(catalogo: ColorCatalog): string[][] {
+  return catalogo.colors.map(fila)
+}
 
 export function generarCsv(catalogo: ColorCatalog): string {
   const lineas = [TITULOS.join(SEPARADOR)]
@@ -104,7 +127,7 @@ export function generarCsv(catalogo: ColorCatalog): string {
 
   // CRLF: es lo que espera Excel y evita que una sola línea larga aparezca
   // como un único registro al abrirlo en Windows.
-  return BOM + lineas.join('\r\n') + '\r\n'
+  return BOM + lineas.join(FIN_DE_LINEA) + FIN_DE_LINEA
 }
 
 /** Hoja vacía con sólo la cabecera, para quien necesite el formato correcto. */
@@ -127,7 +150,7 @@ export function generarPlantilla(catalogo: ColorCatalog): string {
       ].join(SEPARADOR),
     )
   }
-  return BOM + filas.join('\r\n') + '\r\n'
+  return BOM + filas.join(FIN_DE_LINEA) + FIN_DE_LINEA
 }
 
 export function descargar(nombre: string, contenido: string) {
@@ -140,6 +163,17 @@ export function descargar(nombre: string, contenido: string) {
   a.click()
   a.remove()
   URL.revokeObjectURL(url)
+}
+
+/**
+ * Convierte filas ya leídas de un `.xlsx` al texto que entiende `analizar`.
+ *
+ * Se reutiliza el mismo analizador en lugar de duplicarlo para Excel: las
+ * validaciones, los alias de cabecera y el informe de cambios son idénticos,
+ * y tener dos caminos sería tener dos comportamientos que se separan.
+ */
+export function filasATexto(filas: string[][]): string {
+  return filas.map((f) => f.map(celda).join(SEPARADOR)).join(FIN_DE_LINEA) + FIN_DE_LINEA
 }
 
 /* --- Analizar -------------------------------------------------------------- */

@@ -1,5 +1,5 @@
 import type { BusinessLine, Navigation, Site } from '@/types/content'
-import { SOCIAL_OPTIONS } from '@/lib/social'
+import { DEFAULT_VIEWBOX, SOCIAL_OPTIONS, socialNetwork } from '@/lib/social'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { FieldRenderer, ListField } from '../components/Fields'
@@ -48,6 +48,8 @@ export function NavigationScreen() {
           label="Menú principal"
           help="Una entrada sin subenlaces se muestra como enlace directo; con subenlaces abre el mega-menú."
           itemLabelKey="label"
+          itemSubtitleKey="href"
+          variante="tarjetas"
           itemFields={[
             { key: 'label', label: 'Etiqueta', type: 'text', required: true },
             { key: 'href', label: 'Destino', type: 'text', help: 'Déjalo vacío si sólo abre el mega-menú.' },
@@ -73,6 +75,7 @@ export function NavigationScreen() {
         <ListField
           label="Columnas del pie de página"
           itemLabelKey="title"
+          variante="tarjetas"
           itemFields={[
             { key: 'title', label: 'Título de la columna', type: 'text', required: true },
             {
@@ -95,6 +98,8 @@ export function NavigationScreen() {
         <ListField
           label="Enlaces legales"
           itemLabelKey="label"
+          itemSubtitleKey="href"
+          variante="tarjetas"
           itemFields={[
             { key: 'label', label: 'Texto', type: 'text', required: true },
             { key: 'href', label: 'Destino', type: 'text', required: true },
@@ -163,6 +168,25 @@ export function SiteScreen() {
           label="Redes sociales"
           help="El orden de la lista es el orden en que aparecen en el pie de página."
           itemLabelKey="network"
+          itemSubtitleKey="href"
+          variante="tarjetas"
+          // El mismo glifo que sale en el pie: se reconoce la red antes de
+          // leer su nombre, que es de lo que se trata.
+          itemThumb={(item) => {
+            const red = socialNetwork(String(item.network ?? ''))
+            return (
+              <svg
+                width="24"
+                height="24"
+                viewBox={red.viewBox ?? DEFAULT_VIEWBOX}
+                fill="currentColor"
+                aria-hidden="true"
+                style={{ color: 'var(--fg-brand-secondary)' }}
+              >
+                <path d={red.path} />
+              </svg>
+            )
+          }}
           itemFields={[
             {
               key: 'network',
@@ -216,6 +240,9 @@ export function BusinessLinesScreen() {
         <ListField
           label="Líneas"
           itemLabelKey="name"
+          itemSubtitleKey="headline"
+          itemImageKey="image"
+          variante="tarjetas"
           itemFields={[
             { key: 'slug', label: 'Slug (URL)', type: 'text', required: true, help: 'Minúsculas y guiones. Cambiarlo rompe los enlaces existentes.' },
             { key: 'name', label: 'Nombre', type: 'text', required: true },
