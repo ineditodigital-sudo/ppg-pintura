@@ -1,7 +1,7 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import type { CatalogColor, ColorCatalog, FeaturedProduct, Market } from '@/types/content'
 import { ICON_NAMES } from '@/lib/icons'
-import { FICHA_POR_DEFECTO } from '@/lib/stock'
+import { FICHA_POR_DEFECTO, PORTADA_POR_DEFECTO } from '@/lib/stock'
 import * as api from '../api'
 import { Alert, Loading, PageHead, SaveBar } from '../components/Common'
 import { FieldRenderer, ListField } from '../components/Fields'
@@ -623,6 +623,10 @@ export function ColorsScreen() {
     setAnalisis(null)
   }
 
+  /** Escribe una clave de la portada sin repetir el desparramado en cada campo. */
+  const setPortada = (clave: string, valor: unknown) =>
+    s.setValue({ ...catalogo, portada: { ...catalogo.portada, [clave]: valor } })
+
   return (
     <>
       <PageHead
@@ -654,6 +658,81 @@ export function ColorsScreen() {
       />
       <Alert kind="error" message={s.error} errors={s.errors} />
       <Alert kind="ok" message={s.notice} />
+
+      {/* La banda oscura que abre /colores. Estaba escrita dentro de la
+          página: se publicaba y no había forma de tocarla. */}
+      <div className="admin-card">
+        <h2 className="adm-grupo__titulo">Portada de la página de colores</h2>
+        <FieldRenderer
+          field={{ key: 'eyebrow', label: 'Antetítulo', type: 'text' }}
+          value={catalogo.portada?.eyebrow ?? PORTADA_POR_DEFECTO.eyebrow}
+          onChange={(v) => setPortada('eyebrow', v as string)}
+        />
+        <FieldRenderer
+          field={{ key: 'title', label: 'Título', type: 'text' }}
+          value={catalogo.portada?.title ?? PORTADA_POR_DEFECTO.title}
+          onChange={(v) => setPortada('title', v as string)}
+        />
+        <FieldRenderer
+          field={{
+            key: 'entradilla',
+            label: 'Entradilla',
+            type: 'textarea',
+            help: 'Escribe {n} donde quieras que salga el número de referencias; se cuenta solo, así que no se queda desfasado.',
+          }}
+          value={catalogo.portada?.entradilla ?? PORTADA_POR_DEFECTO.entradilla}
+          onChange={(v) => setPortada('entradilla', v as string)}
+        />
+        <FieldRenderer
+          field={{ key: 'aviso', label: 'Aviso sobre el color de pantalla', type: 'textarea' }}
+          value={catalogo.portada?.aviso ?? PORTADA_POR_DEFECTO.aviso}
+          onChange={(v) => setPortada('aviso', v as string)}
+        />
+        <FieldRenderer
+          field={{ key: 'cta', label: 'Botón de la portada', type: 'link' }}
+          value={
+            catalogo.portada?.cta ?? {
+              label: PORTADA_POR_DEFECTO.ctaLabel,
+              href: PORTADA_POR_DEFECTO.ctaHref,
+            }
+          }
+          onChange={(v) => setPortada('cta', v)}
+        />
+      </div>
+
+      <div className="admin-card">
+        <h2 className="adm-grupo__titulo">La página de colores en los buscadores</h2>
+        <FieldRenderer
+          field={{
+            key: 'title',
+            label: 'Título en Google',
+            type: 'text',
+            help: 'Unos 60 caracteres. Es el enlace azul del resultado.',
+          }}
+          value={catalogo.seo?.title ?? PORTADA_POR_DEFECTO.seoTitle}
+          onChange={(v) =>
+            s.setValue({
+              ...catalogo,
+              seo: { ...catalogo.seo, title: String(v ?? ''), description: catalogo.seo?.description ?? PORTADA_POR_DEFECTO.seoDescription },
+            })
+          }
+        />
+        <FieldRenderer
+          field={{
+            key: 'description',
+            label: 'Descripción en Google',
+            type: 'textarea',
+            help: 'Unos 155 caracteres. Es el párrafo gris de debajo.',
+          }}
+          value={catalogo.seo?.description ?? PORTADA_POR_DEFECTO.seoDescription}
+          onChange={(v) =>
+            s.setValue({
+              ...catalogo,
+              seo: { ...catalogo.seo, title: catalogo.seo?.title ?? PORTADA_POR_DEFECTO.seoTitle, description: String(v ?? '') },
+            })
+          }
+        />
+      </div>
 
       {/* Los textos del recuadro que se abre al pulsar un color. Viven con el
           catálogo porque la ficha sale igual desde /colores y desde la página

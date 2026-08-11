@@ -1,4 +1,18 @@
 {
+    "portada": {
+        "eyebrow": "Catálogo PPG",
+        "title": "Carta de color · Pintura en polvo PPG",
+        "entradilla": "{n} referencias de catálogo en poliéster e híbridos, lisas, texturizadas y gofradas. Cada una con su equivalencia RAL y su rango de brillo, tal como los publica PPG. Suministro en Aguascalientes.",
+        "aviso": "El color de pantalla es orientativo: el acabado final depende de la iluminación, el sustrato y la aplicación. Para decidir, pide la carta física.",
+        "cta": {
+            "label": "Solicitar carta física",
+            "href": "/contacto"
+        }
+    },
+    "seo": {
+        "title": "Carta de colores | Pintura en polvo PPG",
+        "description": "Catálogo completo de pintura electrostática en polvo PPG: 83 referencias en poliéster e híbridos, con equivalencia RAL, acabado y rango de brillo."
+    },
     "ficha": {
         "aviso": "El color de pantalla es orientativo. Los datos de resistencia, espesor de película y curva de curado vienen en la ficha técnica del producto: pídenosla y te la enviamos.",
         "ctaFicha": "Solicitar la ficha técnica",

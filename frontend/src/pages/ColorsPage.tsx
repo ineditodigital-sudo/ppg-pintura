@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { ColorCatalog } from '@/types/content'
 import { getColors } from '@/lib/api'
+import { PORTADA_POR_DEFECTO } from '@/lib/stock'
 import { useSeo } from '@/lib/useSeo'
 import { useCabeceraSobreHero } from '@/lib/useCabeceraSobreHero'
 import { ExploradorColores } from '@/components/blocks/ColorCatalog'
@@ -33,10 +34,11 @@ export function ColorsPage() {
     }
   }, [])
 
+  // Todo esto se edita en la Carta de color. Los valores de fábrica quedan
+  // como red de seguridad si una clave falta.
   useSeo({
-    title: 'Carta de colores | Pintura en polvo PPG',
-    description:
-      'Catálogo completo de pintura electrostática en polvo PPG: 83 referencias en poliéster e híbridos, con equivalencia RAL, acabado y rango de brillo.',
+    title: catalogo?.seo?.title ?? PORTADA_POR_DEFECTO.seoTitle,
+    description: catalogo?.seo?.description ?? PORTADA_POR_DEFECTO.seoDescription,
   })
 
   // La portada de la carta es oscura y también monta bajo la cabecera.
@@ -44,29 +46,29 @@ export function ColorsPage() {
 
   if (!catalogo) return <PageSkeleton />
 
+  const portada = catalogo.portada ?? {}
+  // `{n}` lo escribe quien edita el texto; aquí sólo se sustituye por el
+  // recuento real, para que no se quede desfasado al añadir referencias.
+  const entradilla = (portada.entradilla ?? PORTADA_POR_DEFECTO.entradilla)
+    .split('{n}')
+    .join(String(catalogo.colors.length))
+
   return (
     <>
       {/* Sin migas: la banda oscura sube por detrás de la cabecera y las
           taparía. El titular ya dice dónde estás, y el menú sigue arriba. */}
       <Section theme="dark" className="carta__portada">
         <Container>
-          <span className="eyebrow">Catálogo PPG</span>
+          <span className="eyebrow">{portada.eyebrow ?? PORTADA_POR_DEFECTO.eyebrow}</span>
           {/* Un recuento no es un titular: «83 referencias» dice cuántas hay,
               no qué es esto. El nombre del documento va delante y la cifra
               pasa a la entradilla, donde sí aporta. */}
-          <h1>Carta de color · Pintura en polvo PPG</h1>
-          <p className="carta__entradilla">
-            {catalogo.colors.length} referencias de catálogo en poliéster e
-            híbridos, lisas, texturizadas y gofradas. Cada una con su
-            equivalencia RAL y su rango de brillo, tal como los publica PPG.
-            Suministro en Aguascalientes.
-          </p>
-          <p className="carta__aviso">
-            El color de pantalla es orientativo: el acabado final depende de la
-            iluminación, el sustrato y la aplicación. Para decidir, pide la
-            carta física.
-          </p>
-          <ButtonLink href="/contacto">Solicitar carta física</ButtonLink>
+          <h1>{portada.title ?? PORTADA_POR_DEFECTO.title}</h1>
+          <p className="carta__entradilla">{entradilla}</p>
+          <p className="carta__aviso">{portada.aviso ?? PORTADA_POR_DEFECTO.aviso}</p>
+          <ButtonLink href={portada.cta?.href ?? PORTADA_POR_DEFECTO.ctaHref}>
+            {portada.cta?.label ?? PORTADA_POR_DEFECTO.ctaLabel}
+          </ButtonLink>
         </Container>
       </Section>
 

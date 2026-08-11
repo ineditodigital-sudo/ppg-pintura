@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect, useState } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import type { Navigation, Site } from '@/types/content'
 import { getNavigation, getSite } from '@/lib/api'
+import { variablesDelTema } from '@/lib/tema'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 import { WhatsAppFab } from '@/components/layout/WhatsAppFab'
@@ -31,6 +32,22 @@ function ScrollToTop() {
   }, [pathname, hash])
 
   return null
+}
+
+/**
+ * Aplica los colores de marca de Ajustes pisando las variables CSS.
+ *
+ * Con `<style>` y no escribiendo las variables desde JavaScript: son quince, y
+ * ponerlas una a una obligaría a recordar cuáles se pusieron para poder
+ * quitarlas después. Una etiqueta que se reemplaza entera no tiene ese
+ * problema.
+ */
+function ColoresDeMarca({ site }: { site: Site | null }) {
+  const css = variablesDelTema(site)
+
+  if (!css) return null
+
+  return <style>{css}</style>
 }
 
 export default function App() {
@@ -68,6 +85,8 @@ export default function App() {
 
   return (
     <>
+      <ColoresDeMarca site={site} />
+
       <a className="skip-link" href="#contenido">
         Saltar al contenido
       </a>

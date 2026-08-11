@@ -375,6 +375,17 @@ export interface ColorCatalog {
     ctaFicha?: string
     ctaWhatsApp?: string
   }
+  /** La banda oscura que abre /colores. */
+  portada?: {
+    eyebrow?: string
+    title?: string
+    /** Lleva `{n}`, que se sustituye por el número real de referencias. */
+    entradilla?: string
+    aviso?: string
+    cta?: Link
+  }
+  /** Título y descripción de /colores para los buscadores. */
+  seo?: Seo
 }
 
 export interface FeaturedProduct {
@@ -451,6 +462,20 @@ export interface Site {
   /** Marca que encabeza el sitio: PPG. */
   name: string
   tagline: string
+  /**
+   * Colores de marca, editables desde Ajustes.
+   *
+   * Se piden dos y el resto se deriva —ver `lib/tema.ts`—. No se llama `theme`
+   * para no confundirlo con el `Theme` de los bloques, que elige entre fondo
+   * claro, oscuro o de marca y es otra cosa. Si falta, mandan los valores de
+   * `tokens.css`.
+   */
+  brandColors?: {
+    /** Color principal: botones, enlaces y acentos. */
+    brand?: string
+    /** Fondo de las bandas oscuras. */
+    dark?: string
+  }
   logo: Media
   /** Versión calada en blanco, para cabecera y bloques oscuros. */
   logoLight?: Media

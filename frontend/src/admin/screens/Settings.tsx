@@ -146,6 +146,50 @@ export function SiteScreen() {
           value={site.tagline}
           onChange={(v) => s.setValue({ ...site, tagline: String(v ?? '') })}
         />
+      </div>
+
+      {/* Los colores de marca vivían en el CSS: cambiar el azul de PPG era
+          tocar código. Se piden dos y el resto —hover, pulsado, bordes,
+          tintes— se calcula, para no pedirle al cliente que elija cinco azules
+          coherentes entre sí. */}
+      <div className="admin-card">
+        <h2 className="adm-grupo__titulo">Colores de marca</h2>
+        <p className="adm-grupo__nota">
+          Afectan a todo el sitio a la vez: botones, enlaces, iconos y bandas.
+          Los tonos de paso del ratón y de pulsado se calculan solos a partir
+          del principal, y el texto de los botones pasa a oscuro si eliges un
+          color claro para que se siga leyendo.
+        </p>
+        <FieldRenderer
+          field={{
+            key: 'brand',
+            label: 'Color principal',
+            type: 'color',
+            help: 'El azul de PPG es #0078A9. Déjalo vacío para volver a él.',
+          }}
+          value={site.brandColors?.brand ?? '#0078a9'}
+          onChange={(v) =>
+            s.setValue({
+              ...site,
+              brandColors: { ...site.brandColors, brand: String(v ?? '') },
+            })
+          }
+        />
+        <FieldRenderer
+          field={{
+            key: 'dark',
+            label: 'Fondo de las bandas oscuras',
+            type: 'color',
+            help: 'El de la portada y los cierres. Por defecto, #20292E.',
+          }}
+          value={site.brandColors?.dark ?? '#20292e'}
+          onChange={(v) =>
+            s.setValue({
+              ...site,
+              brandColors: { ...site.brandColors, dark: String(v ?? '') },
+            })
+          }
+        />
         <FieldRenderer
           field={{ key: 'copyright', label: 'Aviso de copyright', type: 'text', required: true }}
           value={site.copyright}

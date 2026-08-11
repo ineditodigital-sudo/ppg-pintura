@@ -1,52 +1,56 @@
 {
-  "name": "PPG",
-  "tagline": "Recubrimientos industriales de alto desempeño",
-  "logo": {
-    "src": "/assets/marcas/ppg-azul.svg",
-    "alt": "PPG",
-    "width": 1280,
-    "height": 993
-  },
-  "logoLight": {
-    "src": "/assets/marcas/ppg-blanco.svg",
-    "alt": "PPG",
-    "width": 1280,
-    "height": 993
-  },
-  "footerLogo": {
-    "src": "/assets/marcas/ppg-blanco.svg",
-    "alt": "PPG",
-    "width": 1280,
-    "height": 993
-  },
-  "distributor": {
-    "name": "Coating Systems MX",
-    "legalName": "Coating Systems Mx S de RL de CV",
-    "label": "Distribuidor autorizado en México",
+    "name": "PPG",
+    "tagline": "Recubrimientos industriales de alto desempeño",
     "logo": {
-      "src": "/assets/csmx/logo.svg",
-      "alt": "Coating Systems MX",
-      "width": 340,
-      "height": 100
+        "src": "/assets/marcas/ppg-azul.svg",
+        "alt": "PPG",
+        "width": 1280,
+        "height": 993
+    },
+    "logoLight": {
+        "src": "/assets/marcas/ppg-blanco.svg",
+        "alt": "PPG",
+        "width": 1280,
+        "height": 993
+    },
+    "footerLogo": {
+        "src": "/assets/marcas/ppg-blanco.svg",
+        "alt": "PPG",
+        "width": 1280,
+        "height": 993
+    },
+    "distributor": {
+        "name": "Coating Systems MX",
+        "legalName": "Coating Systems Mx S de RL de CV",
+        "label": "Distribuidor autorizado en México",
+        "logo": {
+            "src": "/assets/csmx/logo.svg",
+            "alt": "Coating Systems MX",
+            "width": 340,
+            "height": 100
+        }
+    },
+    "social": [
+        {
+            "network": "facebook",
+            "href": "https://facebook.com/profile.php?id=100085940283950"
+        },
+        {
+            "network": "whatsapp",
+            "href": "https://api.whatsapp.com/send?phone=523333892775"
+        },
+        {
+            "network": "instagram",
+            "href": "https://instagram.com/coatingsystemsmx"
+        },
+        {
+            "network": "linkedin",
+            "href": "https://linkedin.com/in/coatingsystemsmx"
+        }
+    ],
+    "copyright": "© 2026 Coating Systems Mx S de RL de CV — distribuidor autorizado PPG. Todos los derechos reservados.",
+    "brandColors": {
+        "brand": "#0078a9",
+        "dark": "#20292e"
     }
-  },
-  "social": [
-    {
-      "network": "facebook",
-      "href": "https://facebook.com/profile.php?id=100085940283950"
-    },
-    {
-      "network": "whatsapp",
-      "href": "https://api.whatsapp.com/send?phone=523333892775"
-    },
-    {
-      "network": "instagram",
-      "href": "https://instagram.com/coatingsystemsmx"
-    },
-    {
-      "network": "linkedin",
-      "href": "https://linkedin.com/in/coatingsystemsmx"
-    }
-  ],
-  "copyright": "© 2026 Coating Systems Mx S de RL de CV — distribuidor autorizado PPG. Todos los derechos reservados."
 }

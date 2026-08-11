@@ -36,3 +36,18 @@ export const FICHA_POR_DEFECTO = {
   ctaFicha: 'Solicitar la ficha técnica',
   ctaWhatsApp: 'Preguntar por WhatsApp',
 } as const
+
+/** La banda oscura que abre `/colores`, cuando el catálogo aún no la trae. */
+export const PORTADA_POR_DEFECTO = {
+  eyebrow: 'Catálogo PPG',
+  title: 'Carta de color · Pintura en polvo PPG',
+  entradilla:
+    '{n} referencias de catálogo en poliéster e híbridos, lisas, texturizadas y gofradas. Cada una con su equivalencia RAL y su rango de brillo, tal como los publica PPG. Suministro en Aguascalientes.',
+  aviso:
+    'El color de pantalla es orientativo: el acabado final depende de la iluminación, el sustrato y la aplicación. Para decidir, pide la carta física.',
+  ctaLabel: 'Solicitar carta física',
+  ctaHref: '/contacto',
+  seoTitle: 'Carta de colores | Pintura en polvo PPG',
+  seoDescription:
+    'Catálogo completo de pintura electrostática en polvo PPG: 83 referencias en poliéster e híbridos, con equivalencia RAL, acabado y rango de brillo.',
+} as const
