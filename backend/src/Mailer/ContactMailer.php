@@ -196,7 +196,15 @@ final class ContactMailer
      */
     private function cuerpoHtml(array $m, bool $paraQuienEscribe = false): string
     {
-        $logo = $this->siteUrl . '/assets/csmx/logo-email.png';
+        /**
+         * PNG y no SVG: Gmail y Outlook descartan los SVG, y el correo se
+         * quedaría sin logotipo. Va aplanado sobre el azul de la banda —no con
+         * transparencia— porque es lo único que se ve igual en todos los
+         * clientes, incluidos los que dibujan el correo con el motor de Word.
+         * Se sirve al doble de la medida a la que se enseña, para las pantallas
+         * de densidad alta.
+         */
+        $logo = $this->siteUrl . '/assets/marcas/ppg-email.png';
         $marca = self::MARCA;
         $tinta = self::TINTA;
         $suave = self::SUAVE;
@@ -236,16 +244,26 @@ final class ContactMailer
          style="width:100%;max-width:600px;background:#FFFFFF;border-radius:8px;overflow:hidden;">
 
     <tr>
-      <td style="background:{$marca};padding:24px 28px;">
+      <td style="background:{$marca};padding:26px 28px;">
+        <!--
+          PPG delante y el distribuidor como matiz, igual que en el sitio: la
+          marca del sitio es PPG y Coating Systems aparece como quien la
+          representa, no en su lugar. Antes el correo abría con el logotipo del
+          distribuidor y decía lo contrario que la web.
+
+          El logotipo va sin fondo blanco propio: el archivo ya viene aplanado
+          sobre este mismo azul, así que se funde con la banda en lugar de
+          quedar recuadrado.
+        -->
         <table role="presentation" cellpadding="0" cellspacing="0" border="0">
           <tr>
-            <td style="padding-right:14px;">
-              <img src="{$logo}" width="48" height="54" alt="{$nombreEmpresa}"
-                   style="display:block;border:0;background:#FFFFFF;border-radius:6px;">
+            <td style="padding-right:16px;" valign="middle">
+              <img src="{$logo}" width="62" height="48" alt="PPG"
+                   style="display:block;border:0;">
             </td>
-            <td style="font-family:Arial,Helvetica,sans-serif;color:#FFFFFF;">
-              <div style="font-size:17px;font-weight:bold;line-height:1.3;">{$nombreEmpresa}</div>
-              <div style="font-size:13px;opacity:0.85;line-height:1.4;">Distribuidor autorizado PPG</div>
+            <td style="font-family:Arial,Helvetica,sans-serif;color:#FFFFFF;" valign="middle">
+              <div style="font-size:12px;line-height:1.4;letter-spacing:0.09em;text-transform:uppercase;color:#BFE0EE;">Distribuidor autorizado</div>
+              <div style="font-size:17px;font-weight:bold;line-height:1.35;">{$nombreEmpresa}</div>
             </td>
           </tr>
         </table>
@@ -271,14 +289,18 @@ final class ContactMailer
     <tr>
       <td style="padding:20px 28px 4px;font-family:Arial,Helvetica,sans-serif;">
         <div style="font-size:11px;font-weight:bold;letter-spacing:0.08em;text-transform:uppercase;color:{$suave};padding-bottom:8px;">Mensaje</div>
-        <div style="font-size:15px;line-height:1.65;color:{$tinta};background:#F5F8FB;border-radius:6px;padding:16px 18px;">{$mensaje}</div>
+        <!-- Filete de marca a la izquierda: distingue lo que escribió la
+             persona del texto que genera el sitio, que es lo que se lee
+             primero cuando llega un aviso. -->
+        <div style="font-size:15px;line-height:1.65;color:{$tinta};background:#F5F8FB;border-left:3px solid {$marca};border-radius:0 6px 6px 0;padding:16px 18px;">{$mensaje}</div>
       </td>
     </tr>
 
     <tr>
       <td style="padding:24px 28px 28px;font-family:Arial,Helvetica,sans-serif;">
-        <div style="border-top:1px solid {$borde};padding-top:16px;font-size:12px;line-height:1.6;color:{$suave};">
-          {$nombreEmpresa}<br>
+        <div style="border-top:1px solid {$borde};padding-top:16px;font-size:12px;line-height:1.7;color:{$suave};">
+          <strong style="color:{$tinta};">{$nombreEmpresa}</strong> · Distribuidor autorizado PPG<br>
+          Pintura en polvo en Aguascalientes<br>
           <a href="{$this->siteUrl}" style="color:{$marca};text-decoration:none;">{$this->siteUrl}</a>
         </div>
       </td>
