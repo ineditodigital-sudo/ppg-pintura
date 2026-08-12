@@ -43,9 +43,9 @@
   place-items: center;
   width: 44px;
   height: 44px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: var(--tinta-sobre-oscuro, #fff);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 24%, transparent);
   border-radius: var(--radius-full);
   cursor: pointer;
   transition:
@@ -61,31 +61,32 @@
 /* --- Pista ------------------------------------------------------------------ */
 
 .carrusel__pista {
-  /* Lo que separa la primera muestra del borde: el mismo hueco que deja el
-     contenedor, para que la fila arranque justo bajo el titular.
-
-     El `50%` se mide contra la sección, que ya ocupa todo el ancho útil. Antes
-     esto se hacía sangrando con `margin-inline: calc(50% - 50vw)` y midiendo
-     el hueco en `vw`; como `vw` cuenta la barra de desplazamiento y `%` no, la
-     fila quedaba media barra —7px— a la izquierda del titular. Sin el margen
-     no hay nada que compensar y las dos medidas hablan del mismo ancho. */
-  --sangrado: max(
-    var(--page-padding-x),
-    calc(50% - var(--container-max) / 2 + var(--page-padding-x))
-  );
-
   display: flex;
   gap: var(--space-m);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+
+  /* La fila vive en la misma columna que el resto de la página. Antes sangraba
+     hasta el borde de la ventana: la última muestra acababa 244px por fuera
+     del texto, y eso se lee como algo que se desborda, no como una fila que
+     continúa. Compartir margen con el titular es lo que la hace parecer
+     intencionada. */
+  max-width: var(--container-max);
+  margin-inline: auto;
   padding-block: 0 var(--space-xs);
-  padding-inline: var(--sangrado);
+  padding-inline: var(--page-padding-x);
   /* Sin esto el `scroll-snap` no ve el relleno: al cargar pegaba la primera
      muestra al borde del scrollport, desplazaba la pista sola ese mismo hueco
-     y la fila entera arrancaba cortada contra el borde de la ventana. */
-  scroll-padding-inline: var(--sangrado);
+     y la fila arrancaba desalineada del titular que tiene encima. */
+  scroll-padding-inline: var(--page-padding-x);
+
+  /* El corte se difumina en lugar de darse a hachazo, para que se lea que la
+     fila sigue. Una máscara y no un degradado de color: así vale igual sobre
+     el azul de siempre que sobre el fondo que se elija en el panel. */
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent);
+
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  scrollbar-color: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 30%, transparent) transparent;
 }
 
 .carrusel__pista::-webkit-scrollbar {
@@ -93,7 +94,7 @@
 }
 
 .carrusel__pista::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.28);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 28%, transparent);
   border-radius: 999px;
 }
 
@@ -108,14 +109,14 @@
   border-radius: var(--radius-xl);
   /* Filo interior claro: sin él, las muestras oscuras se funden con el fondo
      y las claras flotan sin límite definido. */
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 16%, transparent);
 }
 
 .carrusel__nombre {
   margin-top: 10px;
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
-  color: #fff;
+  color: var(--tinta-sobre-oscuro, #fff);
 }
 
 .carrusel__meta {

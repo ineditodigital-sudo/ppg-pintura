@@ -43,6 +43,11 @@
 .bloque-color--fondo {
   --texto-tenue-sobre-oscuro: var(--fg-secondary);
   --acento-sobre-oscuro: var(--fg-brand-tertiary);
+  /* La «tinta» es el blanco del que salen los nombres, los botones redondos,
+     los filos y las barras de los bloques oscuros. Los translúcidos se hacen
+     con `color-mix` sobre ella, así que cada uno conserva su porcentaje y
+     basta cambiar el color de partida. */
+  --tinta-sobre-oscuro: var(--fg-primary);
 }
 
 /* Los bloques con tema oscuro fijo —el carrusel de colores— no obedecen al
@@ -141,7 +146,7 @@
 }
 
 .section--dark .section-head {
-  border-bottom-color: rgba(255, 255, 255, 0.16);
+  border-bottom-color: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 16%, transparent);
 }
 
 .section-head__principal {
@@ -547,7 +552,7 @@ a.card--text:hover,
 }
 
 .section--dark .card--text {
-  border-top-color: rgba(255, 255, 255, 0.18);
+  border-top-color: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 18%, transparent);
 }
 
 .section--dark .card--text::after {

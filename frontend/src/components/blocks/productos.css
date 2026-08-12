@@ -110,7 +110,7 @@
   font-weight: var(--fw-regular);
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: var(--tinta-sobre-oscuro, #fff);
 }
 
 .producto__sku {
@@ -135,7 +135,7 @@
   margin-top: var(--space-xs);
   font-size: var(--fs-sm);
   font-weight: var(--fw-semibold);
-  color: #fff;
+  color: var(--tinta-sobre-oscuro, #fff);
   text-decoration: none;
 }
 

@@ -186,9 +186,9 @@
   height: 60px;
   margin-bottom: var(--space-l);
   border-radius: var(--radius-xl);
-  background: rgba(255, 255, 255, 0.14);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 14%, transparent);
   backdrop-filter: blur(6px);
-  color: #fff;
+  color: var(--tinta-sobre-oscuro, #fff);
 }
 
 .hero--feature h1 {
@@ -531,7 +531,7 @@
    fuerte esta pensado para caja baja: en versales pega las letras. */
 .hero-slide h1,
 .hero-slide__titulo-inactivo {
-  color: var(--fg-white);
+  color: var(--tinta-sobre-oscuro, #fff);
   font-size: clamp(1.5rem, 0.35rem + 4.1vw, 3.75rem);
   font-weight: var(--fw-bold);
   line-height: 1.06;
@@ -573,9 +573,9 @@
   place-items: center;
   width: 46px;
   height: 46px;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: var(--tinta-sobre-oscuro, #fff);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 22%, transparent);
   border-radius: var(--radius-full);
   backdrop-filter: blur(6px);
   transition:
@@ -627,13 +627,13 @@
   width: 60px;
   height: 3px;
   border-radius: var(--radius-full);
-  background: rgba(255, 255, 255, 0.26);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 26%, transparent);
   overflow: hidden;
   transition: background-color var(--dur-base) var(--ease-out);
 }
 
 .hero-slider__dot:hover .hero-slider__dot-track {
-  background: rgba(255, 255, 255, 0.5);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 50%, transparent);
 }
 
 .hero-slider__dot-fill {
@@ -1080,17 +1080,17 @@
 }
 
 .section--dark .stat {
-  background: rgba(255, 255, 255, 0.06);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 6%, transparent);
 }
 
 .section--dark .stat:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--tinta-sobre-oscuro, #fff) 10%, transparent);
 }
 .section--dark .stat__value {
   color: var(--acento-sobre-oscuro, #7cc8e8);
 }
 .section--dark .stat__label {
-  color: var(--fg-white);
+  color: var(--tinta-sobre-oscuro, #fff);
 }
 .section--dark .stat__detail {
   color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.82));
