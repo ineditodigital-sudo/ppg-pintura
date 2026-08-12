@@ -437,6 +437,12 @@ GUIAS['editor'] = {
         'Coge un bloque por este asa y suéltalo donde quieras. Cambiar el orden aquí cambia el orden en la página.',
     },
     {
+      objetivo: '.adm-colores',
+      titulo: 'Cada sección puede llevar sus colores',
+      texto:
+        'Al final del formulario de cada bloque. Cambia el fondo, el texto y el color de los botones sólo de esa sección. Si no tocas nada, usa los del sitio; el aviso de contraste te dice si el texto se va a leer.',
+    },
+    {
       objetivo: '.adm-preview__anchos',
       titulo: 'Compruébalo en móvil',
       texto:

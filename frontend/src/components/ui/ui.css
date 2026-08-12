@@ -27,6 +27,65 @@
   padding-block: 0;
 }
 
+/* --- Colores propios de un bloque ------------------------------------------
+   El envoltorio sólo lleva las variables; el fondo se pinta sobre la sección
+   de dentro y no sobre él para no romper los bloques que suben con margen
+   negativo por detrás de la cabecera —ahí el envoltorio y su hijo dejan de
+   ocupar la misma caja, y un fondo puesto arriba quedaría descolocado. */
+.bloque-color.bloque-color--fondo > * {
+  background: var(--bloque-fondo);
+}
+
+/* Los paneles oscuros del sitio fijan su texto en blancos translúcidos porque
+   dan por hecho el azul de debajo. Esas declaraciones pasan por estas dos
+   variables —con su valor de siempre como respaldo—, así que aquí basta
+   redirigirlas al color calculado en lugar de perseguir cada selector. */
+.bloque-color--fondo {
+  --texto-tenue-sobre-oscuro: var(--fg-secondary);
+  --acento-sobre-oscuro: var(--fg-brand-tertiary);
+}
+
+/* Los bloques con tema oscuro fijo —el carrusel de colores— no obedecen al
+   cambio de preajuste, porque su tema no sale del contenido. Aquí se les
+   devuelve el color de texto que corresponde al fondo elegido; sin esto, un
+   fondo claro se quedaría con los titulares en blanco. */
+.bloque-color--fondo > .section--dark,
+.bloque-color--fondo > .section--dark :is(h1, h2, h3, h4) {
+  color: inherit;
+}
+
+/* El bloque de cierre no es una sección plana sino un panel con esquinas
+   redondeadas dentro de ella. Ahí el fondo propio va al panel, que es lo que
+   se lee como fondo del bloque; pintar la sección dejaría el panel azul
+   flotando encima del color elegido. */
+.bloque-color--fondo > .section:has(.cta-banner) {
+  background: transparent;
+}
+
+.bloque-color--fondo .cta-banner {
+  background: var(--bloque-fondo);
+}
+
+/* Los paneles oscuros —cierre y cabeceras— fijan su texto en blanco porque
+   dan por hecho el azul de debajo. Con un fondo propio manda el color
+   elegido, o el que se calcula para que se lea sobre él. */
+.bloque-color--fondo :is(.hero--compact, .hero--full, .hero--feature),
+.bloque-color--fondo :is(.hero, .hero-slide, .cta-banner) :is(h1, h2, h3) {
+  color: inherit;
+}
+
+/* El botón del cierre se invierte a blanco dando por hecho el panel azul.
+   Sobre un fondo claro, un botón blanco desaparece. */
+.bloque-color--fondo .cta-banner__actions .btn--primary {
+  background: var(--bg-brand-solid);
+  color: var(--fg-brand-on-solid);
+}
+
+.bloque-color--fondo .cta-banner__actions .btn--primary:hover {
+  background: var(--bg-brand-solid-hover);
+  color: var(--fg-brand-on-solid);
+}
+
 .section--light {
   background: var(--bg-secondary);
 }
@@ -130,11 +189,11 @@
 }
 
 .section--dark .section-head__description {
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.78));
 }
 
 .section--dark .eyebrow {
-  color: #7cc8e8;
+  color: var(--acento-sobre-oscuro, #7cc8e8);
 }
 
 /* --- Botón ---------------------------------------------------------------- */
@@ -492,7 +551,7 @@ a.card--text:hover,
 }
 
 .section--dark .card--text::after {
-  color: var(--ppg-sky);
+  color: var(--acento-sobre-oscuro, var(--ppg-sky));
 }
 
 .card--text .card__title {

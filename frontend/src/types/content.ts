@@ -9,6 +9,23 @@
 
 export type Theme = 'light' | 'dark' | 'transparent' | 'brand'
 
+/**
+ * Colores propios de un bloque, por encima del preajuste de `theme`.
+ *
+ * Los tres son opcionales y hexadecimales de seis dígitos. Se aplican pisando
+ * las mismas variables CSS que usa el resto del sitio —no hay una segunda
+ * forma de pintar nada—, así que un color de acento repinta botones, enlaces y
+ * antetítulos de esa sección sin tocar ni un componente.
+ */
+export interface ColoresDeBloque {
+  /** Fondo de la sección. Sustituye al preajuste del bloque. */
+  background?: string
+  /** Texto. Si se deja vacío y hay fondo, se calcula uno que se lea sobre él. */
+  text?: string
+  /** Botones, enlaces y antetítulos. */
+  accent?: string
+}
+
 export interface Link {
   label: string
   href: string
@@ -310,7 +327,12 @@ export interface ColorShowcaseBlock {
   cta?: Link
 }
 
-export type Block =
+/**
+ * Los colores propios se cruzan con toda la unión en lugar de repetirse en
+ * diecinueve interfaces: cualquier bloque puede llevarlos, y uno nuevo los
+ * hereda sin que haya que acordarse de añadírselos.
+ */
+export type Block = (
   | HeroBlock
   | HeroSliderBlock
   | RichTextBlock
@@ -330,6 +352,7 @@ export type Block =
   | ProductShowcaseBlock
   | ColorCarouselBlock
   | ColorCatalogBlock
+) & { colors?: ColoresDeBloque }
 
 /* --- Página y datos globales ---------------------------------------------- */
 

@@ -86,12 +86,12 @@
 }
 
 .hero--full .hero__subtitle {
-  color: rgba(255, 255, 255, 0.88);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.88));
   max-width: 48ch;
 }
 
 .hero--full .eyebrow {
-  color: #8fd3f0;
+  color: var(--acento-sobre-oscuro, #8fd3f0);
 }
 
 /* Botones tipo píldora sobre la imagen. */
@@ -201,12 +201,12 @@
 }
 
 .hero--feature .hero__subtitle {
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.86));
   max-width: 46ch;
 }
 
 .hero--feature .eyebrow {
-  color: #8fd3f0;
+  color: var(--acento-sobre-oscuro, #8fd3f0);
 }
 
 .hero--feature .hero__actions .btn {
@@ -295,11 +295,11 @@
 }
 
 .hero--compact .hero__subtitle {
-  color: rgba(255, 255, 255, 0.76);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.76));
 }
 
 .hero--compact .eyebrow {
-  color: var(--ppg-sky);
+  color: var(--acento-sobre-oscuro, var(--ppg-sky));
   background: rgba(143, 211, 240, 0.12);
 }
 
@@ -517,7 +517,7 @@
   font-weight: var(--fw-semibold);
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ppg-sky);
+  color: var(--acento-sobre-oscuro, var(--ppg-sky));
   background: rgba(143, 211, 240, 0.12);
   border: 1px solid rgba(143, 211, 240, 0.24);
   border-radius: var(--radius-full);
@@ -548,7 +548,7 @@
   max-width: 48ch;
   font-size: var(--fs-lead);
   line-height: var(--lh-relaxed);
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.72));
 }
 
 .hero-slide__actions {
@@ -969,7 +969,7 @@
 }
 
 .section--dark .content-banner__body {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.8));
 }
 
 .content-banner__children {
@@ -1087,13 +1087,13 @@
   background: rgba(255, 255, 255, 0.1);
 }
 .section--dark .stat__value {
-  color: #7cc8e8;
+  color: var(--acento-sobre-oscuro, #7cc8e8);
 }
 .section--dark .stat__label {
   color: var(--fg-white);
 }
 .section--dark .stat__detail {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.82));
 }
 
 /* Sin esto la regla de arriba pisa a `.stat--highlight` por orden de cascada
@@ -1221,7 +1221,7 @@
 .cta-banner__description {
   font-size: var(--fs-lead);
   line-height: var(--lh-relaxed);
-  color: rgba(255, 255, 255, 0.86);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.86));
 }
 
 .cta-banner__actions {

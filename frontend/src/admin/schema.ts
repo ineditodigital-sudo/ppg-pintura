@@ -19,6 +19,7 @@ export type FieldType =
   | 'link'
   | 'list'
   | 'stringList'
+  | 'colors'
 
 export interface FieldDef {
   key: string
@@ -73,6 +74,18 @@ const linkField = (key: string, label: string): FieldDef => ({
   type: 'link',
 })
 
+/**
+ * Colores propios de la sección. Va en todos los bloques, en la misma posición
+ * y con el mismo nombre: buscar dónde se cambia un fondo no debería depender
+ * de qué bloque sea.
+ */
+const campoColores: FieldDef = {
+  key: 'colors',
+  label: 'Colores de esta sección',
+  type: 'colors',
+  help: 'Opcional. Sin tocar nada, la sección usa los colores del sitio que están en Ajustes.',
+}
+
 const cardItemFields: FieldDef[] = [
   { key: 'title', label: 'Título', type: 'text', required: true },
   { key: 'description', label: 'Descripción', type: 'textarea' },
@@ -125,6 +138,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       },
       linkField('cta', 'Botón principal'),
       linkField('secondaryCta', 'Botón secundario'),
+      campoColores,
     ],
     defaults: { type: 'hero', variant: 'compact', title: 'Nuevo título' },
   },
@@ -168,6 +182,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           linkField('secondaryCta', 'Botón secundario'),
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'heroSlider',
@@ -200,6 +215,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         required: true,
         help: 'Cada entrada es un párrafo independiente.',
       },
+      campoColores,
     ],
     defaults: { type: 'richText', align: 'left', paragraphs: ['Escribe aquí.'] },
   },
@@ -233,6 +249,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         itemFields: cardItemFields,
         itemLabelKey: 'title',
       },
+      campoColores,
     ],
     defaults: {
       type: 'cardGrid',
@@ -260,6 +277,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           { key: 'href', label: 'Enlace al vídeo', type: 'text', required: true },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'mediaGrid',
@@ -298,6 +316,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       },
       { key: 'theme', label: 'Fondo', type: 'select', options: themeOptions },
       linkField('cta', 'Botón'),
+      campoColores,
     ],
     defaults: {
       type: 'contentBanner',
@@ -318,6 +337,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       { key: 'videoTitle', label: 'Título del vídeo', type: 'text' },
       { key: 'thumbnail', label: 'Miniatura', type: 'image', required: true },
       { key: 'theme', label: 'Fondo', type: 'select', options: themeOptions },
+      campoColores,
     ],
     defaults: {
       type: 'videoFeature',
@@ -354,6 +374,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'statGrid',
@@ -380,6 +401,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           { key: 'description', label: 'Descripción', type: 'textarea', required: true },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'timeline',
@@ -402,6 +424,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       { key: 'theme', label: 'Fondo de la sección', type: 'select', options: themeOptions },
       linkField('cta', 'Botón principal'),
       linkField('secondaryCta', 'Botón secundario'),
+      campoColores,
     ],
     defaults: {
       type: 'ctaBanner',
@@ -440,6 +463,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'linkList',
@@ -455,6 +479,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
       { key: 'quote', label: 'Cita', type: 'textarea', required: true },
       { key: 'author', label: 'Autor', type: 'text', required: true },
       { key: 'role', label: 'Cargo', type: 'text' },
+      campoColores,
     ],
     defaults: { type: 'quote', quote: 'Texto de la cita.', author: 'Nombre' },
   },
@@ -528,6 +553,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'contactForm',
@@ -557,6 +583,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           { key: 'href', label: 'Sitio de la marca', type: 'text' },
         ],
       },
+      campoColores,
     ],
     defaults: {
       type: 'brandStrip',
@@ -570,7 +597,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
   productShowcase: {
     label: 'Productos destacados',
     description: 'Los tres productos PPG que abren el sitio. Se editan en «Productos».',
-    fields: [],
+    fields: [campoColores],
     defaults: { type: 'productShowcase' },
   },
 
@@ -621,6 +648,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         placeholder: '/colores',
         help: 'Ruta interna (/colores) o URL completa.',
       },
+      campoColores,
     ],
     defaults: {
       type: 'colorCarousel',
@@ -637,7 +665,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
     label: 'Carta de colores completa',
     description:
       'La carta entera con pestañas por familia y buscador. Se alimenta sola de la Carta de color; no hay nada que configurar.',
-    fields: [],
+    fields: [campoColores],
     defaults: { type: 'colorCatalog' },
   },
 
@@ -680,6 +708,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
           },
         ],
       },
+      campoColores,
     ],
     defaults: { type: 'specList', columns: 2, items: [] },
   },
@@ -722,6 +751,7 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
         help: 'Aclaración sobre la fidelidad del color en pantalla.',
       },
       linkField('cta', 'Botón'),
+      campoColores,
     ],
     defaults: {
       type: 'colorShowcase',

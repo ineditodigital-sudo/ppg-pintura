@@ -31,7 +31,7 @@
   margin-top: var(--space-2xs);
   max-width: 46ch;
   font-size: var(--fs-lead);
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.8));
 }
 
 .carrusel__acciones {
@@ -111,7 +111,7 @@
 .carrusel__meta {
   margin-top: 1px;
   font-size: var(--fs-xs);
-  color: rgba(255, 255, 255, 0.62);
+  color: var(--texto-tenue-sobre-oscuro, rgba(255, 255, 255, 0.62));
   /* «RAL 9016 · Traffic White» ocupa dos líneas en una muestra de 150px y
      «RAL 3002 · Wine Red» sólo una. Sin reservar el alto, el enlace de abajo
      bailaba según qué colores tocaran en la pista. */
@@ -123,7 +123,7 @@
   margin-top: var(--space-l);
   font-size: var(--fs-body);
   font-weight: var(--fw-semibold);
-  color: var(--ppg-sky);
+  color: var(--acento-sobre-oscuro, var(--ppg-sky));
   text-decoration: none;
 }
 

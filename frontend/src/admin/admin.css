@@ -589,6 +589,62 @@
   text-transform: uppercase;
 }
 
+/* --- Colores de la sección --------------------------------------------------- */
+
+.adm-colores {
+  display: grid;
+  gap: var(--space-s);
+  padding: var(--space-s) var(--space-m);
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+}
+
+.adm-colores__fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: var(--space-m);
+  align-items: center;
+}
+
+.adm-colores__nombre {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg-primary);
+}
+
+.adm-colores__nombre small {
+  font-weight: 400;
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: var(--fg-tertiary);
+}
+
+/* La muestra se pinta con los colores elegidos: un número de contraste no
+   dice nada hasta que se ve el texto encima del fondo. */
+.adm-colores__contraste {
+  margin: var(--space-xs) 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border-tertiary);
+  border-radius: var(--radius-xs);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.adm-colores__contraste.is-flojo {
+  border-color: #d79a1a;
+  box-shadow: inset 3px 0 0 #d79a1a;
+}
+
+@media (max-width: 40rem) {
+  .adm-colores__fila {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+}
+
 /* --- Editor de enlaces ------------------------------------------------------- */
 
 .adm-link {

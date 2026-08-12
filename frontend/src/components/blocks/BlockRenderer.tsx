@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
 import type { Block, Breadcrumb } from '@/types/content'
 import { useCabeceraSobreHero } from '@/lib/useCabeceraSobreHero'
+import { variablesDeBloque } from '@/lib/tema'
 import { Breadcrumbs, Container } from '@/components/ui'
 import {
   CardGrid,
@@ -91,7 +92,43 @@ export function BlockRenderer({
   )
 }
 
+/**
+ * Envuelve el bloque si trae colores propios.
+ *
+ * Las variables van en el envoltorio y no en la sección porque así las hereda
+ * todo lo de dentro sin tocar ni un componente: el sitio entero pinta con esas
+ * mismas variables, de modo que cambiar `--bg-brand-solid` aquí repinta los
+ * botones de esta sección y sólo de esta.
+ *
+ * Con fondo propio se anula el preajuste del bloque. Si el tema oscuro
+ * siguiera puesto, sus reglas —antetítulo azul claro, descripción translúcida,
+ * titulares en blanco— seguirían pintando sobre un fondo que ya no es oscuro.
+ */
 function renderizar(block: Block, key: string) {
+  const estilo = variablesDeBloque(block.colors)
+
+  if (!estilo) return despachar(block, key)
+
+  const conFondo = '--bloque-fondo' in estilo
+
+  // El reemplazo del tema obliga a un molde: `theme` no existe en todos los
+  // bloques de la unión, y añadirlo donde el componente no lo lee sería
+  // prometer un ajuste que no hace nada.
+  const paraPintar =
+    conFondo && 'theme' in block ? ({ ...block, theme: 'transparent' } as Block) : block
+
+  return (
+    <div
+      key={key}
+      className={`bloque-color${conFondo ? ' bloque-color--fondo' : ''}`}
+      style={estilo}
+    >
+      {despachar(paraPintar, key)}
+    </div>
+  )
+}
+
+function despachar(block: Block, key: string) {
   switch (block.type) {
     case 'hero':
       return <Hero key={key} block={block} />

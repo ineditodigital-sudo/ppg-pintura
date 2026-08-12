@@ -1,8 +1,9 @@
 import { useEffect, useId, useState, type ReactNode } from 'react'
 import { Icon } from '@/lib/icons'
+import { contraste, textoLegibleSobre } from '@/lib/tema'
 import type { FieldDef } from '../schema'
 import { listMedia, uploadMedia, type MediaItem } from '../api'
-import { IconEye, IconEyeOff } from './Icons'
+import { IconEye, IconEyeOff, IconTrash } from './Icons'
 
 /* --- Envoltorio común ------------------------------------------------------ */
 
@@ -264,6 +265,150 @@ interface LinkValue {
   label?: string
   href?: string
   external?: boolean
+}
+
+/* --- Colores de la sección -------------------------------------------------- */
+
+interface ColoresValue {
+  background?: string
+  text?: string
+  accent?: string
+}
+
+const CANALES = [
+  {
+    clave: 'background' as const,
+    etiqueta: 'Fondo',
+    ayuda: 'Sustituye al fondo que trae el bloque.',
+  },
+  {
+    clave: 'text' as const,
+    etiqueta: 'Texto',
+    ayuda: 'Titulares y párrafos.',
+  },
+  {
+    clave: 'accent' as const,
+    etiqueta: 'Botones y enlaces',
+    ayuda: 'También el antetítulo de la sección.',
+  },
+]
+
+const ES_HEX = /^#[0-9a-f]{6}$/i
+
+/**
+ * Los tres colores de una sección, con el contraste calculado en vivo.
+ *
+ * El aviso no bloquea: enseña el número y qué significa. Prohibir la
+ * combinación sería decidir por quien edita —a veces un titular grande a 3:1
+ * es una decisión, no un descuido—, pero dejarle a oscuras sería peor.
+ */
+export function ColoresField({
+  label,
+  help,
+  value,
+  onChange,
+}: {
+  label: string
+  help?: string
+  value: ColoresValue | undefined
+  onChange: (value: ColoresValue | undefined) => void
+}) {
+  const colores = value ?? {}
+
+  const cambiar = (clave: keyof ColoresValue, nuevo: string | undefined) => {
+    const siguiente = { ...colores }
+
+    if (nuevo) {
+      siguiente[clave] = nuevo
+    } else {
+      delete siguiente[clave]
+    }
+
+    // Sin ningún color se borra el objeto entero, para que el JSON de la
+    // página no acumule `"colors": {}` en cada bloque que se tocó y se
+    // deshizo.
+    onChange(Object.keys(siguiente).length ? siguiente : undefined)
+  }
+
+  // El texto que se pintará de verdad: el elegido o, si sólo hay fondo, el que
+  // calcula la página. Enseñar el segundo evita la pregunta «¿y esto de qué
+  // color va a salir?».
+  const textoReal =
+    colores.text ??
+    (colores.background && ES_HEX.test(colores.background)
+      ? (textoLegibleSobre(colores.background) ?? undefined)
+      : undefined)
+
+  const fondoReal = colores.background ?? '#ffffff'
+
+  const razon =
+    ES_HEX.test(fondoReal) && textoReal && ES_HEX.test(textoReal)
+      ? contraste(fondoReal, textoReal)
+      : null
+
+  return (
+    <div className="adm-field">
+      <span className="adm-field__label">{label}</span>
+
+      <div className="adm-colores">
+        {CANALES.map(({ clave, etiqueta, ayuda }) => {
+          const puesto = colores[clave]
+          const automatico = clave === 'text' && !puesto && textoReal
+
+          return (
+            <div className="adm-colores__fila" key={clave}>
+              <span className="adm-colores__nombre">
+                {etiqueta}
+                <small>{ayuda}</small>
+              </span>
+
+              <div className="adm-color">
+                <input
+                  type="color"
+                  value={puesto && ES_HEX.test(puesto) ? puesto : (textoReal ?? '#0078a9')}
+                  onChange={(e) => cambiar(clave, e.target.value)}
+                  aria-label={`${etiqueta}: selector de color`}
+                />
+                <input
+                  type="text"
+                  value={puesto ?? ''}
+                  placeholder={automatico ? `${textoReal} (calculado)` : 'Sin cambios'}
+                  onChange={(e) => cambiar(clave, e.target.value || undefined)}
+                  aria-label={`${etiqueta}: valor hexadecimal`}
+                />
+                {puesto && (
+                  <button
+                    type="button"
+                    className="adm-btn adm-btn--icon"
+                    title={`Quitar el color de ${etiqueta.toLowerCase()}`}
+                    onClick={() => cambiar(clave, undefined)}
+                  >
+                    <IconTrash size={15} />
+                  </button>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      {razon !== null && (
+        <p
+          className={`adm-colores__contraste${razon < 4.5 ? ' is-flojo' : ''}`}
+          style={{ background: fondoReal, color: textoReal }}
+        >
+          Así se verá el texto. Contraste {razon.toFixed(1)}:1 —{' '}
+          {razon >= 4.5
+            ? 'se lee bien a cualquier tamaño.'
+            : razon >= 3
+              ? 'sólo vale para titulares grandes; el texto normal necesita 4,5:1.'
+              : 'insuficiente, cámbialo o no se leerá.'}
+        </p>
+      )}
+
+      {help && <span className="adm-field__help">{help}</span>}
+    </div>
+  )
 }
 
 export function LinkField({
@@ -813,6 +958,16 @@ export function FieldRenderer({
           help={field.help}
           required={field.required}
           value={value as string[] | undefined}
+          onChange={onChange}
+        />
+      )
+
+    case 'colors':
+      return (
+        <ColoresField
+          label={field.label}
+          help={field.help}
+          value={value as ColoresValue | undefined}
           onChange={onChange}
         />
       )

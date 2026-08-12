@@ -287,7 +287,7 @@ hr {
 /* Sobre fondo oscuro la pastilla se invierte. */
 .section--dark .eyebrow,
 .carrusel .eyebrow {
-  color: var(--ppg-sky);
+  color: var(--acento-sobre-oscuro, var(--ppg-sky));
   background: rgba(143, 211, 240, 0.12);
 }
 

@@ -159,6 +159,52 @@ final class ContentValidator
             }
         }
 
+        return array_merge($errors, $this->validateBlockColors($block['colors'] ?? null, $position));
+    }
+
+    /**
+     * Colores propios de un bloque.
+     *
+     * Se exige hexadecimal de seis dígitos y nada más. Estos valores acaban en
+     * el atributo `style` de la sección, así que aceptar texto libre sería
+     * abrir la puerta a que lo guardado en el panel inyecte CSS en la página.
+     * El navegador y React ya frenarían lo peor; esto lo frena antes.
+     *
+     * @return list<string>
+     */
+    private function validateBlockColors(mixed $colors, int $position): array
+    {
+        // Un `colors` vacío es «sin colores», no un error. Al decodificar JSON
+        // en arrays, `{}` y `[]` llegan iguales, así que se descarta antes de
+        // comprobar la forma —si no, un objeto vacío se rechazaría por «lista».
+        if ($colors === null || $colors === []) {
+            return [];
+        }
+
+        if (!is_array($colors) || array_is_list($colors)) {
+            return ["El bloque {$position} tiene «colors» con un formato que no es un objeto."];
+        }
+
+        $errors = [];
+
+        foreach (['background', 'text', 'accent'] as $clave) {
+            $valor = $colors[$clave] ?? null;
+
+            if ($valor === null || $valor === '') {
+                continue;
+            }
+
+            if (!is_string($valor) || preg_match('/^#[0-9a-fA-F]{6}$/', $valor) !== 1) {
+                $errors[] = "En el bloque {$position}, el color «{$clave}» debe ser hexadecimal de seis dígitos (por ejemplo #0078A9).";
+            }
+        }
+
+        foreach (array_keys($colors) as $clave) {
+            if (!in_array($clave, ['background', 'text', 'accent'], true)) {
+                $errors[] = "En el bloque {$position}, «colors» no reconoce la clave «{$clave}».";
+            }
+        }
+
         return $errors;
     }
 
