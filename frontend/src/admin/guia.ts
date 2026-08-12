@@ -369,6 +369,16 @@ export const GUIAS: Record<string, Guia> = {
           'Cuando alguien rellena el formulario de contacto, aquí decides a qué buzón llega el aviso.',
       },
       {
+        titulo: 'El aviso es un extra, no el mensaje',
+        texto:
+          'El mensaje se guarda siempre en Mensajes, aunque el correo falle. Si el aviso no llega, no has perdido a nadie: entra a Mensajes y ahí está.',
+      },
+      {
+        titulo: 'El buzón tiene que existir de verdad',
+        texto:
+          'No basta con escribir la dirección aquí: el buzón debe estar creado en el hosting y su dominio necesita registro MX. Sin eso el aviso rebota y no te enteras.',
+      },
+      {
         titulo: 'El remitente tiene que ser de tu dominio',
         texto:
           'Si pones una dirección de otro proveedor, muchos servidores marcarán el aviso como spam y no lo verás.',

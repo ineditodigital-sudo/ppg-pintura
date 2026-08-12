@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "recipients": ["ventas@coatingsystemsmx.com"],
+  "recipients": ["ventas@ppg.pinturaenpolvo-mx.com"],
   "fromName": "Coating Systems MX",
   "fromEmail": "no-responder@pinturaenpolvo-mx.com",
   "subjectPrefix": "Nuevo mensaje del sitio",
