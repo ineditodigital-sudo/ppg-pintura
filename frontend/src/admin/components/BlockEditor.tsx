@@ -40,6 +40,13 @@ function BlockForm({
     )
   }
 
+  // Un cuerpo vacío se lee como una avería: abres el bloque, no aparece nada y
+  // parece que el editor no ha cargado. Los bloques que se alimentan solos de
+  // otro módulo lo dicen, y desde dónde se cambia lo que muestran.
+  if (def.fields.length === 0) {
+    return <p className="adm-bloque__nota">{def.description}</p>
+  }
+
   return (
     <>
       {def.fields.map((field) => (

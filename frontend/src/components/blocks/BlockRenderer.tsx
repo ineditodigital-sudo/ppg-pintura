@@ -128,7 +128,7 @@ function renderizar(block: Block, key: string) {
     case 'productShowcase':
       return <ProductShowcase key={key} />
     case 'colorCarousel':
-      return <ColorCarousel key={key} />
+      return <ColorCarousel key={key} {...block} />
     case 'colorCatalog':
       return <ColorCatalogBlock key={key} />
     default: {

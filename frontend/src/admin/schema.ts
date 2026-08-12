@@ -25,6 +25,13 @@ export interface FieldDef {
   label: string
   type: FieldType
   help?: string
+  /**
+   * Texto en gris cuando el campo está vacío. Sirve para los bloques que
+   * tienen valor de fábrica: vacío no significa «sin texto» sino «el de
+   * siempre», y sin esto el formulario parece vacío mientras la página
+   * muestra contenido.
+   */
+  placeholder?: string
   /** Para `select`. */
   options?: { value: string | number; label: string }[]
   /** Para `list`: campos de cada elemento. */
@@ -569,9 +576,61 @@ export const BLOCK_SCHEMA: Record<string, BlockDef> = {
 
   colorCarousel: {
     label: 'Carrusel de colores',
-    description: 'Adelanto de la carta de colores, sobre fondo oscuro.',
-    fields: [],
-    defaults: { type: 'colorCarousel' },
+    description:
+      'Adelanto de la carta de colores, sobre fondo oscuro. Las muestras salen solas de la Carta de color; aquí se edita lo que las presenta.',
+    fields: [
+      {
+        key: 'eyebrow',
+        label: 'Antetítulo',
+        type: 'text',
+        placeholder: 'Carta de colores',
+      },
+      {
+        key: 'title',
+        label: 'Título',
+        type: 'text',
+        placeholder: 'Color de catálogo, con equivalencia RAL',
+        help: 'Escribe {total} donde quieras que aparezca el número de colores del catálogo.',
+      },
+      {
+        key: 'description',
+        label: 'Descripción',
+        type: 'textarea',
+        placeholder:
+          '{total} referencias entre poliéster e híbridos, lisos, texturizados y gofrados.',
+        help: 'También admite {total}, que se sustituye solo cuando cambia la carta.',
+      },
+      {
+        key: 'count',
+        label: 'Muestras que se adelantan',
+        type: 'number',
+        placeholder: '16',
+        help: 'Como máximo. El carrusel enseña primero los colores marcados en existencia en la Carta de color, así que si hay menos, verás menos.',
+      },
+      {
+        key: 'linkLabel',
+        label: 'Texto del enlace final',
+        type: 'text',
+        placeholder: 'Ver las {total} referencias',
+        help: 'Admite {total}. Si lo dejas vacío se usa el texto en gris.',
+      },
+      {
+        key: 'linkHref',
+        label: 'Destino del enlace',
+        type: 'text',
+        placeholder: '/colores',
+        help: 'Ruta interna (/colores) o URL completa.',
+      },
+    ],
+    defaults: {
+      type: 'colorCarousel',
+      eyebrow: 'Carta de colores',
+      title: 'Color de catálogo, con equivalencia RAL',
+      description:
+        '{total} referencias entre poliéster e híbridos, lisos, texturizados y gofrados.',
+      linkLabel: 'Ver las {total} referencias',
+      linkHref: '/colores',
+    },
   },
 
   colorCatalog: {
@@ -692,6 +751,13 @@ export function blockSummary(block: Record<string, unknown>): string {
 
   if (Array.isArray(items)) {
     return `${items.length} elemento${items.length === 1 ? '' : 's'}`
+  }
+
+  // Un guion no dice nada, y en los bloques que se alimentan solos de otro
+  // módulo era lo único que se veía en la fila. Mejor de qué va el bloque.
+  const descripcion = BLOCK_SCHEMA[String(block.type)]?.description
+  if (descripcion) {
+    return descripcion.length > 70 ? `${descripcion.slice(0, 70)}…` : descripcion
   }
 
   return '—'

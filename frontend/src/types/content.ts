@@ -406,6 +406,15 @@ export interface ProductShowcaseBlock {
 /** Adelanto del catálogo de color en la portada. */
 export interface ColorCarouselBlock {
   type: 'colorCarousel'
+  eyebrow?: string
+  title?: string
+  /** Admite «{total}», que se sustituye por el número de colores del catálogo. */
+  description?: string
+  /** Texto del enlace al final. También admite «{total}». */
+  linkLabel?: string
+  linkHref?: string
+  /** Cuántas muestras se adelantan. Por defecto 16. */
+  count?: number
 }
 
 /**

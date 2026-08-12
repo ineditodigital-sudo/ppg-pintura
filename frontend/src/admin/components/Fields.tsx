@@ -707,6 +707,7 @@ export function FieldRenderer({
           <textarea
             id={id}
             value={typeof value === 'string' ? value : ''}
+            placeholder={field.placeholder}
             onChange={(e) => onChange(e.target.value)}
           />
         </Field>
@@ -741,6 +742,7 @@ export function FieldRenderer({
             id={id}
             type="number"
             value={typeof value === 'number' ? value : ''}
+            placeholder={field.placeholder}
             onChange={(e) => onChange(e.target.value === '' ? undefined : Number(e.target.value))}
           />
         </Field>
@@ -835,6 +837,7 @@ export function FieldRenderer({
             id={id}
             type="text"
             value={typeof value === 'string' ? value : ''}
+            placeholder={field.placeholder}
             onChange={(e) => onChange(e.target.value)}
           />
         </Field>

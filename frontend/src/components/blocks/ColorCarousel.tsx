@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import type { CatalogColor } from '@/types/content'
+import type { CatalogColor, ColorCarouselBlock } from '@/types/content'
 import { getColors } from '@/lib/api'
 import { esEnStock } from '@/lib/stock'
 import { Container, Section } from '@/components/ui'
@@ -17,6 +17,16 @@ import './carrusel.css'
  * mande esa lista, se toma una selección repartida por familias para que el
  * adelanto no salga entero en tonos parecidos.
  */
+const POR_DEFECTO = {
+  eyebrow: 'Carta de colores',
+  title: 'Color de catálogo, con equivalencia RAL',
+  description:
+    '{total} referencias entre poliéster e híbridos, lisos, texturizados y gofrados.',
+  linkLabel: 'Ver las {total} referencias',
+  linkHref: '/colores',
+  count: 16,
+} as const
+
 function seleccionar(colores: CatalogColor[], cuantos = 16): CatalogColor[] {
   const enStock = colores.filter(esEnStock)
   if (enStock.length > 0) return enStock.slice(0, cuantos)
@@ -31,19 +41,36 @@ function seleccionar(colores: CatalogColor[], cuantos = 16): CatalogColor[] {
 
   const salida: CatalogColor[] = []
   const familias = [...porFamilia.values()]
-  const porCada = Math.ceil(cuantos / familias.length)
 
-  for (const lista of familias) {
-    const paso = Math.max(1, Math.floor(lista.length / porCada))
-    for (let i = 0; i < lista.length && salida.length < cuantos; i += paso) {
-      salida.push(lista[i])
+  // Ronda a ronda, una muestra de cada familia. El reparto anterior tomaba a
+  // intervalos dentro de cada familia y se quedaba corto —pedirle 16 devolvía
+  // 10—, lo que convertía el número en una promesa que no cumplía. Así el
+  // adelanto sigue sin salir entero en tonos parecidos y, cuando una familia
+  // se agota, las demás completan el cupo.
+  for (let ronda = 0; salida.length < cuantos; ronda++) {
+    let quedaAlguna = false
+
+    for (const lista of familias) {
+      if (ronda >= lista.length) continue
+      quedaAlguna = true
+      salida.push(lista[ronda])
+      if (salida.length === cuantos) break
     }
+
+    if (!quedaAlguna) break
   }
 
-  return salida.slice(0, cuantos)
+  return salida
 }
 
-export function ColorCarousel() {
+export function ColorCarousel({
+  eyebrow = POR_DEFECTO.eyebrow,
+  title = POR_DEFECTO.title,
+  description = POR_DEFECTO.description,
+  linkLabel = POR_DEFECTO.linkLabel,
+  linkHref = POR_DEFECTO.linkHref,
+  count = POR_DEFECTO.count,
+}: Omit<ColorCarouselBlock, 'type'> = {}) {
   const [colores, setColores] = useState<CatalogColor[] | null>(null)
   const [total, setTotal] = useState(0)
   const pista = useRef<HTMLDivElement>(null)
@@ -52,13 +79,18 @@ export function ColorCarousel() {
     let vivo = true
     getColors().then((d) => {
       if (!vivo) return
-      setColores(seleccionar(d.colors))
+      setColores(seleccionar(d.colors, count))
       setTotal(d.colors.length)
     })
     return () => {
       vivo = false
     }
-  }, [])
+  }, [count])
+
+  // El número de referencias no se escribe a mano: sale del catálogo, así que
+  // sigue siendo cierto cuando el cliente sube una carta nueva. Con `split` y
+  // no con una expresión regular porque el texto lo escribe quien edita.
+  const conTotal = (texto: string) => texto.split('{total}').join(String(total))
 
   const desplazar = (signo: number) => {
     const nodo = pista.current
@@ -75,12 +107,11 @@ export function ColorCarousel() {
       <Container>
         <div className="carrusel__cabecera">
           <div>
-            <span className="eyebrow">Carta de colores</span>
-            <h2>Color de catálogo, con equivalencia RAL</h2>
-            <p className="carrusel__texto">
-              {total} referencias entre poliéster e híbridos, lisos,
-              texturizados y gofrados.
-            </p>
+            {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+            {title && <h2>{conTotal(title)}</h2>}
+            {description && (
+              <p className="carrusel__texto">{conTotal(description)}</p>
+            )}
           </div>
           <div className="carrusel__acciones">
             <button
@@ -124,11 +155,13 @@ export function ColorCarousel() {
         ))}
       </div>
 
-      <Container>
-        <Link className="carrusel__enlace" to="/colores">
-          Ver las {total} referencias
-        </Link>
-      </Container>
+      {linkLabel && linkHref && (
+        <Container>
+          <Link className="carrusel__enlace" to={linkHref}>
+            {conTotal(linkLabel)}
+          </Link>
+        </Container>
+      )}
     </Section>
   )
 }

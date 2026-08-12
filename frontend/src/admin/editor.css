@@ -139,6 +139,19 @@ body.admin-ancho-completo .admin-main {
   background: #fafcfe;
 }
 
+/* Los bloques que no tienen nada que configurar explican por qué, en vez de
+   abrirse en blanco. */
+.adm-bloque__nota {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  border-left: 3px solid var(--border-brand-solid, #0078a9);
+  border-radius: 0 6px 6px 0;
+  background: #fff;
+  color: var(--text-secondary, #4a5568);
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
 /* Dentro del editor los campos respiran más que en el resto del panel: aquí
    se escriben titulares y párrafos enteros, no un par de datos sueltos. */
 .adm-bloque__cuerpo .adm-field textarea {
