@@ -2,12 +2,11 @@
    Carrusel de colores de la portada
    ========================================================================== */
 
-/* La pista sangra a los bordes con `calc(50% - 50vw)`, y `vw` cuenta la barra
-   de desplazamiento mientras que `%` no: con barra visible la pista se pasaba
-   ~8px por cada lado y la página entera cogía scroll horizontal. `clip` corta
-   ese sobrante sin crear un contenedor de scroll propio —`hidden` sí lo crea,
-   y eso rompería el `position: sticky` de la cabecera—. El eje vertical se
-   deja visible a propósito. */
+/* Seguro contra el scroll horizontal de toda la página: la pista es lo más
+   ancho de la portada y cualquier descuadre suyo se pagaría en la ventana.
+   `clip` y no `hidden` porque `hidden` crea un contenedor de scroll propio, y
+   eso rompería el `position: sticky` de la cabecera. El eje vertical se deja
+   visible a propósito. */
 .carrusel {
   overflow-x: clip;
 }
@@ -62,18 +61,29 @@
 /* --- Pista ------------------------------------------------------------------ */
 
 .carrusel__pista {
+  /* Lo que separa la primera muestra del borde: el mismo hueco que deja el
+     contenedor, para que la fila arranque justo bajo el titular.
+
+     El `50%` se mide contra la sección, que ya ocupa todo el ancho útil. Antes
+     esto se hacía sangrando con `margin-inline: calc(50% - 50vw)` y midiendo
+     el hueco en `vw`; como `vw` cuenta la barra de desplazamiento y `%` no, la
+     fila quedaba media barra —7px— a la izquierda del titular. Sin el margen
+     no hay nada que compensar y las dos medidas hablan del mismo ancho. */
+  --sangrado: max(
+    var(--page-padding-x),
+    calc(50% - var(--container-max) / 2 + var(--page-padding-x))
+  );
+
   display: flex;
   gap: var(--space-m);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  /* Sangra hasta el borde de la ventana y arranca alineado al contenedor:
-     así la última muestra se corta y se ve que la fila continúa. */
-  padding: 0 var(--page-padding-x) var(--space-xs);
-  margin-inline: calc(50% - 50vw);
-  padding-inline: max(
-    var(--page-padding-x),
-    calc(50vw - var(--container-max) / 2 + var(--page-padding-x))
-  );
+  padding-block: 0 var(--space-xs);
+  padding-inline: var(--sangrado);
+  /* Sin esto el `scroll-snap` no ve el relleno: al cargar pegaba la primera
+     muestra al borde del scrollport, desplazaba la pista sola ese mismo hueco
+     y la fila entera arrancaba cortada contra el borde de la ventana. */
+  scroll-padding-inline: var(--sangrado);
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
 }
