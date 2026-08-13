@@ -73,7 +73,17 @@ function medir(objetivo: string | undefined): Recuadro | null {
 }
 
 const MARGEN = 14
-const ANCHO = 340
+const ANCHO_MAX = 340
+
+/**
+ * Lo que mide la tarjeta de verdad. En un móvil de 375px no caben 340 más los
+ * márgenes, y la colocación creía que sí: elegía ponerla al lado del objetivo
+ * y la mitad de la tarjeta quedaba fuera de la pantalla. El mismo valor está
+ * en el CSS con `min()`; aquí hace falta para decidir dónde cabe.
+ */
+function anchoTarjeta(): number {
+  return Math.min(ANCHO_MAX, window.innerWidth - MARGEN * 2)
+}
 /** Alto de partida, hasta que se mide el real. Depende de lo largo que sea el texto. */
 const ALTO_INICIAL = 240
 
@@ -90,15 +100,24 @@ const ALTO_INICIAL = 240
  * alrededor y es preferible a empujarla fuera de la pantalla.
  */
 function colocar(r: Recuadro | null, ALTO: number): React.CSSProperties {
+  const { innerWidth: W, innerHeight: H } = window
+  const ANCHO = anchoTarjeta()
+
+  /**
+   * Centrada con coordenadas, no con `translate(-50%, -50%)`.
+   *
+   * La animación de entrada anima `transform`, y con `fill-mode: both` se
+   * queda con el valor que había cuando arrancó —antes de que se aplicara el
+   * centrado—, así que dejaba la tarjeta a media pantalla de distancia. En un
+   * escritorio no se notaba porque casi nunca se recurre a centrarla; en un
+   * móvil no cabe en ningún lado y es el único caso que se da.
+   */
   const centrada: React.CSSProperties = {
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
+    left: Math.max(MARGEN, (W - ANCHO) / 2),
+    top: Math.max(MARGEN, (H - ALTO) / 2),
   }
 
   if (!r) return centrada
-
-  const { innerWidth: W, innerHeight: H } = window
   const centroX = r.left + r.width / 2 - ANCHO / 2
   const centroY = r.top + r.height / 2 - ALTO / 2
   const dentro = (v: number, max: number) => Math.min(Math.max(MARGEN, v), Math.max(MARGEN, max))

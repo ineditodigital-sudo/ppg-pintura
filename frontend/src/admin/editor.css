@@ -446,11 +446,14 @@ body.admin-ancho-completo .admin-main {
   height: calc(100vh - 128px);
 }
 
+/* Con el botón de recoger son cuatro cosas en la barra y en un móvil no caben
+   en línea: los tres anchos se salían por la derecha. */
 .adm-preview__barra {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 8px 12px;
   padding: 8px 12px;
   border-bottom: 1px solid var(--border-tertiary);
   background: #f7fafc;
@@ -569,14 +572,59 @@ body.admin-ancho-completo .admin-main {
   font-size: 14px;
 }
 
+/* Recoger sólo tiene sentido donde la vista previa manda sobre el sitio: en
+   escritorio ocupa su propia columna y no estorba a nadie. Va antes del salto
+   para que la regla que la enciende, que tiene el mismo peso, gane por orden. */
+.adm-preview__plegar {
+  display: none;
+  align-items: center;
+  min-height: 32px;
+  padding: 4px 12px;
+  margin-left: auto;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--fg-brand-secondary);
+  background: transparent;
+  border: 1px solid var(--border-brand-primary);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
 @media (max-width: 68rem) {
   .adm-editor {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
+  /* La vista previa sube al principio y se queda anclada.
+     Apilada debajo quedaba a 2074px de scroll con sólo tres bloques —y una
+     página real tiene diez—, así que en un móvil no se veía nunca. Es lo que
+     da sentido al editor: sin ella, esto es un formulario a ciegas. */
   .adm-preview {
-    position: static;
-    height: 60vh;
+    order: -1;
+    position: sticky;
+    /* Justo debajo de la barra del panel, que también está anclada. */
+    top: 60px;
+    z-index: 30;
+    height: 40vh;
+    box-shadow: 0 10px 20px -14px rgba(8, 21, 32, 0.4);
+    /* En columna flexible un elemento no encoge por debajo de su contenido, y
+       aquí dentro hay un lienzo del ancho del dispositivo que se simula —820px
+       en tableta—, que estiraba la vista previa hasta 822px. */
+    min-width: 0;
+    width: 100%;
+  }
+
+  .adm-preview.is-recogida {
+    height: auto;
+  }
+
+  .adm-preview.is-recogida .adm-preview__marco {
+    display: none;
+  }
+
+  .adm-preview__plegar {
+    display: inline-flex;
   }
 }
 

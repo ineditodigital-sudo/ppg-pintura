@@ -224,7 +224,7 @@ const FilaColor = memo(function FilaColor({
 }) {
   return (
     <tr>
-      <td>
+      <td data-campo="Color">
         <div className="adm-carta__muestra">
           <input
             type="color"
@@ -241,7 +241,7 @@ const FilaColor = memo(function FilaColor({
           />
         </div>
       </td>
-      <td>
+      <td data-campo="Código">
         <input
           type="text"
           className="adm-input"
@@ -250,7 +250,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Código"
         />
       </td>
-      <td>
+      <td data-campo="Nombre">
         <input
           type="text"
           className="adm-input"
@@ -259,7 +259,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Nombre"
         />
       </td>
-      <td>
+      <td data-campo="RAL">
         <input
           type="text"
           className="adm-input adm-carta__corto"
@@ -268,7 +268,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="RAL"
         />
       </td>
-      <td>
+      <td data-campo="Nombre PPG">
         {/* Nombre con el que PPG publica ese RAL en su catálogo (Traffic
             White, Jet Black…). Se deja vacío cuando PPG no lo nombra: en la
             carta simplemente no aparece. */}
@@ -280,7 +280,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Nombre PPG del RAL"
         />
       </td>
-      <td>
+      <td data-campo="Acabado">
         <input
           type="text"
           className="adm-input adm-carta__corto"
@@ -289,7 +289,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Acabado"
         />
       </td>
-      <td>
+      <td data-campo="Brillo">
         <input
           type="text"
           className="adm-input adm-carta__corto"
@@ -298,7 +298,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Brillo"
         />
       </td>
-      <td>
+      <td data-campo="Familia">
         <select
           value={color.family}
           onChange={(e) => onCambiar(index, { family: e.target.value })}
@@ -311,7 +311,7 @@ const FilaColor = memo(function FilaColor({
           ))}
         </select>
       </td>
-      <td className="adm-carta__centro">
+      <td data-campo="Textura" className="adm-carta__centro">
         <input
           type="checkbox"
           checked={color.textured}
@@ -319,7 +319,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="Texturizado"
         />
       </td>
-      <td className="adm-carta__centro">
+      <td data-campo="Existencia" className="adm-carta__centro">
         <input
           type="checkbox"
           checked={color.stock}
@@ -327,7 +327,7 @@ const FilaColor = memo(function FilaColor({
           aria-label="En existencia"
         />
       </td>
-      <td className="adm-carta__acciones">
+      <td data-campo="Acciones" className="adm-carta__acciones">
         {/* La tabla sirve para repasar y para cambios en bloque; para tocar
             una referencia a fondo se abre su ficha, que tiene los nombres de
             campo escritos y la muestra en grande. */}

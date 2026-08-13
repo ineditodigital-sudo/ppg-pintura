@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import {
+  NavLink,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
 import * as api from './api'
 import { Alert, Loading } from './components/Common'
 import { Field, PasswordInput } from './components/Fields'
@@ -26,6 +33,8 @@ import {
   IconSettings,
   IconStar,
   IconLogout,
+  IconMenu,
+  IconCerrar,
 } from './components/Icons'
 import './admin.css'
 
@@ -151,8 +160,46 @@ const GRUPOS = [
   },
 ]
 
+/** El nombre de la pantalla en la que estás, para la barra de móvil. */
+function tituloDeLaRuta(pathname: string): string {
+  const enlaces = GRUPOS.flatMap((g) => g.links)
+  // El más específico primero: `/admin/paginas/home` es «Páginas», no «Inicio».
+  const acierto = [...enlaces]
+    .sort((a, b) => b.to.length - a.to.length)
+    .find((l) => pathname.startsWith(l.to))
+
+  return acierto?.label ?? 'Panel'
+}
+
 function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const [menuAbierto, setMenuAbierto] = useState(false)
+
+  // Al cambiar de pantalla el cajón se cierra solo: dejarlo abierto tapando la
+  // pantalla recién elegida es el fallo clásico de este patrón.
+  useEffect(() => {
+    setMenuAbierto(false)
+  }, [pathname])
+
+  // Con el cajón abierto no se desplaza lo de debajo, que es lo que hace que
+  // al cerrarlo aparezcas en otro punto de la página.
+  useEffect(() => {
+    if (!menuAbierto) return
+
+    const previo = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    const alPulsarEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuAbierto(false)
+    }
+    document.addEventListener('keydown', alPulsarEscape)
+
+    return () => {
+      document.body.style.overflow = previo
+      document.removeEventListener('keydown', alPulsarEscape)
+    }
+  }, [menuAbierto])
 
   async function handleLogout() {
     try {
@@ -164,11 +211,51 @@ function Shell({ user, onLogout }: { user: string; onLogout: () => void }) {
   }
 
   return (
-    <div className="admin-shell">
-      <aside className="admin-side">
+    <div className={`admin-shell${menuAbierto ? ' is-menu-open' : ''}`}>
+      {/* Barra de móvil. En escritorio no se pinta: allí la lateral está
+          siempre a la vista y una barra encima sólo robaría alto. */}
+      <header className="admin-bar">
+        <button
+          type="button"
+          className="admin-bar__menu"
+          onClick={() => setMenuAbierto(true)}
+          aria-expanded={menuAbierto}
+          aria-controls="admin-menu"
+        >
+          <IconMenu size={22} />
+          <span className="adm-oculto">Abrir el menú</span>
+        </button>
+        <span className="admin-bar__titulo">{tituloDeLaRuta(pathname)}</span>
+        <img className="admin-bar__logo" src={LOGO} alt="PPG" width={291} height={226} />
+      </header>
+
+      {/* Fondo que cierra al tocar fuera. Va detrás del cajón y sólo existe
+          mientras está abierto, para que no intercepte nada en escritorio. */}
+      {menuAbierto && (
+        <button
+          type="button"
+          className="admin-velo"
+          aria-label="Cerrar el menú"
+          onClick={() => setMenuAbierto(false)}
+        />
+      )}
+
+      <aside
+        id="admin-menu"
+        className={`admin-side${menuAbierto ? ' is-open' : ''}`}
+        aria-hidden={undefined}
+      >
         <div className="admin-side__brand">
           <img src={LOGO} alt="" width={291} height={226} />
           <span>Contenido</span>
+          <button
+            type="button"
+            className="admin-side__cerrar"
+            onClick={() => setMenuAbierto(false)}
+          >
+            <IconCerrar size={20} />
+            <span className="adm-oculto">Cerrar el menú</span>
+          </button>
         </div>
 
         <nav>

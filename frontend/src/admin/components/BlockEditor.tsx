@@ -139,9 +139,17 @@ function Preview({
   activo: number | null
   onSelect: (index: number) => void
 }) {
-  const [ancho, setAncho] = useState<(typeof ANCHOS)[number]['id']>('tablet')
+  // Desde un móvil se arranca previsualizando en móvil: es la pantalla en la
+  // que estás y, sobre todo, la que más visitas tiene el sitio.
+  const [ancho, setAncho] = useState<(typeof ANCHOS)[number]['id']>(() =>
+    typeof window !== 'undefined' && window.innerWidth < 700 ? 'movil' : 'tablet',
+  )
   const marcoRef = useRef<HTMLDivElement>(null)
   const [escala, setEscala] = useState(1)
+  // En móvil la vista previa se ancla arriba y se puede recoger. Sin recoger,
+  // ocupa un tercio de la pantalla también cuando estás escribiendo un párrafo
+  // largo y lo que necesitas es sitio para el formulario.
+  const [recogida, setRecogida] = useState(false)
 
   const px = ANCHOS.find((a) => a.id === ancho)!.px
 
@@ -161,11 +169,19 @@ function Preview({
   }, [px])
 
   return (
-    <div className="adm-preview">
+    <div className={`adm-preview${recogida ? ' is-recogida' : ''}`}>
       <div className="adm-preview__barra">
         <span className="adm-preview__titulo">
           <IconEye size={15} /> Vista previa
         </span>
+        <button
+          type="button"
+          className="adm-preview__plegar"
+          onClick={() => setRecogida((v) => !v)}
+          aria-expanded={!recogida}
+        >
+          {recogida ? 'Mostrar' : 'Ocultar'}
+        </button>
         <div className="adm-preview__anchos">
           {ANCHOS.map((a) => (
             <button

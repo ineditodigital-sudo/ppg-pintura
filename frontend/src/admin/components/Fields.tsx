@@ -230,7 +230,7 @@ export function ImageField({
             placeholder="Texto alternativo (accesibilidad)"
             onChange={(e) => onChange({ ...value, src, alt: e.target.value })}
           />
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="adm-image__acciones">
             <button
               type="button"
               className="adm-btn adm-btn--ghost adm-btn--sm"

@@ -63,10 +63,93 @@
 
 /* --- Estructura ------------------------------------------------------------ */
 
+/* Rótulo que sólo leen los lectores de pantalla: los botones de icono del
+   panel necesitan nombre, y un `title` no lo da en móvil. */
+.adm-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .admin-shell {
   display: grid;
   grid-template-columns: 248px 1fr;
   min-height: 100vh;
+}
+
+/* --- Barra y cajón de móvil -------------------------------------------------
+   En escritorio no existen: la barra está oculta y la lateral es una columna
+   fija. Todo lo de aquí abajo se enciende en el salto de 62rem. */
+.admin-bar {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 10px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-tertiary);
+  border-top: 4px solid var(--bg-brand-solid);
+}
+
+.admin-bar__menu,
+.admin-side__cerrar {
+  display: grid;
+  place-items: center;
+  /* 44px: el objetivo cómodo con el pulgar. El mínimo de la norma son 24, que
+     se cumple sobradamente. */
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-m);
+  color: var(--fg-secondary);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.admin-bar__menu:hover,
+.admin-side__cerrar:hover {
+  background: var(--bg-secondary);
+  color: var(--fg-primary);
+}
+
+.admin-bar__titulo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  color: var(--fg-primary);
+}
+
+.admin-bar__logo {
+  height: 26px;
+  width: auto;
+}
+
+/* Sólo existe mientras el cajón está abierto. */
+.admin-velo {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  background: rgba(8, 21, 32, 0.45);
+  border: 0;
+  cursor: pointer;
+}
+
+.admin-side__cerrar {
+  display: none;
+  margin-left: auto;
 }
 
 /* Barra lateral clara: el azul marino anterior resultaba frío y pesado.
@@ -870,6 +953,12 @@
   box-shadow: var(--shadow-m);
 }
 
+/* En una pantalla estrecha el aviso de cambios y los dos botones no caben en
+   una línea: se salían 5px por la derecha y con ellos la página entera. */
+.adm-savebar {
+  flex-wrap: wrap;
+}
+
 .adm-savebar__state {
   font-size: var(--fs-sm);
   color: var(--fg-tertiary);
@@ -971,6 +1060,27 @@
   min-width: 0;
   display: grid;
   gap: var(--space-xs);
+}
+
+/* Estos campos no van envueltos en `.adm-field`, así que no heredan su
+   `width: 100%`: un `input` sin ancho declarado mide lo que su `size` por
+   defecto —unos 207px— y se salía de la columna en cuanto ésta era estrecha.
+   Los elementos de una rejilla no encogen por debajo de su contenido si no se
+   les dice, de ahí también el `min-width: 0`. */
+.adm-image__fields > * {
+  min-width: 0;
+}
+
+.adm-image__fields input {
+  width: 100%;
+}
+
+/* «Elegir de la biblioteca» y «Quitar» en una sola línea no caben en un móvil:
+   el segundo se salía por la derecha y arrastraba a la página con él. */
+.adm-image__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 /* --- Diálogo ------------------------------------------------------------------------ */
@@ -1140,27 +1250,271 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* El menú deja de ser una columna y pasa a ser un cajón.
+
+   Antes se apilaba arriba con los quince enlaces en fila: 540px —dos tercios
+   de un móvil— antes de ver una sola línea de contenido, en cada pantalla y
+   cada vez. Ahora la navegación cabe en un botón y el contenido empieza
+   arriba, que es donde se espera. */
 @media (max-width: 62rem) {
   .admin-shell {
     grid-template-columns: 1fr;
   }
 
-  .admin-side {
-    position: static;
-    height: auto;
+  .admin-bar {
+    display: flex;
   }
 
-  .admin-side nav {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .admin-side {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 50;
+    width: min(310px, 86vw);
+    height: 100dvh;
+    padding-top: var(--space-l);
+    border-top: 0;
+    border-right: 1px solid var(--border-tertiary);
+    box-shadow: 0 0 40px rgba(8, 21, 32, 0.18);
+    /* Fuera de pantalla, no `display: none`: así entra y sale deslizando y
+       los enlaces siguen existiendo para el lector de pantalla mientras el
+       cajón está abierto. `visibility` lo saca del recorrido al cerrarse. */
+    transform: translateX(-100%);
+    visibility: hidden;
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      visibility var(--dur-base);
+  }
+
+  .admin-side.is-open {
+    transform: none;
+    visibility: visible;
+  }
+
+  .admin-side__cerrar {
+    display: grid;
+  }
+
+  .admin-shell.is-menu-open .admin-velo {
+    display: block;
   }
 
   .admin-main {
-    padding: var(--space-xl) var(--space-m) var(--space-4xl);
+    padding: var(--space-l) var(--space-m) var(--space-4xl);
   }
 
   .adm-link {
     grid-template-columns: 1fr;
+  }
+
+  /* --- Todo lo que se toca -------------------------------------------------
+     El panel se diseñó para ratón: enlaces de menú de 18px de alto, botones de
+     icono de 30px y campos de 13px. Con el dedo eso son fallos de puntería, y
+     un campo por debajo de 16px hace que iOS amplíe la página al enfocarlo y
+     la deje descuadrada. 44px es el objetivo cómodo; el mínimo de la norma
+     son 24. */
+  .admin-side__link {
+    min-height: 44px;
+    padding-block: 10px;
+    font-size: var(--fs-body);
+  }
+
+  .adm-btn {
+    min-height: 40px;
+  }
+
+  .adm-btn--icon {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .admin-head__ayuda-btn {
+    min-height: 40px;
+    padding: 8px 14px 8px 10px;
+  }
+
+  .adm-list__handle {
+    min-height: 40px;
+  }
+
+  .adm-indice__enlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 9px 14px;
+  }
+
+  .adm-quick__item {
+    min-height: 60px;
+  }
+
+  .adm-field input[type='text'],
+  .adm-field input[type='password'],
+  .adm-field input[type='number'],
+  .adm-field select,
+  .adm-field textarea,
+  .adm-input,
+  .adm-carta input,
+  .adm-carta select {
+    min-height: 44px;
+    /* 16px exactos: por debajo, Safari de iOS amplía al enfocar. */
+    font-size: 16px;
+  }
+
+  .adm-field textarea {
+    min-height: 96px;
+  }
+
+  /* El campo de archivo dibuja su propio botón, así que no le sirve la regla
+     de arriba: se le pide la fuente aparte para que iOS tampoco amplíe aquí. */
+  input[type='file'] {
+    font-size: 16px;
+  }
+
+  /* Las casillas nativas miden 13px, la mitad del mínimo. Van sin acotar a
+     una pantalla concreta porque esta hoja sólo se carga en el panel, y
+     porque están repartidas por la carta, las fichas y los interruptores de
+     Ajustes: acotarlas era garantizar que a alguna se le olvidara. */
+  input[type='checkbox'],
+  input[type='radio'] {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* --- La carta de color, fila a fila --------------------------------------
+     Once columnas y 1397px de ancho dentro de una pantalla de 375: se podía
+     desplazar de lado, pero editar así es imposible —no ves qué campo estás
+     tocando porque la cabecera se queda fuera—. Cada referencia pasa a ser
+     una tarjeta con los nombres de campo delante, que es la misma información
+     sin el desplazamiento lateral. */
+  .adm-carta,
+  .adm-carta tbody,
+  .adm-carta tr,
+  .adm-carta td {
+    display: block;
+    width: 100%;
+  }
+
+  /* La cabecera sobra: cada celda lleva ya su rótulo. Se oculta con
+     `position: absolute` y no con `display: none` para no sacarla del árbol
+     de accesibilidad. */
+  .adm-carta thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  /* Cada referencia es una tarjeta con lo que sirve para repasar: la muestra,
+     el código, el nombre y si hay existencia. Los otros siete campos —RAL,
+     nombre PPG, acabado, brillo, familia, textura— se editan en la ficha, que
+     ya está pensada para el móvil y abre desde el botón de aquí mismo.
+
+     Enseñarlos todos daba tarjetas de 665px: casi dos pantallas por color y
+     ochenta y tres colores. Es la misma división que ya declara el código de
+     la tabla —repasar aquí, tocar a fondo en la ficha—, sólo que en un móvil
+     deja de ser una preferencia y pasa a ser la única forma de que se pueda
+     recorrer la carta. No se pierde nada: todo sigue siendo editable. */
+  .adm-carta tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-xs) var(--space-s);
+    margin-bottom: var(--space-s);
+    padding: var(--space-s);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--adm-radio-s, 8px);
+    background: var(--bg-primary);
+  }
+
+  .adm-carta td {
+    display: block;
+    padding: 0;
+    border-top: 0;
+    min-width: 0;
+  }
+
+  .adm-carta td[data-campo='RAL'],
+  .adm-carta td[data-campo='Nombre PPG'],
+  .adm-carta td[data-campo='Acabado'],
+  .adm-carta td[data-campo='Brillo'],
+  .adm-carta td[data-campo='Familia'],
+  .adm-carta td[data-campo='Textura'] {
+    display: none;
+  }
+
+  .adm-carta td[data-campo='Color'],
+  .adm-carta td[data-campo='Nombre'],
+  .adm-carta td[data-campo='Acciones'] {
+    grid-column: 1 / -1;
+  }
+
+  .adm-carta td::before {
+    content: attr(data-campo);
+    display: block;
+    margin-bottom: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--fg-tertiary);
+  }
+
+  /* «Acciones» no tiene nombre que enseñar: su rótulo es para el lector. */
+  .adm-carta td[data-campo='Acciones']::before {
+    content: '';
+    margin: 0;
+  }
+
+  /* El botón de la ficha deja de ser secundario: en móvil es la puerta a los
+     campos que la tarjeta no enseña. */
+  .adm-carta__acciones .adm-btn:first-child {
+    flex: 1;
+  }
+
+  /* Las que iban centradas en la tabla se alinean con el resto. */
+  .adm-carta .adm-carta__centro {
+    text-align: left;
+  }
+
+  /* Los campos cortos lo eran para caber en su columna; aquí hay ancho. */
+  .adm-carta .adm-carta__corto,
+  .adm-carta .adm-input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .adm-carta__acciones {
+    justify-content: start;
+  }
+
+  /* La barra de guardado ocupa el ancho: dos botones a media pantalla se
+     aciertan mejor que dos botones pequeños en una esquina. */
+  .adm-savebar {
+    padding: var(--space-s) var(--space-m);
+  }
+
+  .adm-savebar > div {
+    flex: 1;
+    display: flex;
+    gap: var(--space-xs);
+  }
+
+  .adm-savebar > div .adm-btn {
+    flex: 1;
+  }
+
+  /* El selector de color nativo no admite bien alturas pequeñas y a 46px de
+     ancho es difícil de acertar. */
+  .adm-color input[type='color'] {
+    width: 56px;
+    height: 44px;
+  }
+}
+
+/* Quien pide menos movimiento no ve el cajón deslizarse: aparece y ya. */
+@media (prefers-reduced-motion: reduce) {
+  .admin-side {
+    transition: none;
   }
 }
 
