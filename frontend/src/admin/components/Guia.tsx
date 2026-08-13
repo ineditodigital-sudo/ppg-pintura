@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { useLocation } from 'react-router-dom'
 import { guiaDeLaRuta, type PasoGuia } from '../guia'
 
@@ -170,7 +177,24 @@ export function Guia() {
   const tarjetaRef = useRef<HTMLDivElement>(null)
 
   const modulo = encontrada?.clave ?? ''
-  const pasos = encontrada?.guia.pasos ?? []
+
+  /**
+   * Los pasos que aplican a esta pantalla y a este tamaño.
+   *
+   * Se calcula al abrir y no en cada render: si se recalculara mientras la
+   * guía está abierta, iluminar un paso podría hacer aparecer o desaparecer
+   * otro y la numeración bailaría bajo los pies de quien la está leyendo.
+   */
+  const pasos = useMemo(() => {
+    const todos = encontrada?.guia.pasos ?? []
+    if (!abierta) return todos
+
+    return todos.filter(
+      (p) => !p.soloConObjetivo || (p.objetivo && document.querySelector(p.objetivo)),
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [encontrada, abierta])
+
   const actual: PasoGuia | undefined = pasos[paso]
 
   const cerrar = useCallback(() => {

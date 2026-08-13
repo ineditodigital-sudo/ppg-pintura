@@ -139,11 +139,7 @@ function Preview({
   activo: number | null
   onSelect: (index: number) => void
 }) {
-  // Desde un móvil se arranca previsualizando en móvil: es la pantalla en la
-  // que estás y, sobre todo, la que más visitas tiene el sitio.
-  const [ancho, setAncho] = useState<(typeof ANCHOS)[number]['id']>(() =>
-    typeof window !== 'undefined' && window.innerWidth < 700 ? 'movil' : 'tablet',
-  )
+  const [ancho, setAncho] = useState<(typeof ANCHOS)[number]['id']>('tablet')
   const marcoRef = useRef<HTMLDivElement>(null)
   const [escala, setEscala] = useState(1)
   // En móvil la vista previa se ancla arriba y se puede recoger. Sin recoger,
@@ -230,6 +226,34 @@ function Preview({
 
 /* --- Lista de bloques ------------------------------------------------------- */
 
+/**
+ * ¿Hay sitio para la vista previa?
+ *
+ * En un teléfono no. Ocupaba el alto que necesita el formulario, y montarla
+ * cuesta lo mismo que cargar la página entera —un iframe con todos los
+ * estilos, las imágenes y la carta de color—, así que aquí no se oculta: no se
+ * monta. Se escucha el cambio de tamaño porque girar el teléfono cruza el
+ * límite y la vista previa debe aparecer o irse con él.
+ */
+const CABE_LA_PREVIA = '(min-width: 48rem)'
+
+function useCabeLaPrevia(): boolean {
+  const [cabe, setCabe] = useState(
+    () => typeof window === 'undefined' || window.matchMedia(CABE_LA_PREVIA).matches,
+  )
+
+  useEffect(() => {
+    const consulta = window.matchMedia(CABE_LA_PREVIA)
+    const alCambiar = () => setCabe(consulta.matches)
+
+    alCambiar()
+    consulta.addEventListener('change', alCambiar)
+    return () => consulta.removeEventListener('change', alCambiar)
+  }, [])
+
+  return cabe
+}
+
 export function BlockEditor({
   blocks,
   onChange,
@@ -237,6 +261,7 @@ export function BlockEditor({
   blocks: BlockValue[]
   onChange: (blocks: BlockValue[]) => void
 }) {
+  const cabeLaPrevia = useCabeLaPrevia()
   const [abierto, setAbierto] = useState<number | null>(blocks.length ? 0 : null)
   const [anadiendo, setAnadiendo] = useState(false)
   const [arrastrando, setArrastrando] = useState<number | null>(null)
@@ -373,7 +398,9 @@ export function BlockEditor({
         )}
       </div>
 
-      <Preview blocks={blocks} activo={abierto} onSelect={setAbierto} />
+      {cabeLaPrevia && (
+        <Preview blocks={blocks} activo={abierto} onSelect={setAbierto} />
+      )}
     </div>
   )
 }

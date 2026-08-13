@@ -20,6 +20,13 @@ export interface PasoGuia {
   objetivo?: string
   titulo: string
   texto: string
+  /**
+   * El paso desaparece si su objetivo no está en pantalla, en vez de contarse
+   * centrado. Para lo que sólo existe en algunos tamaños —la vista previa del
+   * editor no se monta en un móvil—: explicar un control que no está delante
+   * confunde más que no mencionarlo.
+   */
+  soloConObjetivo?: boolean
 }
 
 export interface Guia {
@@ -444,6 +451,7 @@ GUIAS['editor'] = {
     },
     {
       objetivo: '.adm-preview__anchos',
+      soloConObjetivo: true,
       titulo: 'Compruébalo en móvil',
       texto:
         'La vista previa no es una aproximación: monta la página real. Cambia el ancho para ver cómo queda en un teléfono antes de publicar.',
