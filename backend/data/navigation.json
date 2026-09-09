@@ -37,7 +37,7 @@
     },
     {
       "label": "Mercados",
-      "description": "Los sectores donde aplicamos nuestras soluciones.",
+      "description": "Los sectores a los que suministramos.",
       "children": [
         {
           "label": "Todos los sectores",

@@ -35,9 +35,9 @@ const POR_DEFECTO = {
   },
   sustratos: {
     eyebrow: 'Sustratos habituales',
-    title: 'Sobre qué aplicamos',
+    title: 'Sobre qué materiales se aplica',
     description:
-      'Cada material impone su propio pretratamiento. Esto es lo que tenemos en cuenta antes de recubrir.',
+      'Cada material impone su propio pretratamiento. Esto es lo que hay que tener en cuenta antes de recubrir.',
   },
   suministro: {
     eyebrow: 'Cómo trabajamos',
