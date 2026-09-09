@@ -40,6 +40,20 @@ Options -Indexes
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
+  # Rutas de versiones anteriores del sitio.
+  #
+  # Cuando el sitio vivía en el dominio principal, las páginas de producto
+  # colgaban de la raíz: `/pintura-en-polvo`. Google conserva esas URLs y una
+  # de ellas es la que sale hoy en las búsquedas. Sin esto caen en el comodín
+  # de abajo, que entrega el `index.html` de la portada: la URL responde 200
+  # con el título y el canonical de la portada, que es justo lo que el cliente
+  # está viendo en el buscador.
+  #
+  # Con barra final en el destino porque es la forma que sirve este servidor y
+  # la que declaran el canonical y el sitemap; sin ella habría un segundo
+  # salto. Van antes del comodín porque el comodín se lo tragaría todo.
+  RewriteRule ^(pintura-en-polvo|pintura-liquida|pretratamientos-metalicos)/?$ /productos/$1/ [R=301,L]
+
   # /api/... → front controller. La URI original se conserva, que es de donde
   # el Router de PHP lee la ruta.
   RewriteCond %{REQUEST_URI} ^/api/

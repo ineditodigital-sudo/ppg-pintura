@@ -1,0 +1,57 @@
+# BEGIN cPanel-generated php ini directives, do not edit
+# Manual editing of this file may result in unexpected behavior.
+# To make changes to this file, use the cPanel MultiPHP INI Editor (Home >> Software >> MultiPHP INI Editor)
+# For more information, read our documentation (https://go.cpanel.net/EA4ModifyINI)
+<IfModule php8_module>
+   php_value error_log "/home/pinturaenpolvomx/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+<IfModule lsapi_module>
+   php_value error_log "/home/pinturaenpolvomx/logs/php.error.log"
+   php_flag log_errors On
+</IfModule>
+# END cPanel-generated php ini directives, do not edit
+
+# ---------------------------------------------------------------------------
+# pinturaenpolvo-mx.com — RETIRADO
+#
+# El sitio vive en https://ppg.pinturaenpolvo-mx.com. Aquí quedó el despliegue
+# anterior, de cuando el sitio estaba en el dominio principal, y nadie lo
+# apagó: seguía sirviéndose entero, con su propio sitemap empujando estas URLs
+# a Google y su propio panel y API respondiendo. El resultado es que el sitio
+# viejo salía en las búsquedas en lugar del nuevo, con los títulos de entonces.
+#
+# Es 301 (permanente) y no un borrado a propósito: el 301 traslada al
+# subdominio el posicionamiento que este dominio ya tenía, y de paso cualquier
+# enlace repartido por ahí sigue llegando a su sitio. Borrar los archivos
+# devolvería 404 y tiraría las dos cosas a la basura.
+#
+# Los archivos del sitio viejo siguen en esta carpeta pero dejan de ser
+# alcanzables por HTTP, incluidos `/admin` y `/api`. Cuando se confirme que
+# Google ya sirve el subdominio, se pueden borrar; hasta entonces no estorban.
+# ---------------------------------------------------------------------------
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # La condición de host es la red de seguridad de todo esto. El subdominio
+  # cuelga de una carpeta DENTRO de ésta —así organiza cPanel los subdominios—
+  # y, aunque sus propias reglas de reescritura sustituyen a las de aquí, una
+  # regla sin acotar quedaría a un descuido de mandar el sitio nuevo a
+  # redirigirse contra sí mismo. Con el host comprobado no puede ocurrir.
+  RewriteCond %{HTTP_HOST} ^(www\.)?pinturaenpolvo-mx\.com$ [NC]
+
+  # Excepción: la validación del certificado. Si se redirige también esto, la
+  # renovación de SSL falla y el dominio empieza a dar avisos de seguridad.
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+
+  # Todo lo demás al subdominio, conservando ruta y parámetros.
+  RewriteRule ^(.*)$ https://ppg.pinturaenpolvo-mx.com/$1 [R=301,L,QSA]
+</IfModule>
+
+# Si mod_rewrite no estuviera disponible, al menos la portada redirige.
+<IfModule !mod_rewrite.c>
+  Redirect 301 / https://ppg.pinturaenpolvo-mx.com/
+</IfModule>
