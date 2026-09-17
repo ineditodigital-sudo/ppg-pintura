@@ -221,6 +221,24 @@ for (const r of rutas) {
   const canonica = r.url === '/' ? SITIO + '/' : `${SITIO}${r.url}/`
   const extras = [`<link rel="canonical" href="${canonica}" />`]
 
+  // El nombre del sitio: el renglón que Google escribe encima del título del
+  // resultado. Si no se declara, lo deduce, y para un subdominio cae al
+  // dominio de arriba: salía «pinturaenpolvo-mx.com», justo la dirección que
+  // dejó de ser pública. Google sólo lo lee en la portada del subdominio y lo
+  // ignora en las demás, así que se emite aquí y no en la plantilla, que
+  // comparten las catorce rutas.
+  if (r.url === '/') {
+    extras.push(
+      `<script type="application/ld+json">${JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Pintura en Polvo PPG',
+        alternateName: 'Coating Systems MX',
+        url: `${SITIO}/`,
+      })}</script>`,
+    )
+  }
+
   if (r.entidad) {
     const limpia = JSON.parse(JSON.stringify(r.entidad))
     extras.push(
