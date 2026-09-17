@@ -54,6 +54,13 @@ Options -Indexes
   # salto. Van antes del comodín porque el comodín se lo tragaría todo.
   RewriteRule ^(pintura-en-polvo|pintura-liquida|pretratamientos-metalicos)/?$ /productos/$1/ [R=301,L]
 
+  # Y los mercados colgaban igualmente de la raíz: `/iluminacion`. Google las
+  # conserva y hoy acaban en el comodín de abajo, que sirve el `index.html`:
+  # responden 200 y el enrutador del cliente pinta su página de error. Está
+  # marcada `noindex`, así que no ensucia el índice, pero el posicionamiento y
+  # los enlaces de esas URLs se tiran en lugar de trasladarse a la página real.
+  RewriteRule ^(ace|arquitectura|automotriz|iluminacion|industria-general|mueblero)/?$ /mercados/$1/ [R=301,L]
+
   # /api/... → front controller. La URI original se conserva, que es de donde
   # el Router de PHP lee la ruta.
   RewriteCond %{REQUEST_URI} ^/api/
