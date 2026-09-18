@@ -56,7 +56,15 @@ export function useSeo(seo: Seo | undefined) {
     setMeta('meta[property="og:url"]', 'content', url)
     setMeta('meta[property="og:image"]', 'content', imagen)
     setMeta('meta[property="og:locale"]', 'content', 'es_MX')
-    setMeta('meta[property="og:site_name"]', 'content', 'PPG')
+    // El nombre del sitio, uno de los dos lugares de los que Google lo toma.
+    // Al montar, React reescribe la etiqueta que venía en el HTML: si aquí
+    // dijera otra cosa, la página renderizada declararía un nombre y la cruda
+    // otro. Va igual que en `index.html` y que el `WebSite` de la portada.
+    setMeta(
+      'meta[property="og:site_name"]',
+      'content',
+      'ppg.pinturaenpolvo-mx.com',
+    )
 
     // Sin tarjeta declarada, al compartir en X sale sólo un enlace pelado.
     setMeta('meta[name="twitter:card"]', 'content', 'summary_large_image')

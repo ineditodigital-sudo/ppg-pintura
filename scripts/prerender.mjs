@@ -227,13 +227,18 @@ for (const r of rutas) {
   // dejó de ser pública. Google sólo lo lee en la portada del subdominio y lo
   // ignora en las demás, así que se emite aquí y no en la plantilla, que
   // comparten las catorce rutas.
+  //
+  // El nombre declarado es el propio host. Un nombre de marca leía mejor,
+  // pero ahí donde Google escribe un nombre se lee una dirección, y la que
+  // deducía era la equivocada: se prefiere que diga la buena. Google admite
+  // el dominio como nombre, en minúsculas. La marca queda de alternativa.
   if (r.url === '/') {
     extras.push(
       `<script type="application/ld+json">${JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
-        name: 'Pintura en Polvo PPG',
-        alternateName: 'Coating Systems MX',
+        name: 'ppg.pinturaenpolvo-mx.com',
+        alternateName: ['Pintura en Polvo PPG', 'Coating Systems MX'],
         url: `${SITIO}/`,
       })}</script>`,
     )
