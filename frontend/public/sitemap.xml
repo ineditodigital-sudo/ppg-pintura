@@ -3,27 +3,27 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/colores/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/contacto/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/ace/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/ace.webp</image:loc>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/arquitectura/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/arquitectura.webp</image:loc>
@@ -41,7 +41,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/automotriz/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/automotriz.webp</image:loc>
@@ -50,7 +50,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/iluminacion/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/iluminacion.webp</image:loc>
@@ -59,7 +59,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/industria-general/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/industria-general.webp</image:loc>
@@ -68,7 +68,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/mercados/mueblero/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/mercados/mueblero.webp</image:loc>
@@ -77,7 +77,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pintura-en-polvo/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/video/hero-poster-2026-08.jpg</image:loc>
@@ -86,7 +86,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pintura-liquida/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/aerosol-retoque.webp</image:loc>
@@ -95,7 +95,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/productos/pretratamientos-metalicos/</loc>
-    <lastmod>2026-08-11</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://ppg.pinturaenpolvo-mx.com/assets/csmx/industria.webp</image:loc>
@@ -104,7 +104,7 @@
   </url>
   <url>
     <loc>https://ppg.pinturaenpolvo-mx.com/quienes-somos/</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <priority>0.6</priority>
   </url>
 </urlset>

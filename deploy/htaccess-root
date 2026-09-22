@@ -111,7 +111,12 @@ Options -Indexes
   # lo tenían siguieron sirviendo el viejo. Por eso el archivo lleva la fecha
   # en el nombre: `hero-2026-08.mp4`. Al cambiarlo, renómbralo.
 
-  <FilesMatch "\.(html|json)$">
+  # Se les suman `xml` y `txt`: el sitemap, `robots.txt` y `llms.txt` son los
+  # archivos cuyo trabajo es decir cómo está el sitio ahora mismo. Sin regla no
+  # llevaban `Cache-Control` ninguno, así que cada intermediario les inventaba
+  # una caducidad: el sitemap recién subido seguía sirviéndose con la fecha de
+  # cinco días antes, que es exactamente la señal que se quería corregir.
+  <FilesMatch "\.(html|json|xml|txt)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 

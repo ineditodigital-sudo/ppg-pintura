@@ -73,6 +73,28 @@ function fechaDe(...archivos) {
   return fechas.sort().at(-1)
 }
 
+/**
+ * Lo que reescribe el HTML de todas las páginas.
+ *
+ * Cada ruta se fechaba sólo por su JSON de contenido, y eso deja fuera los
+ * cambios de código que cambian lo que se sirve: el prerenderizado escribe el
+ * título, el canonical, los datos estructurados y el texto de cada página.
+ *
+ * Se vio con el nombre del sitio en Google. El HTML de la portada cambió el 18
+ * de septiembre —ahí se declaró el nombre— y el sitemap seguía diciendo 11 de
+ * agosto: «aquí no hay nada nuevo», justo lo contrario de lo que hacía falta
+ * para que volvieran a rastrearla.
+ *
+ * No entra el resto del código a propósito, por lo que dice el comentario de
+ * arriba: una fecha que se mueve en cada despliegue deja de ser una señal.
+ * Estos dos archivos se tocan pocas veces y, cuando se tocan, cambian de
+ * verdad lo que se sirve en las catorce rutas.
+ */
+const COMUNES = [
+  join(raiz, 'scripts', 'prerender.mjs'),
+  join(raiz, 'frontend', 'index.html'),
+]
+
 const F = {
   markets: join(datos, 'markets.json'),
   lineas: join(datos, 'business-lines.json'),
@@ -158,7 +180,7 @@ const cuerpo = entradas
       // redirige la forma sin barra. Listarlas sin ella mandaba al buscador a
       // un 301 en cada una de las catorce.
       `    <loc>${SITIO}${e.ruta === '/' ? '/' : e.ruta + '/'}</loc>\n` +
-      `    <lastmod>${fechaDe(...e.fuentes)}</lastmod>\n` +
+      `    <lastmod>${fechaDe(...e.fuentes, ...COMUNES)}</lastmod>\n` +
       `    <priority>${prioridad(e.ruta)}</priority>\n` +
       imagenes +
       `  </url>`
